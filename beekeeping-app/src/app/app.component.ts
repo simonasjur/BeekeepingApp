@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 
-import { AuthenticationService } from './_services';
+import { UserService } from './_services';
 import { User } from './_models';
 
 @Component({ selector: 'app', templateUrl: 'app.component.html' })
@@ -9,14 +8,11 @@ export class AppComponent {
     title = 'Beekeeping app'
     user: User;
 
-    constructor(
-        private router: Router,
-        private authenticationService: AuthenticationService
-    ) {
-        this.authenticationService.user.subscribe(x => this.user = x);
+    constructor(private userService: UserService) {
+        this.userService.user.subscribe(x => this.user = x);
     }
 
     logout() {
-        this.authenticationService.logout();
+        this.userService.logout();
     }
 }

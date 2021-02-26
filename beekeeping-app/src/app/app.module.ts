@@ -8,7 +8,7 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { BasicAuthInterceptor, ErrorInterceptor } from './_helpers';
 import { HomeComponent } from './home';
-import { LoginComponent } from './login';
+import { AlertComponent } from './_components';
 
 @NgModule({
     imports: [
@@ -19,8 +19,8 @@ import { LoginComponent } from './login';
     ],
     declarations: [
         AppComponent,
-        HomeComponent,
-        LoginComponent
+        AlertComponent,
+        HomeComponent
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },

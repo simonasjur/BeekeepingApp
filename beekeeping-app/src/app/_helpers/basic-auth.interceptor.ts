@@ -3,15 +3,15 @@ import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/c
 import { Observable } from 'rxjs';
 
 import { environment } from '../../environments/environment';
-import { AuthenticationService } from '../_services';
+import { UserService } from '../_services';
 
 @Injectable()
 export class BasicAuthInterceptor implements HttpInterceptor {
-    constructor(private authenticationService: AuthenticationService) { }
+    constructor(private userService: UserService) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         // add header with basic auth credentials if user is logged in and request is to the api url
-        const user = this.authenticationService.userValue;
+        const user = this.userService.userValue;
         const isLoggedIn = user && user.authdata;
         const isApiUrl = request.url.startsWith(environment.apiUrl);
         if (isLoggedIn && isApiUrl) {

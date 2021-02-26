@@ -3,20 +3,21 @@ import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/c
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { AuthenticationService } from '../_services';
+import { UserService } from '../_services';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
-    constructor(private authenticationService: AuthenticationService) { }
+    constructor(private userService: UserService) {}
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(request).pipe(catchError(err => {
-            if (err.status === 401) {
-                // auto logout if 401 response returned from api
-                this.authenticationService.logout();
+            if ([401, 403].includes(err.status) && this.userService.userValue) {
+                // auto logout if 401 or 403 response returned from api
+                this.userService.logout();
             }
 
-            const error = err.error.message || err.statusText;
+            const error = err.error?.message || err.statusText;
+            console.error(err);
             return throwError(error);
         }))
     }
