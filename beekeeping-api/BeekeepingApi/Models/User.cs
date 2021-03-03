@@ -31,5 +31,7 @@ namespace BeekeepingApi.Models
 
         [Required]
         public string Role { get; set; }
+
+        public virtual ICollection<FarmWorker> FarmWorkers { get; set; }
     }
 }
