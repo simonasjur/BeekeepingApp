@@ -30,7 +30,7 @@ namespace BeekeepingApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<FarmWorkerReadDTO>>> GetFarmWorker()
         {
-            var farmWorkersList = await _context.FarmWorker.ToListAsync();
+            var farmWorkersList = await _context.FarmWorkers.ToListAsync();
 
             return _mapper.Map<IEnumerable<FarmWorkerReadDTO>>(farmWorkersList).ToList();
         }
@@ -39,7 +39,7 @@ namespace BeekeepingApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<FarmWorkerReadDTO>> GetFarmWorker(long id)
         {
-            var farmWorker = await _context.FarmWorker.FindAsync(id);
+            var farmWorker = await _context.FarmWorkers.FindAsync(id);
 
             var currentUserId = long.Parse(User.Identity.Name);
 
@@ -94,7 +94,7 @@ namespace BeekeepingApi.Controllers
         [HttpPost]
         public async Task<ActionResult<FarmWorker>> PostFarmWorker(FarmWorker farmWorker)
         {
-            _context.FarmWorker.Add(farmWorker);
+            _context.FarmWorkers.Add(farmWorker);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetFarmWorker", new { id = farmWorker.Id }, farmWorker);
@@ -104,13 +104,13 @@ namespace BeekeepingApi.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<FarmWorker>> DeleteFarmWorker(long id)
         {
-            var farmWorker = await _context.FarmWorker.FindAsync(id);
+            var farmWorker = await _context.FarmWorkers.FindAsync(id);
             if (farmWorker == null)
             {
                 return NotFound();
             }
 
-            _context.FarmWorker.Remove(farmWorker);
+            _context.FarmWorkers.Remove(farmWorker);
             await _context.SaveChangesAsync();
 
             return farmWorker;
@@ -118,7 +118,7 @@ namespace BeekeepingApi.Controllers
 
         private bool FarmWorkerExists(long id)
         {
-            return _context.FarmWorker.Any(e => e.Id == id);
+            return _context.FarmWorkers.Any(e => e.Id == id);
         }
     }
 }

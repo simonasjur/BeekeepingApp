@@ -16,6 +16,18 @@ namespace BeekeepingApi.Models
 
         public DbSet<User> Users { get; set; }
 
-        public DbSet<FarmWorker> FarmWorker { get; set; }
+        public DbSet<FarmWorker> FarmWorkers { get; set; }
+
+        public DbSet<Farm> Farms { get; set; }
+
+        public DbSet<Apiary> Apiaries { get; set; }
+
+        public DbSet<Beehive> Beehives { get; set; }
+
+        public DbSet<ApiaryBeehive> ApiaryBeehives { get; set; }
+
+        public DbSet<Manufacturer> Manufacturers { get; set; }
+
+        public DbSet<Super> Supers { get; set; }
     }
 }
