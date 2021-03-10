@@ -14,6 +14,11 @@ namespace BeekeepingApi.Models
         {
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<FarmWorker>().HasKey(e => new { e.UserId, e.FarmId });
+        }
+
         public DbSet<User> Users { get; set; }
 
         public DbSet<FarmWorker> FarmWorker { get; set; }

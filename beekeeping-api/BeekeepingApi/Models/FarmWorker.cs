@@ -14,18 +14,13 @@ namespace BeekeepingApi.Models
 
     public class FarmWorker
     {
-        [Key]
-        public long Id { get; set; }
-
         [Required]
         public WorkerRole? Role { get; set; }
+
         public long UserId { get; set; }
-
-        [ForeignKey("UserId")]
         public User User { get; set; }
-        public long FarmId { get; set; }
 
-        [ForeignKey("FarmId")]
+        public long FarmId { get; set; }
         public Farm Farm { get; set; }
     }
 }
