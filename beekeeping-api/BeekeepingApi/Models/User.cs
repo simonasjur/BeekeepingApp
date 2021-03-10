@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -32,6 +33,7 @@ namespace BeekeepingApi.Models
         [Required]
         public string Role { get; set; }
 
+        [ForeignKey("UserID")]
         public virtual ICollection<FarmWorker> FarmWorkers { get; set; }
     }
 }

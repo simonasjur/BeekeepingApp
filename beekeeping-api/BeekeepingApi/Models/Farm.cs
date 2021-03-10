@@ -19,6 +19,7 @@ namespace BeekeepingApi.Models
         [DisplayFormat(DataFormatString = "{yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime CreationDate { get; set; }
 
+        [ForeignKey("FarmID")]
         public virtual ICollection<FarmWorker> FarmWorkers { get; set; }
     }
 }
