@@ -33,7 +33,6 @@ namespace BeekeepingApi.Models
         [Required]
         public string Role { get; set; }
 
-        [ForeignKey("UserID")]
         public virtual ICollection<FarmWorker> FarmWorkers { get; set; }
     }
 }

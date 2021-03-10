@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BeekeepingApi.Migrations
 {
-    public partial class Initial : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -102,15 +102,13 @@ namespace BeekeepingApi.Migrations
                 name: "FarmWorkers",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Role = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<long>(type: "bigint", nullable: false),
-                    FarmId = table.Column<long>(type: "bigint", nullable: false)
+                    FarmId = table.Column<long>(type: "bigint", nullable: false),
+                    Role = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FarmWorkers", x => x.Id);
+                    table.PrimaryKey("PK_FarmWorkers", x => new { x.UserId, x.FarmId });
                     table.ForeignKey(
                         name: "FK_FarmWorkers_Farms_FarmId",
                         column: x => x.FarmId,
@@ -201,11 +199,6 @@ namespace BeekeepingApi.Migrations
                 name: "IX_FarmWorkers_FarmId",
                 table: "FarmWorkers",
                 column: "FarmId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_FarmWorkers_UserId",
-                table: "FarmWorkers",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Supers_BeehiveId",

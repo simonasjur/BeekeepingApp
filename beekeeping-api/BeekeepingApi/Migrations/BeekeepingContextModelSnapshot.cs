@@ -130,10 +130,8 @@ namespace BeekeepingApi.Migrations
 
             modelBuilder.Entity("BeekeepingApi.Models.FarmWorker", b =>
                 {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
 
                     b.Property<long>("FarmId")
                         .HasColumnType("bigint");
@@ -141,14 +139,9 @@ namespace BeekeepingApi.Migrations
                     b.Property<int>("Role")
                         .HasColumnType("int");
 
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
+                    b.HasKey("UserId", "FarmId");
 
                     b.HasIndex("FarmId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("FarmWorkers");
                 });

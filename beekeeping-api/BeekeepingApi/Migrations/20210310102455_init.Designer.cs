@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BeekeepingApi.Migrations
 {
     [DbContext(typeof(BeekeepingContext))]
-    [Migration("20210306142231_Initial")]
-    partial class Initial
+    [Migration("20210310102455_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -132,10 +132,8 @@ namespace BeekeepingApi.Migrations
 
             modelBuilder.Entity("BeekeepingApi.Models.FarmWorker", b =>
                 {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
 
                     b.Property<long>("FarmId")
                         .HasColumnType("bigint");
@@ -143,14 +141,9 @@ namespace BeekeepingApi.Migrations
                     b.Property<int>("Role")
                         .HasColumnType("int");
 
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
+                    b.HasKey("UserId", "FarmId");
 
                     b.HasIndex("FarmId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("FarmWorkers");
                 });

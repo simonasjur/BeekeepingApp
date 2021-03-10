@@ -162,40 +162,6 @@ namespace BeekeepingApi.Controllers
             return userWithToken;
         }
 
-        // GET: api/Users/1/Farmworkers
-        [Authorize]
-        [HttpGet("{id}/Farmworkers")]
-        public async Task<ActionResult<IEnumerable<FarmWorkerReadDTO>>> GetUserFarmWorkers(long id)
-        {
-            var currentUserId = long.Parse(User.Identity.Name);
-            if (id != currentUserId)
-                return Forbid();
-
-            var user = await _context.Users.FindAsync(id);
-
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            var workersList = await _context.FarmWorker.Where(l => l.UserId == id).ToListAsync();
-
-            return _mapper.Map<IEnumerable<FarmWorkerReadDTO>>(workersList).ToList();
-        }
-
-        // GET: api/Users/5/FarmWorkers/5
-        [HttpGet("{userId}/FarmWorkers/{workerId}")]
-        public async Task<ActionResult<FarmWorkerReadDTO>> GetUserFarmWorker(long userId, long workerId)
-        {
-            var user = await _context.Users.FindAsync(userId);
-
-            var currentUserId = long.Parse(User.Identity.Name);
-            if (yard == null || yard.UserId != currentUserId)
-                return Forbid();
-
-            return _mapper.Map<YardReadDTO>(yard);
-        }
-
         private bool UserExists(long id)
         {
             return _context.Users.Any(e => e.Id == id);
