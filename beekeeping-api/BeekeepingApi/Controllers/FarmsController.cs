@@ -13,7 +13,7 @@ using BeekeepingApi.DTOs.FarmDTOs;
 namespace BeekeepingApi.Controllers
 {
     [Authorize]
-    [Route("api/[controller]")]
+    [Route("api/Users/{userId}/[controller]")]
     [ApiController]
     public class FarmsController : ControllerBase
     {
@@ -26,83 +26,129 @@ namespace BeekeepingApi.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/Farms/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Farm>> GetFarm(long id)
+        // GET: api/Users/1/Farms
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<FarmReadDTO>>> GetFarms(long userId)
         {
-            var farm = await _context.Farms.FindAsync(id);
+            var currentUserId = long.Parse(User.Identity.Name);
+            if (userId != currentUserId)
+                return Forbid();
 
-            if (farm == null)
+            var user = await _context.Users.FindAsync(userId);
+
+            var farmWorkersList = await _context.FarmWorkers.Where(l => l.UserId == userId).ToListAsync();
+            var farmList = new List<Farm>();
+            foreach (var farmWorker in farmWorkersList)
             {
-                return NotFound();
+                var farm = await _context.Farms.FindAsync(farmWorker.FarmId);
+                farmList.Add(farm);
             }
 
-            return farm;
+            return _mapper.Map<IEnumerable<FarmReadDTO>>(farmList).ToList();
         }
 
-        // PUT: api/Farms/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutFarm(long id, Farm farm)
+        // GET: api/Users/1/Farms/1
+        [Authorize]
+        [HttpGet("{farmId}")]
+        public async Task<ActionResult<FarmReadDTO>> GetFarm(long userId, long farmId)
         {
-            if (id != farm.Id)
+            var currentUserId = long.Parse(User.Identity.Name);
+            if (userId != currentUserId)
+                return Forbid();
+
+            var farm = await _context.Farms.FindAsync(farmId);
+            var farmWorker = await _context.FarmWorkers.FindAsync(userId, farmId);
+
+            if (farm == null)
+                return NotFound();
+
+            if (farmWorker == null)
+                return Forbid();
+
+            return _mapper.Map<FarmReadDTO>(farm);
+        }
+
+
+        // POST: api/Users/5/Farms
+        [Authorize]
+        [HttpPost]
+        public async Task<ActionResult<FarmReadDTO>> PostFarm(long userId, FarmCreateDTO farmCreateDTO)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            var currentUserId = long.Parse(User.Identity.Name);
+
+            if (user == null || user.Id != currentUserId)
+                return Forbid();
+
+            var farm = _mapper.Map<Farm>(farmCreateDTO);
+            _context.Farms.Add(farm);
+            await _context.SaveChangesAsync();
+
+            var farmWorker = new FarmWorker
+            {
+                Role = WorkerRole.Owner,
+                FarmId = farm.Id,
+                UserId = user.Id
+            };
+            _context.FarmWorkers.Add(farmWorker);
+            await _context.SaveChangesAsync();
+
+            var farmReadDTO = _mapper.Map<FarmReadDTO>(farm);
+
+            return CreatedAtAction("GetFarm", "Farms", new { userId = user.Id, farmId = farm.Id }, farmReadDTO);
+        }
+
+        // PUT: api/Users/5/Farms/1
+        [Authorize]
+        [HttpPut("{farmId}")]
+        public async Task<IActionResult> PutFarm(long userId, long farmId, FarmEditDTO farmEditDTO)
+        {
+            var currentUserId = long.Parse(User.Identity.Name);
+            if (userId != currentUserId)
+                return Forbid();
+
+            if (farmId != farmEditDTO.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(farm).State = EntityState.Modified;
+            var farm = await _context.Farms.FindAsync(farmId);
+            var farmWorker = await _context.FarmWorkers.FindAsync(userId, farmId);
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!FarmExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            if (farm == null)
+                return NotFound();
+
+            if (farmWorker == null)
+                return Forbid();
+
+            _mapper.Map(farmEditDTO, farm);
+            await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        // POST: api/Farms
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPost]
-        public async Task<ActionResult<Farm>> PostFarm(Farm farm)
+        // DELETE: api/Users/5/Farms/5
+        [Authorize]
+        [HttpDelete("{farmId}")]
+        public async Task<ActionResult<FarmReadDTO>> DeleteFarm(long userId, long farmId)
         {
-            _context.Farms.Add(farm);
-            await _context.SaveChangesAsync();
+            var currentUserId = long.Parse(User.Identity.Name);
+            if (userId != currentUserId)
+                return Forbid();
 
-            return CreatedAtAction("GetFarm", new { id = farm.Id }, farm);
-        }
+            var farm = await _context.Farms.FindAsync(farmId);
+            var farmWorker = await _context.FarmWorkers.FindAsync(userId, farmId);
 
-        // DELETE: api/Farms/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Farm>> DeleteFarm(long id)
-        {
-            var farm = await _context.Farms.FindAsync(id);
             if (farm == null)
-            {
                 return NotFound();
-            }
+
+            if (farmWorker == null)
+                return Forbid();
 
             _context.Farms.Remove(farm);
             await _context.SaveChangesAsync();
 
-            return farm;
-        }
-
-        private bool FarmExists(long id)
-        {
-            return _context.Farms.Any(e => e.Id == id);
+            return _mapper.Map<FarmReadDTO>(farm);
         }
     }
 }
