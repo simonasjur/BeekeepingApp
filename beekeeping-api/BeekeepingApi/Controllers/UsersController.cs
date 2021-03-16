@@ -12,7 +12,9 @@ using Microsoft.AspNetCore.Authorization;
 using BeekeepingApi.Helpers;
 using BeekeepingApi.DTOs.UsersDTOs;
 using BeekeepingApi.DTOs.FarmWorkerDTOs;
+using BeekeepingApi.DTOs.FarmDTOs;
 
+//SJ
 namespace BeekeepingApi.Controllers
 {
     [Route("api/[controller]")]
@@ -30,17 +32,181 @@ namespace BeekeepingApi.Controllers
             _userService = userService;
         }
 
+        // GET: api/Users/1/FarmWorkers
+        [Authorize]
+        [HttpGet("{id}/FarmWorkers")]
+        public async Task<ActionResult<IEnumerable<FarmWorkerReadDTO>>> GetUserFarmWorkers(long id)
+        {
+            var currentUserId = long.Parse(User.Identity.Name);
+            if (id != currentUserId)
+                return Forbid();
+
+            var user = await _context.Users.FindAsync(id);
+
+            var farmWorkersList = await _context.FarmWorkers.Where(l => l.UserId == id).ToListAsync();
+
+            return _mapper.Map<IEnumerable<FarmWorkerReadDTO>>(farmWorkersList).ToList();
+        }
+
+        // DELETE: api/Users/5/FarmWorkers/1
+        [Authorize]
+        [HttpDelete("{userId}/FarmWorkers/{workerId}")]
+        public async Task<ActionResult<FarmWorkerReadDTO>> DeleteUserFarmWorker(long userId, long workerId)
+        {
+            var currentUserId = long.Parse(User.Identity.Name);
+            if (userId != currentUserId)
+                return Forbid();
+
+            var farmWorker = await _context.FarmWorkers.FindAsync(userId, workerId);
+            if (farmWorker == null)
+                return NotFound();
+
+            if (farmWorker.UserId != currentUserId)
+                return Forbid();
+
+            _context.FarmWorkers.Remove(farmWorker);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<FarmWorkerReadDTO>(farmWorker);
+        }
+
+        // GET: api/Users/1/Farms
+        [Authorize]
+        [HttpGet("{id}/Farms")]
+        public async Task<ActionResult<IEnumerable<FarmReadDTO>>> GetUserFarms(long id)
+        {
+            var currentUserId = long.Parse(User.Identity.Name);
+            if (id != currentUserId)
+                return Forbid();
+
+            var user = await _context.Users.FindAsync(id);
+
+            var farmWorkersList = await _context.FarmWorkers.Where(l => l.UserId == id).ToListAsync();
+            var farmList = new List<Farm>();
+            foreach (var farmWorker in farmWorkersList)
+            {
+                var farm = await _context.Farms.FindAsync(farmWorker.FarmId);
+                farmList.Add(farm);
+            }
+
+            return _mapper.Map<IEnumerable<FarmReadDTO>>(farmList).ToList();
+        }
+
+        // GET: api/Users/1/Farms/1
+        [Authorize]
+        [HttpGet("{userId}/Farms/{farmId}")]
+        public async Task<ActionResult<FarmReadDTO>> GetUserFarm(long userId, long farmId)
+        {
+            var currentUserId = long.Parse(User.Identity.Name);
+            if (userId != currentUserId)
+                return Forbid();
+
+            var farm = await _context.Farms.FindAsync(farmId);
+            var farmWorker = await _context.FarmWorkers.FindAsync(userId, farmId);
+
+            if (farm == null)
+                return NotFound();
+
+            if (farmWorker == null)
+                return Forbid();
+
+            return _mapper.Map<FarmReadDTO>(farm);
+        }
+
+        // POST: api/Users/5/Farms
+        [Authorize]
+        [HttpPost("{id}/Farms")]
+        public async Task<ActionResult<FarmReadDTO>> PostUserFarm(long id, FarmCreateDTO farmCreateDTO)
+        {
+            var user = await _context.Users.FindAsync(id);
+            var currentUserId = long.Parse(User.Identity.Name);
+
+            if (user == null || user.Id != currentUserId)
+                return Forbid();
+
+            var farm = _mapper.Map<Farm>(farmCreateDTO);
+            _context.Farms.Add(farm);
+            await _context.SaveChangesAsync();
+
+            var farmWorker = new FarmWorker
+            {
+                Role = WorkerRole.Owner,
+                FarmId = farm.Id,
+                UserId = user.Id
+            };
+            _context.FarmWorkers.Add(farmWorker);
+            await _context.SaveChangesAsync();
+
+            var farmReadDTO = _mapper.Map<FarmReadDTO>(farm);
+
+            return CreatedAtAction("GetUserFarm", "Users", new { userId = user.Id, farmId = farm.Id }, farmReadDTO);
+        }
+
+        // PUT: api/Users/5/Farms/1
+        [Authorize]
+        [HttpPut("{userId}/Farms/{farmId}")]
+        public async Task<IActionResult> PutUserFarm(long userId, long farmId, FarmEditDTO farmEditDTO)
+        {
+            var currentUserId = long.Parse(User.Identity.Name);
+            if (userId != currentUserId)
+                return Forbid();
+
+            if (farmId != farmEditDTO.Id)
+            {
+                return BadRequest();
+            }
+
+            var farm = await _context.Farms.FindAsync(farmId);
+            var farmWorker = await _context.FarmWorkers.FindAsync(userId, farmId);
+
+            if (farm == null)
+                return NotFound();
+
+            if (farmWorker == null)
+                return Forbid();
+
+            _mapper.Map(farmEditDTO, farm);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        // DELETE: api/Users/5/Farms/5
+        [Authorize]
+        [HttpDelete("{userId}/Farms/{farmId}")]
+        public async Task<ActionResult<FarmReadDTO>> DeleteUserFarm(long userId, long farmId)
+        {
+            var currentUserId = long.Parse(User.Identity.Name);
+            if (userId != currentUserId)
+                return Forbid();
+
+            var farm = await _context.Farms.FindAsync(farmId);
+            var farmWorker = await _context.FarmWorkers.FindAsync(userId, farmId);
+
+            if (farm == null)
+                return NotFound();
+
+            if (farmWorker == null)
+                return Forbid();
+
+            _context.Farms.Remove(farm);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<FarmReadDTO>(farm);
+        }
+
         // GET: api/Users
-        [Authorize(Roles = Role.Admin)]
+        /*[Authorize(Roles = Role.Admin)]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserReadDTO>>> GetUsers()
         {
             var userList = await _context.Users.ToListAsync();
 
             return _mapper.Map<IEnumerable<UserReadDTO>>(userList).ToList();
-        }
+        }*/
 
         // GET: api/Users/5
+
         [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<UserReadDTO>> GetUser(long id)
@@ -76,10 +242,6 @@ namespace BeekeepingApi.Controllers
             }
 
             var user = await _context.Users.FindAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
 
             _mapper.Map(userEditDTO, user);
             if (!string.IsNullOrWhiteSpace(userEditDTO.Password))
@@ -101,6 +263,12 @@ namespace BeekeepingApi.Controllers
                 return BadRequest(new { message = "User with username \"" + userCreateDTO.Username + "\" already exist." });
             }
 
+            var existingEmail = await _context.Users.Where(u => u.Email.Equals(userCreateDTO.Email)).FirstOrDefaultAsync();
+            if (existingEmail != null)
+            {
+                return BadRequest(new { message = "User with email \"" + userCreateDTO.Email + "\" already exist." });
+            }
+
             var user = _mapper.Map<User>(userCreateDTO);
 
             user.Role = Role.User;
@@ -114,7 +282,7 @@ namespace BeekeepingApi.Controllers
         }
 
         // DELETE: api/Users/5
-        [Authorize(Roles = Role.Admin)]
+        /*[Authorize(Roles = Role.Admin)]
         [HttpDelete("{id}")]
         public async Task<ActionResult<UserReadDTO>> DeleteUser(long id)
         {
@@ -141,7 +309,7 @@ namespace BeekeepingApi.Controllers
             await _context.SaveChangesAsync();
 
             return _mapper.Map<UserReadDTO>(user);
-        }
+        }*/
 
         [HttpPost("authenticate")]
         public async Task<ActionResult<UserWithTokenDTO>> AuthenticateUser(UserAuthenticate userAuthenticate)
@@ -162,10 +330,10 @@ namespace BeekeepingApi.Controllers
             return userWithToken;
         }
 
-        private bool UserExists(long id)
+        /*private bool UserExists(long id)
         {
             return _context.Users.Any(e => e.Id == id);
-        }
+        }*/
 
     }
 }
