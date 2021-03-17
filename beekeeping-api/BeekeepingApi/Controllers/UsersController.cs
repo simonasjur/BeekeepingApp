@@ -10,7 +10,7 @@ using AutoMapper;
 using BeekeepingApi.Services;
 using Microsoft.AspNetCore.Authorization;
 using BeekeepingApi.Helpers;
-using BeekeepingApi.DTOs.UsersDTOs;
+using BeekeepingApi.DTOs.UserDTOs;
 using BeekeepingApi.DTOs.FarmWorkerDTOs;
 using BeekeepingApi.DTOs.FarmDTOs;
 

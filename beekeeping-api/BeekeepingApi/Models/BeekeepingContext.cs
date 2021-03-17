@@ -34,5 +34,7 @@ namespace BeekeepingApi.Models
         public DbSet<Manufacturer> Manufacturers { get; set; }
 
         public DbSet<Super> Supers { get; set; }
+
+        public DbSet<BeekeepingApi.Models.Harvest> Harvest { get; set; }
     }
 }

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BeekeepingApi.DTOs.UsersDTOs
+namespace BeekeepingApi.DTOs.UserDTOs
 {
     public class UserCreateDTO
     {

@@ -20,5 +20,6 @@ namespace BeekeepingApi.Models
         public DateTime CreationDate { get; set; }
 
         public virtual ICollection<FarmWorker> FarmWorkers { get; set; }
+        public virtual ICollection<Harvest> Harvests { get; set; }
     }
 }

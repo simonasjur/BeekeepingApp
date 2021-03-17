@@ -1,4 +1,4 @@
-﻿using BeekeepingApi.DTOs.UsersDTOs;
+﻿using BeekeepingApi.DTOs.UserDTOs;
 using BeekeepingApi.Models;
 using System;
 using System.Collections.Generic;

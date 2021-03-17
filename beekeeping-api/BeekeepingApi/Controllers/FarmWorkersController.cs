@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace BeekeepingApi.Controllers
 {
     [Authorize]
-    [Route("api/Users/{userId}/[controller]")]
+    [Route("api/Farms/{farmId}/[controller]")]
     [ApiController]
     public class FarmWorkersController : ControllerBase
     {
@@ -25,37 +25,30 @@ namespace BeekeepingApi.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/Users/1/FarmWorkers
-        [Authorize]
+        // GET: api/Farms/1/FarmWorkers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<FarmWorkerReadDTO>>> GetFarmWorkers(long userId)
+        public async Task<ActionResult<IEnumerable<FarmWorkerReadDTO>>> GetFarmWorkers(long farmId)
         {
             var currentUserId = long.Parse(User.Identity.Name);
-            if (userId != currentUserId)
+            var farmWorkersList = await _context.FarmWorkers.Where(l => l.FarmId == farmId).ToListAsync();
+
+            if (farmWorkersList.Any() && farmWorkersList.First().UserId != currentUserId)
                 return Forbid();
-
-            var user = await _context.Users.FindAsync(userId);
-
-            var farmWorkersList = await _context.FarmWorkers.Where(l => l.UserId == userId).ToListAsync();
 
             return _mapper.Map<IEnumerable<FarmWorkerReadDTO>>(farmWorkersList).ToList();
         }
 
-        // DELETE: api/Users/5/FarmWorkers/1
-        [Authorize]
+        // DELETE: api/Farms/5/FarmWorkers/1
         [HttpDelete("{workerId}")]
-        public async Task<ActionResult<FarmWorkerReadDTO>> DeleteFarmWorker(long userId, long workerId)
+        public async Task<ActionResult<FarmWorkerReadDTO>> DeleteFarmWorker(long farmId, long workerId)
         {
             var currentUserId = long.Parse(User.Identity.Name);
-            if (userId != currentUserId)
+            if (workerId != currentUserId)
                 return Forbid();
 
-            var farmWorker = await _context.FarmWorkers.FindAsync(userId, workerId);
+            var farmWorker = await _context.FarmWorkers.FindAsync(workerId, farmId);
             if (farmWorker == null)
                 return NotFound();
-
-            if (farmWorker.UserId != currentUserId)
-                return Forbid();
 
             _context.FarmWorkers.Remove(farmWorker);
             await _context.SaveChangesAsync();

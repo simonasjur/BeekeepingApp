@@ -1,4 +1,4 @@
-﻿using BeekeepingApi.DTOs.UsersDTOs;
+﻿using BeekeepingApi.DTOs.UserDTOs;
 using BeekeepingApi.Helpers;
 using BeekeepingApi.Models;
 using Microsoft.Extensions.Options;

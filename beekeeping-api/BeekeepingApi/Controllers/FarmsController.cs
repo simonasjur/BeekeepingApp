@@ -48,7 +48,6 @@ namespace BeekeepingApi.Controllers
         }
 
         // GET: api/Users/1/Farms/1
-        [Authorize]
         [HttpGet("{farmId}")]
         public async Task<ActionResult<FarmReadDTO>> GetFarm(long userId, long farmId)
         {
@@ -70,7 +69,6 @@ namespace BeekeepingApi.Controllers
 
 
         // POST: api/Users/5/Farms
-        [Authorize]
         [HttpPost]
         public async Task<ActionResult<FarmReadDTO>> PostFarm(long userId, FarmCreateDTO farmCreateDTO)
         {
@@ -99,7 +97,6 @@ namespace BeekeepingApi.Controllers
         }
 
         // PUT: api/Users/5/Farms/1
-        [Authorize]
         [HttpPut("{farmId}")]
         public async Task<IActionResult> PutFarm(long userId, long farmId, FarmEditDTO farmEditDTO)
         {
@@ -128,7 +125,6 @@ namespace BeekeepingApi.Controllers
         }
 
         // DELETE: api/Users/5/Farms/5
-        [Authorize]
         [HttpDelete("{farmId}")]
         public async Task<ActionResult<FarmReadDTO>> DeleteFarm(long userId, long farmId)
         {
