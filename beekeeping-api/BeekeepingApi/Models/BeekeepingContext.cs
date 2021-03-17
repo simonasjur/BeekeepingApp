@@ -17,6 +17,18 @@ namespace BeekeepingApi.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<FarmWorker>().HasKey(e => new { e.UserId, e.FarmId });
+
+            modelBuilder.Entity<Apiary>()
+                .HasMany<ApiaryBeehive>(a => a.ApiaryBeehives)
+                .WithOne(ab => ab.Apiary)
+                .HasForeignKey(ab => ab.ApiaryId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Beehive>()
+                .HasMany<ApiaryBeehive>(b => b.ApiaryBeehives)
+                .WithOne(ab => ab.Beehive)
+                .HasForeignKey(ab => ab.BeehiveId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
         public DbSet<User> Users { get; set; }

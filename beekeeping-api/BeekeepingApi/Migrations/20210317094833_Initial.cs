@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BeekeepingApi.Migrations
 {
-    public partial class init : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -85,15 +85,15 @@ namespace BeekeepingApi.Migrations
                     No = table.Column<int>(type: "int", nullable: false),
                     AcquireDay = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Color = table.Column<int>(type: "int", nullable: false),
-                    ManufacturerId = table.Column<long>(type: "bigint", nullable: false)
+                    FarmId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Beehives", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Beehives_Manufacturers_ManufacturerId",
-                        column: x => x.ManufacturerId,
-                        principalTable: "Manufacturers",
+                        name: "FK_Beehives_Farms_FarmId",
+                        column: x => x.FarmId,
+                        principalTable: "Farms",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -144,13 +144,13 @@ namespace BeekeepingApi.Migrations
                         column: x => x.ApiaryId,
                         principalTable: "Apiaries",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ApiaryBeehives_Beehives_BeehiveId",
                         column: x => x.BeehiveId,
                         principalTable: "Beehives",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -191,9 +191,9 @@ namespace BeekeepingApi.Migrations
                 column: "BeehiveId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Beehives_ManufacturerId",
+                name: "IX_Beehives_FarmId",
                 table: "Beehives",
-                column: "ManufacturerId");
+                column: "FarmId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FarmWorkers_FarmId",
@@ -215,6 +215,9 @@ namespace BeekeepingApi.Migrations
                 name: "FarmWorkers");
 
             migrationBuilder.DropTable(
+                name: "Manufacturers");
+
+            migrationBuilder.DropTable(
                 name: "Supers");
 
             migrationBuilder.DropTable(
@@ -228,9 +231,6 @@ namespace BeekeepingApi.Migrations
 
             migrationBuilder.DropTable(
                 name: "Farms");
-
-            migrationBuilder.DropTable(
-                name: "Manufacturers");
         }
     }
 }

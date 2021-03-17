@@ -32,11 +32,10 @@ namespace BeekeepingApi.Models
 
         public Colors Color { get; set; }
 
-        public long ManufacturerId { get; set; }
+        public long FarmId { get; set; }
 
-
-        [ForeignKey("ManufacturerId")]
-        public Manufacturer Manufacturer { get; set; }
+        [ForeignKey("FarmId")]
+        public Farm Farm { get; set; }
 
         public virtual ICollection<Super> Supers { get; set; }
 

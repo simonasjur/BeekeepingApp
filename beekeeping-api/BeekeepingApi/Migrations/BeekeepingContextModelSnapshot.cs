@@ -93,7 +93,7 @@ namespace BeekeepingApi.Migrations
                     b.Property<int>("Color")
                         .HasColumnType("int");
 
-                    b.Property<long>("ManufacturerId")
+                    b.Property<long>("FarmId")
                         .HasColumnType("bigint");
 
                     b.Property<int>("No")
@@ -104,7 +104,7 @@ namespace BeekeepingApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ManufacturerId");
+                    b.HasIndex("FarmId");
 
                     b.ToTable("Beehives");
                 });
@@ -244,13 +244,13 @@ namespace BeekeepingApi.Migrations
                     b.HasOne("BeekeepingApi.Models.Apiary", "Apiary")
                         .WithMany("ApiaryBeehives")
                         .HasForeignKey("ApiaryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("BeekeepingApi.Models.Beehive", "Beehive")
                         .WithMany("ApiaryBeehives")
                         .HasForeignKey("BeehiveId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Apiary");
@@ -260,13 +260,13 @@ namespace BeekeepingApi.Migrations
 
             modelBuilder.Entity("BeekeepingApi.Models.Beehive", b =>
                 {
-                    b.HasOne("BeekeepingApi.Models.Manufacturer", "Manufacturer")
-                        .WithMany("Beehives")
-                        .HasForeignKey("ManufacturerId")
+                    b.HasOne("BeekeepingApi.Models.Farm", "Farm")
+                        .WithMany()
+                        .HasForeignKey("FarmId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Manufacturer");
+                    b.Navigation("Farm");
                 });
 
             modelBuilder.Entity("BeekeepingApi.Models.FarmWorker", b =>
@@ -314,11 +314,6 @@ namespace BeekeepingApi.Migrations
             modelBuilder.Entity("BeekeepingApi.Models.Farm", b =>
                 {
                     b.Navigation("FarmWorkers");
-                });
-
-            modelBuilder.Entity("BeekeepingApi.Models.Manufacturer", b =>
-                {
-                    b.Navigation("Beehives");
                 });
 
             modelBuilder.Entity("BeekeepingApi.Models.User", b =>
