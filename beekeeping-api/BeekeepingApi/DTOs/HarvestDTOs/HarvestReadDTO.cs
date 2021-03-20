@@ -14,5 +14,6 @@ namespace BeekeepingApi.DTOs.HarvestDTOs
         public DateTime EndDate { get; set; }
         public double Quantity { get; set; }
         public long FarmId { get; set; }
+        public long ApiaryId { get; set; }
     }
 }

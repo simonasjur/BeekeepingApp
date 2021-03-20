@@ -35,5 +35,10 @@ namespace BeekeepingApi.Models
 
         [ForeignKey("FarmId")]
         public Farm Farm { get; set; }
+
+        public long? ApiaryId { get; set; }
+
+        [ForeignKey("ApiaryId")]
+        public Apiary Apiary { get; set; }
     }
 }

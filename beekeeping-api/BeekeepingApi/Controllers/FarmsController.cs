@@ -105,16 +105,12 @@ namespace BeekeepingApi.Controllers
                 return Forbid();
 
             if (farmId != farmEditDTO.Id)
-            {
                 return BadRequest();
-            }
 
             var farm = await _context.Farms.FindAsync(farmId);
-            var farmWorker = await _context.FarmWorkers.FindAsync(userId, farmId);
-
             if (farm == null)
                 return NotFound();
-
+            var farmWorker = await _context.FarmWorkers.FindAsync(userId, farmId);
             if (farmWorker == null)
                 return Forbid();
 

@@ -29,6 +29,12 @@ namespace BeekeepingApi.Models
                 .WithOne(ab => ab.Beehive)
                 .HasForeignKey(ab => ab.BeehiveId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Apiary>()
+                .HasMany<Harvest>(a => a.Harvests)
+                .WithOne(ab => ab.Apiary)
+                .HasForeignKey(ab => ab.ApiaryId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
         public DbSet<User> Users { get; set; }
@@ -47,6 +53,6 @@ namespace BeekeepingApi.Models
 
         public DbSet<Super> Supers { get; set; }
 
-        public DbSet<BeekeepingApi.Models.Harvest> Harvest { get; set; }
+        public DbSet<Harvest> Harvests { get; set; }
     }
 }

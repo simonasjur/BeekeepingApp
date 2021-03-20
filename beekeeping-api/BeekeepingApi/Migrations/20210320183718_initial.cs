@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BeekeepingApi.Migrations
 {
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -124,6 +124,36 @@ namespace BeekeepingApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Harvests",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Product = table.Column<int>(type: "int", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "date", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "date", nullable: false),
+                    Quantity = table.Column<double>(type: "float", nullable: false),
+                    FarmId = table.Column<long>(type: "bigint", nullable: false),
+                    ApiaryId = table.Column<long>(type: "bigint", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Harvests", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Harvests_Apiaries_ApiaryId",
+                        column: x => x.ApiaryId,
+                        principalTable: "Apiaries",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Harvests_Farms_FarmId",
+                        column: x => x.FarmId,
+                        principalTable: "Farms",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ApiaryBeehives",
                 columns: table => new
                 {
@@ -201,6 +231,16 @@ namespace BeekeepingApi.Migrations
                 column: "FarmId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Harvests_ApiaryId",
+                table: "Harvests",
+                column: "ApiaryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Harvests_FarmId",
+                table: "Harvests",
+                column: "FarmId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Supers_BeehiveId",
                 table: "Supers",
                 column: "BeehiveId");
@@ -215,16 +255,19 @@ namespace BeekeepingApi.Migrations
                 name: "FarmWorkers");
 
             migrationBuilder.DropTable(
+                name: "Harvests");
+
+            migrationBuilder.DropTable(
                 name: "Manufacturers");
 
             migrationBuilder.DropTable(
                 name: "Supers");
 
             migrationBuilder.DropTable(
-                name: "Apiaries");
+                name: "Users");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Apiaries");
 
             migrationBuilder.DropTable(
                 name: "Beehives");

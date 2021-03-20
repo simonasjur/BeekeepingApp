@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BeekeepingApi.Models
+namespace BeekeepingApi.DTOs.ApiaryDTOs
 {
-    public class Apiary
+    public class ApiaryCreateDTO
     {
-        [Key]
-        public long Id { get; set; }
-
         [Required]
         public string Name { get; set; }
 
@@ -22,12 +18,5 @@ namespace BeekeepingApi.Models
         public double Latitude { get; set; }
 
         public long FarmId { get; set; }
-
-
-        [ForeignKey("FarmId")]
-        public Farm Farm { get; set; }
-
-        public virtual ICollection<ApiaryBeehive> ApiaryBeehives { get; set; }
-        public virtual ICollection<Harvest> Harvests { get; set; }
     }
 }

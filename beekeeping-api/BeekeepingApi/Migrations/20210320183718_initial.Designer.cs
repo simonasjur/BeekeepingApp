@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BeekeepingApi.Migrations
 {
     [DbContext(typeof(BeekeepingContext))]
-    [Migration("20210317094833_Initial")]
-    partial class Initial
+    [Migration("20210320183718_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -146,6 +146,40 @@ namespace BeekeepingApi.Migrations
                     b.HasIndex("FarmId");
 
                     b.ToTable("FarmWorkers");
+                });
+
+            modelBuilder.Entity("BeekeepingApi.Models.Harvest", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<long?>("ApiaryId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("date");
+
+                    b.Property<long>("FarmId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("Product")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Quantity")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("date");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApiaryId");
+
+                    b.HasIndex("FarmId");
+
+                    b.ToTable("Harvests");
                 });
 
             modelBuilder.Entity("BeekeepingApi.Models.Manufacturer", b =>
@@ -290,6 +324,24 @@ namespace BeekeepingApi.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("BeekeepingApi.Models.Harvest", b =>
+                {
+                    b.HasOne("BeekeepingApi.Models.Apiary", "Apiary")
+                        .WithMany("Harvests")
+                        .HasForeignKey("ApiaryId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("BeekeepingApi.Models.Farm", "Farm")
+                        .WithMany("Harvests")
+                        .HasForeignKey("FarmId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Apiary");
+
+                    b.Navigation("Farm");
+                });
+
             modelBuilder.Entity("BeekeepingApi.Models.Super", b =>
                 {
                     b.HasOne("BeekeepingApi.Models.Beehive", "Beehive")
@@ -304,6 +356,8 @@ namespace BeekeepingApi.Migrations
             modelBuilder.Entity("BeekeepingApi.Models.Apiary", b =>
                 {
                     b.Navigation("ApiaryBeehives");
+
+                    b.Navigation("Harvests");
                 });
 
             modelBuilder.Entity("BeekeepingApi.Models.Beehive", b =>
@@ -316,6 +370,8 @@ namespace BeekeepingApi.Migrations
             modelBuilder.Entity("BeekeepingApi.Models.Farm", b =>
                 {
                     b.Navigation("FarmWorkers");
+
+                    b.Navigation("Harvests");
                 });
 
             modelBuilder.Entity("BeekeepingApi.Models.User", b =>

@@ -29,6 +29,10 @@ namespace BeekeepingApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<FarmWorkerReadDTO>>> GetFarmWorkers(long farmId)
         {
+            var farm = await _context.Farms.FindAsync(farmId);
+            if (farm == null)
+                return NotFound();
+
             var currentUserId = long.Parse(User.Identity.Name);
             var farmWorkersList = await _context.FarmWorkers.Where(l => l.FarmId == farmId).ToListAsync();
 
