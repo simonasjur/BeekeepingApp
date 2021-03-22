@@ -321,13 +321,13 @@ namespace BeekeepingApi.Migrations
                     b.HasOne("BeekeepingApi.Models.Apiary", "Apiary")
                         .WithMany("ApiaryBeehives")
                         .HasForeignKey("ApiaryId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("BeekeepingApi.Models.Beehive", "Beehive")
                         .WithMany("ApiaryBeehives")
                         .HasForeignKey("BeehiveId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.Navigation("Apiary");
@@ -338,7 +338,7 @@ namespace BeekeepingApi.Migrations
             modelBuilder.Entity("BeekeepingApi.Models.Beehive", b =>
                 {
                     b.HasOne("BeekeepingApi.Models.Farm", "Farm")
-                        .WithMany()
+                        .WithMany("Beehives")
                         .HasForeignKey("FarmId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -370,7 +370,7 @@ namespace BeekeepingApi.Migrations
                     b.HasOne("BeekeepingApi.Models.Apiary", "Apiary")
                         .WithMany("Harvests")
                         .HasForeignKey("ApiaryId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.ClientCascade);
 
                     b.HasOne("BeekeepingApi.Models.Farm", "Farm")
                         .WithMany("Harvests")
@@ -438,6 +438,8 @@ namespace BeekeepingApi.Migrations
             modelBuilder.Entity("BeekeepingApi.Models.Farm", b =>
                 {
                     b.Navigation("Apiaries");
+
+                    b.Navigation("Beehives");
 
                     b.Navigation("FarmWorkers");
 

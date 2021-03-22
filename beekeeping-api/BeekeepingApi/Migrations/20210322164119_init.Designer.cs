@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BeekeepingApi.Migrations
 {
     [DbContext(typeof(BeekeepingContext))]
-    [Migration("20210320183718_initial")]
-    partial class initial
+    [Migration("20210322164119_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -224,6 +224,49 @@ namespace BeekeepingApi.Migrations
                     b.ToTable("Supers");
                 });
 
+            modelBuilder.Entity("BeekeepingApi.Models.TodoItem", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<long?>("ApiaryId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("BeehiveId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DueDate")
+                        .HasColumnType("date");
+
+                    b.Property<long>("FarmId")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsComplete")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApiaryId");
+
+                    b.HasIndex("BeehiveId");
+
+                    b.HasIndex("FarmId");
+
+                    b.ToTable("TodoItems");
+                });
+
             modelBuilder.Entity("BeekeepingApi.Models.User", b =>
                 {
                     b.Property<long>("Id")
@@ -267,7 +310,7 @@ namespace BeekeepingApi.Migrations
             modelBuilder.Entity("BeekeepingApi.Models.Apiary", b =>
                 {
                     b.HasOne("BeekeepingApi.Models.Farm", "Farm")
-                        .WithMany()
+                        .WithMany("Apiaries")
                         .HasForeignKey("FarmId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -280,13 +323,13 @@ namespace BeekeepingApi.Migrations
                     b.HasOne("BeekeepingApi.Models.Apiary", "Apiary")
                         .WithMany("ApiaryBeehives")
                         .HasForeignKey("ApiaryId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("BeekeepingApi.Models.Beehive", "Beehive")
                         .WithMany("ApiaryBeehives")
                         .HasForeignKey("BeehiveId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.Navigation("Apiary");
@@ -297,7 +340,7 @@ namespace BeekeepingApi.Migrations
             modelBuilder.Entity("BeekeepingApi.Models.Beehive", b =>
                 {
                     b.HasOne("BeekeepingApi.Models.Farm", "Farm")
-                        .WithMany()
+                        .WithMany("Beehives")
                         .HasForeignKey("FarmId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -329,7 +372,7 @@ namespace BeekeepingApi.Migrations
                     b.HasOne("BeekeepingApi.Models.Apiary", "Apiary")
                         .WithMany("Harvests")
                         .HasForeignKey("ApiaryId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.ClientCascade);
 
                     b.HasOne("BeekeepingApi.Models.Farm", "Farm")
                         .WithMany("Harvests")
@@ -353,11 +396,36 @@ namespace BeekeepingApi.Migrations
                     b.Navigation("Beehive");
                 });
 
+            modelBuilder.Entity("BeekeepingApi.Models.TodoItem", b =>
+                {
+                    b.HasOne("BeekeepingApi.Models.Apiary", "Apiary")
+                        .WithMany("TodoItems")
+                        .HasForeignKey("ApiaryId");
+
+                    b.HasOne("BeekeepingApi.Models.Beehive", "Beehive")
+                        .WithMany("TodoItems")
+                        .HasForeignKey("BeehiveId");
+
+                    b.HasOne("BeekeepingApi.Models.Farm", "Farm")
+                        .WithMany("TodoItems")
+                        .HasForeignKey("FarmId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Apiary");
+
+                    b.Navigation("Beehive");
+
+                    b.Navigation("Farm");
+                });
+
             modelBuilder.Entity("BeekeepingApi.Models.Apiary", b =>
                 {
                     b.Navigation("ApiaryBeehives");
 
                     b.Navigation("Harvests");
+
+                    b.Navigation("TodoItems");
                 });
 
             modelBuilder.Entity("BeekeepingApi.Models.Beehive", b =>
@@ -365,13 +433,21 @@ namespace BeekeepingApi.Migrations
                     b.Navigation("ApiaryBeehives");
 
                     b.Navigation("Supers");
+
+                    b.Navigation("TodoItems");
                 });
 
             modelBuilder.Entity("BeekeepingApi.Models.Farm", b =>
                 {
+                    b.Navigation("Apiaries");
+
+                    b.Navigation("Beehives");
+
                     b.Navigation("FarmWorkers");
 
                     b.Navigation("Harvests");
+
+                    b.Navigation("TodoItems");
                 });
 
             modelBuilder.Entity("BeekeepingApi.Models.User", b =>

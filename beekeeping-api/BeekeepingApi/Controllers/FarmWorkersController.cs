@@ -44,7 +44,7 @@ namespace BeekeepingApi.Controllers
             return _mapper.Map<IEnumerable<FarmWorkerReadDTO>>(farmWorkersList).ToList();
         }
 
-        // DELETE: api/Users/1/FarmWorkers/1
+        // DELETE: api/Farms/1/FarmWorkers/1
         [HttpDelete("{workerId}")]
         public async Task<ActionResult<FarmWorkerReadDTO>> DeleteFarmWorker(long farmId, long workerId)
         {
