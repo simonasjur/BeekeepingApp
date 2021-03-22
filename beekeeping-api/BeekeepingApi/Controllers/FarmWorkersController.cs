@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BeekeepingApi.DTOs.FarmWorkerDTOs;
 using BeekeepingApi.Models;
+using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -27,14 +28,15 @@ namespace BeekeepingApi.Controllers
 
         // GET: api/Farms/1/FarmWorkers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<FarmWorkerReadDTO>>> GetFarmWorkers(long farmId)
+        [EnableQuery()]
+        public async Task<ActionResult<IEnumerable<FarmWorkerReadDTO>>> GetFarmWorkers(long id)
         {
-            var farm = await _context.Farms.FindAsync(farmId);
+            var farm = await _context.Farms.FindAsync(id);
             if (farm == null)
                 return NotFound();
 
             var currentUserId = long.Parse(User.Identity.Name);
-            var farmWorkersList = await _context.FarmWorkers.Where(l => l.FarmId == farmId).ToListAsync();
+            var farmWorkersList = await _context.FarmWorkers.Where(l => l.FarmId == id).ToListAsync();
 
             if (farmWorkersList.Any() && farmWorkersList.First().UserId != currentUserId)
                 return Forbid();
@@ -42,7 +44,7 @@ namespace BeekeepingApi.Controllers
             return _mapper.Map<IEnumerable<FarmWorkerReadDTO>>(farmWorkersList).ToList();
         }
 
-        // DELETE: api/Farms/5/FarmWorkers/1
+        // DELETE: api/Users/1/FarmWorkers/1
         [HttpDelete("{workerId}")]
         public async Task<ActionResult<FarmWorkerReadDTO>> DeleteFarmWorker(long farmId, long workerId)
         {

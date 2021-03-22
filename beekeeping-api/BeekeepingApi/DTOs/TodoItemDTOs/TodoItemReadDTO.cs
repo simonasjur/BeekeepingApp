@@ -16,5 +16,8 @@ namespace BeekeepingApi.DTOs.TodoItemDTOs
         public string Description { get; set; }
         public DateTime DueDate { get; set; }
         public bool IsComplete { get; set; }
+        public long FarmId { get; set; }
+        public long ApiaryId { get; set; }
+        public long BeehiveId { get; set; }
     }
 }

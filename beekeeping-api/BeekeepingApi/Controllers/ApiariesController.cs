@@ -9,11 +9,12 @@ using BeekeepingApi.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using BeekeepingApi.DTOs.ApiaryDTOs;
+using Microsoft.AspNet.OData;
 
 namespace BeekeepingApi.Controllers
 {
     [Authorize]
-    [Route("api/Farms/{farmId}/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class ApiariesController : ControllerBase
     {
@@ -27,17 +28,16 @@ namespace BeekeepingApi.Controllers
         }
 
         // GET: api/Farms/1/Apiaries
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<ApiaryReadDTO>>> GetApiaries(long farmId)
-        {
-            var currentUserId = long.Parse(User.Identity.Name);
+        [HttpGet("/api/Farms/{farmId}/Apiaries")]
+        [EnableQuery()]
+        public async Task<ActionResult<IEnumerable<ApiaryReadDTO>>> GetFarmApiaries(long farmId)
+        {           
             var farm = await _context.Farms.FindAsync(farmId);
-
             if (farm == null)
                 return NotFound();
 
+            var currentUserId = long.Parse(User.Identity.Name);
             var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, farmId);
-
             if (farmWorker == null)
                 return Forbid();
 
@@ -46,36 +46,32 @@ namespace BeekeepingApi.Controllers
             return _mapper.Map<IEnumerable<ApiaryReadDTO>>(harvestList).ToList();
         }
 
-        // GET: api/Farms/1/Apiaries/1
-        [HttpGet("{apiaryId}")]
-        public async Task<ActionResult<ApiaryReadDTO>> GetApiary(long farmId, long apiaryId)
+        // GET: api/Apiaries/1
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ApiaryReadDTO>> GetApiary(long id)
         {
-            var currentUserId = long.Parse(User.Identity.Name);
-            var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, farmId);
-            if (farmWorker == null)
-                return Forbid();
-
-            var apiary = await _context.Apiaries.FindAsync(apiaryId);
+            var apiary = await _context.Apiaries.FindAsync(id);
             if (apiary == null)
                 return NotFound();
+
+            var currentUserId = long.Parse(User.Identity.Name);
+            var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, apiary.FarmId);
+            if (farmWorker == null)
+                return Forbid();
 
             return _mapper.Map<ApiaryReadDTO>(apiary);
         }
 
-        // POST: api/Farms/5/Apiaries
+        // POST: api/Apiaries
         [HttpPost]
-        public async Task<ActionResult<ApiaryReadDTO>> PostApiary(long farmId, ApiaryCreateDTO apiaryCreateDTO)
+        public async Task<ActionResult<ApiaryReadDTO>> CreateApiary(ApiaryCreateDTO apiaryCreateDTO)
         {
-            if (farmId != apiaryCreateDTO.FarmId)
-                return BadRequest();
-
-            var farm = await _context.Farms.FindAsync(farmId);
+            var farm = await _context.Farms.FindAsync(apiaryCreateDTO.FarmId);
             if (farm == null)
                 return BadRequest();
 
             var currentUserId = long.Parse(User.Identity.Name);
-            var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, farmId);
-
+            var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, farm.Id);
             if (farmWorker == null)
                 return Forbid();
 
@@ -85,25 +81,25 @@ namespace BeekeepingApi.Controllers
 
             var apiaryReadDTO = _mapper.Map<ApiaryReadDTO>(apiary);
 
-            return CreatedAtAction("GetApiary", "Apiaries", new { farmId = apiary.FarmId, apiaryId = apiary.Id }, apiaryReadDTO);
+            return CreatedAtAction("GetApiary", "Apiaries", new { id = apiary.Id }, apiaryReadDTO);
         }
 
-        // PUT: api/Farms/5/Apiaries/1
-        [HttpPut("{apiaryId}")]
-        public async Task<IActionResult> PutApiary(long farmId, long apiaryId, ApiaryEditDTO apiaryEditDTO)
+        // PUT: api/Apiaries/1
+        [HttpPut("{id}")]
+        public async Task<IActionResult> EditApiary(long id, ApiaryEditDTO apiaryEditDTO)
         {
-            if (apiaryId != apiaryEditDTO.Id)
+            if (id != apiaryEditDTO.Id)
                 return BadRequest();
 
-            var farm = await _context.Farms.FindAsync(farmId);
-            if (farm == null)
-                return NotFound();
-            var apiary = await _context.Apiaries.FindAsync(apiaryId);
+            var apiary = await _context.Apiaries.FindAsync(id);
             if (apiary == null)
+                return NotFound();
+            var farm = await _context.Farms.FindAsync(apiary.Id);
+            if (farm == null)
                 return NotFound();
 
             var currentUserId = long.Parse(User.Identity.Name);
-            var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, farmId);
+            var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, farm.Id);
             if (farmWorker == null)
                 return Forbid();
 
@@ -113,19 +109,19 @@ namespace BeekeepingApi.Controllers
             return NoContent();
         }
 
-        // DELETE: api/Farms/5/Apiaries/5
-        [HttpDelete("{harvestId}")]
-        public async Task<ActionResult<ApiaryReadDTO>> DeleteApiary(long farmId, long apiaryId)
+        // DELETE: api/Apiaries/5
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<ApiaryReadDTO>> DeleteApiary(long id)
         {
-            var farm = await _context.Farms.FindAsync(farmId);
-            if (farm == null)
-                return NotFound();
-            var apiary = await _context.Apiaries.FindAsync(apiaryId);
+            var apiary = await _context.Apiaries.FindAsync(id);
             if (apiary == null)
+                return NotFound();
+            var farm = await _context.Farms.FindAsync(apiary.FarmId);
+            if (farm == null)
                 return NotFound();
 
             var currentUserId = long.Parse(User.Identity.Name);
-            var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, farmId);
+            var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, farm.Id);
             if (farmWorker == null)
                 return Forbid();
 

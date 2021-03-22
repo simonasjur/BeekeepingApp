@@ -20,6 +20,7 @@ namespace BeekeepingApi.Models
         public DateTime CreationDate { get; set; }
 
         public virtual ICollection<FarmWorker> FarmWorkers { get; set; }
+        public virtual ICollection<Apiary> Apiaries { get; set; }
         public virtual ICollection<Harvest> Harvests { get; set; }
         public virtual ICollection<TodoItem> TodoItems { get; set; }
     }
