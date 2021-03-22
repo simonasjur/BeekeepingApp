@@ -13,7 +13,7 @@ using BeekeepingApi.DTOs.HarvestDTOs;
 namespace BeekeepingApi.Controllers
 {
     [Authorize]
-    [Route("api/Farms/{farmId}/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class HarvestsController : ControllerBase
     {
@@ -27,112 +27,21 @@ namespace BeekeepingApi.Controllers
         }
 
         // GET: api/Farms/1/Harvests
-        [HttpGet]
+        [HttpGet("/api/Farms/{farmId}/Harvests")]
         public async Task<ActionResult<IEnumerable<HarvestReadDTO>>> GetFarmHarvests(long farmId)
         {
-            var currentUserId = long.Parse(User.Identity.Name);
             var farm = await _context.Farms.FindAsync(farmId);
-
             if (farm == null)
                 return NotFound();
 
+            var currentUserId = long.Parse(User.Identity.Name);
             var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, farmId);
-
             if (farmWorker == null)
                 return Forbid();
 
             var harvestList = await _context.Harvests.Where(l => l.FarmId == farmId).ToListAsync();
 
             return _mapper.Map<IEnumerable<HarvestReadDTO>>(harvestList).ToList();
-        }
-
-        // GET: api/Farms/1/Harvests/1
-        [HttpGet("{harvestId}")]
-        public async Task<ActionResult<HarvestReadDTO>> GetFarmHarvest(long farmId, long harvestId)
-        {
-            var currentUserId = long.Parse(User.Identity.Name);
-            var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, farmId);
-            if (farmWorker == null)
-                return Forbid();
-
-            var harvest = await _context.Harvests.FindAsync(harvestId);
-            if (harvest == null)
-                return NotFound();
-
-            return _mapper.Map<HarvestReadDTO>(harvest);
-        }
-
-        // POST: api/Farms/5/Harvests
-        [HttpPost]
-        public async Task<ActionResult<HarvestReadDTO>> PostFarmHarvest(long farmId, HarvestCreateDTO harvestCreateDTO)
-        {
-            if (farmId != harvestCreateDTO.FarmId)
-                return BadRequest();
-
-            var farm = await _context.Farms.FindAsync(farmId);
-            if (farm == null)
-                return BadRequest();
-
-            var currentUserId = long.Parse(User.Identity.Name);
-            var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, farmId);
-
-            if (farmWorker == null)
-                return Forbid();
-
-            var harvest = _mapper.Map<Harvest>(harvestCreateDTO);
-            _context.Harvests.Add(harvest);
-            await _context.SaveChangesAsync();
-
-            var harvestReadDTO = _mapper.Map<HarvestReadDTO>(harvest);
-
-            return CreatedAtAction("GetFarmHarvest", "Harvests", new { farmId = harvest.FarmId, harvestId = harvest.Id }, harvestReadDTO);
-        }
-
-        // PUT: api/Farms/5/Harvests/1
-        [HttpPut("{harvestId}")]
-        public async Task<IActionResult> PutFarmHarvest(long farmId, long harvestId, HarvestEditDTO harvestEditDTO)
-        {
-            if (harvestId != harvestEditDTO.Id)
-                return BadRequest();
-
-            var farm = await _context.Farms.FindAsync(farmId);
-            if (farm == null)
-                return NotFound();
-            var harvest = await _context.Harvests.FindAsync(harvestId);
-            if (harvest == null)
-                return NotFound();
-
-            var currentUserId = long.Parse(User.Identity.Name);
-            var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, farmId);
-            if (farmWorker == null)
-                return Forbid();
-
-            _mapper.Map(harvestEditDTO, harvest);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        // DELETE: api/Farms/5/Harvests/5
-        [HttpDelete("{harvestId}")]
-        public async Task<ActionResult<HarvestReadDTO>> DeleteFarmHarvest(long farmId, long harvestId)
-        {
-            var farm = await _context.Farms.FindAsync(farmId);
-            if (farm == null)
-                return NotFound();
-            var harvest = await _context.Harvests.FindAsync(harvestId);
-            if (harvest == null)
-                return NotFound();
-
-            var currentUserId = long.Parse(User.Identity.Name);
-            var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, farmId);
-            if (farmWorker == null)
-                return Forbid();
-
-            _context.Harvests.Remove(harvest);
-            await _context.SaveChangesAsync();
-
-            return _mapper.Map<HarvestReadDTO>(harvest);
         }
 
         // GET: api/Apiaries/1/Harvests
@@ -154,6 +63,93 @@ namespace BeekeepingApi.Controllers
             var harvestList = await _context.Harvests.Where(l => l.ApiaryId == apiaryId).ToListAsync();
 
             return _mapper.Map<IEnumerable<HarvestReadDTO>>(harvestList).ToList();
+        }
+
+        // GET: api/Harvests/1
+        [HttpGet("{id}")]
+        public async Task<ActionResult<HarvestReadDTO>> GetHarvest(long id)
+        {            
+            var harvest = await _context.Harvests.FindAsync(id);
+            if (harvest == null)
+                return NotFound();
+
+            var farm = await _context.Farms.FindAsync(harvest.FarmId);
+
+            var currentUserId = long.Parse(User.Identity.Name);
+            var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, farm.Id);
+            if (farmWorker == null)
+                return Forbid();
+
+            return _mapper.Map<HarvestReadDTO>(harvest);
+        }
+
+        // POST: api/Harvests
+        [HttpPost]
+        public async Task<ActionResult<HarvestReadDTO>> CreateHarvest(HarvestCreateDTO harvestCreateDTO)
+        {
+            var farm = await _context.Farms.FindAsync(harvestCreateDTO.FarmId);
+            if (farm == null)
+                return BadRequest();
+
+            var currentUserId = long.Parse(User.Identity.Name);
+            var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, farm.Id);
+            if (farmWorker == null)
+                return Forbid();
+
+            var harvest = _mapper.Map<Harvest>(harvestCreateDTO);
+            _context.Harvests.Add(harvest);
+            await _context.SaveChangesAsync();
+
+            var harvestReadDTO = _mapper.Map<HarvestReadDTO>(harvest);
+
+            return CreatedAtAction("GetHarvest", "Harvests", new { id = harvest.Id }, harvestReadDTO);
+        }
+
+        // PUT: api/Harvests/1
+        [HttpPut("{id}")]
+        public async Task<IActionResult> EditHarvest(long id, HarvestEditDTO harvestEditDTO)
+        {
+            if (id != harvestEditDTO.Id)
+                return BadRequest();
+
+            var harvest = await _context.Harvests.FindAsync(id);
+            if (harvest == null)
+                return NotFound();
+            var farm = await _context.Farms.FindAsync(harvest.FarmId);
+            if (farm == null)
+                return NotFound();
+
+            var currentUserId = long.Parse(User.Identity.Name);
+            var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, farm.Id);
+            if (farmWorker == null)
+                return Forbid();
+
+            _mapper.Map(harvestEditDTO, harvest);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        // DELETE: api/Harvests/5
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<HarvestReadDTO>> DeleteHarvest(long id)
+        {
+            var harvest = await _context.Harvests.FindAsync(id);
+            if (harvest == null)
+                return NotFound();
+            var farm = await _context.Farms.FindAsync(harvest.FarmId);
+            if (farm == null)
+                return NotFound();
+
+            var currentUserId = long.Parse(User.Identity.Name);
+            var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, farm.Id);
+            if (farmWorker == null)
+                return Forbid();
+
+            _context.Harvests.Remove(harvest);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<HarvestReadDTO>(harvest);
         }
 
         // GET: api/Apiaries/1/Harvests/1

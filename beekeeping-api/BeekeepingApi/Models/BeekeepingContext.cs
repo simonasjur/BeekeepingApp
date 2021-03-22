@@ -54,5 +54,7 @@ namespace BeekeepingApi.Models
         public DbSet<Super> Supers { get; set; }
 
         public DbSet<Harvest> Harvests { get; set; }
+
+        public DbSet<BeekeepingApi.Models.TodoItem> TodoItem { get; set; }
     }
 }

@@ -8,17 +8,20 @@ using System.Threading.Tasks;
 using BeekeepingApi.Helpers;
 using BeekeepingApi.Models;
 using BeekeepingApi.Services;
+using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Net.Http.Headers;
 
 namespace BeekeepingApi
 {
@@ -36,7 +39,8 @@ namespace BeekeepingApi
         {
             services.AddCors();
             services.AddDbContext<BeekeepingContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("BeekeepingConnection")));
-            services.AddControllers();
+            services.AddControllers(mvcOptions =>
+                mvcOptions.EnableEndpointRouting = false);
             services.AddSwaggerGen(options =>
             {
                 options.SwaggerDoc("v1",
@@ -84,6 +88,19 @@ namespace BeekeepingApi
                     ValidateAudience = false
                 };
             });
+            services.AddOData();
+            services.AddMvcCore(options =>
+            {
+                foreach (var outputFormatter in options.OutputFormatters.OfType<OutputFormatter>().Where(x => x.SupportedMediaTypes.Count == 0))
+                {
+                    outputFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/prs.odatatestxx-odata"));
+                }
+
+                foreach (var inputFormatter in options.InputFormatters.OfType<InputFormatter>().Where(x => x.SupportedMediaTypes.Count == 0))
+                {
+                    inputFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/prs.odatatestxx-odata"));
+                }
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -107,10 +124,10 @@ namespace BeekeepingApi
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
+            /*app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-            });
+            });*/
 
             app.UseSwagger();
 
@@ -118,6 +135,12 @@ namespace BeekeepingApi
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Swagger Demo API");
                 options.RoutePrefix = "";
+            });
+
+            app.UseMvc(routeBuilder =>
+            {
+                routeBuilder.EnableDependencyInjection();
+                routeBuilder.Select().OrderBy().Filter();
             });
         }
     }

@@ -19,10 +19,12 @@ namespace BeekeepingApi.Models
 
         [ForeignKey("UserID")]
         public long UserId { get; set; }
+
         public User User { get; set; }
 
         [ForeignKey("FarmID")]
         public long FarmId { get; set; }
+
         public Farm Farm { get; set; }
     }
 }

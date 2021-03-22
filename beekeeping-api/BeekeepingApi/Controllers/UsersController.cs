@@ -43,7 +43,6 @@ namespace BeekeepingApi.Controllers
         }*/
 
         // GET: api/Users/5
-
         [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<UserReadDTO>> GetUser(long id)
