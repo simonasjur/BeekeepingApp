@@ -16,7 +16,7 @@
 Project is currently in development stage. We're creating this project to learn .NET Core and Angular. Also, to create app that would be beneficial in our beekeeping work.
 
 ## Technologies
-Server-side: ASP.NET Core 3.2 Web API, EF Core, OData, Swagger
+Server-side: ASP.NET Core Web API, EF Core, OData, Swagger
 
 Client-side: Angular
 
