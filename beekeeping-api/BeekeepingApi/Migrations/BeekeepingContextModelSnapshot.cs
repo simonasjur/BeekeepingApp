@@ -62,7 +62,7 @@ namespace BeekeepingApi.Migrations
                     b.Property<long>("BeehiveId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("DepartDate")
+                    b.Property<DateTime?>("DepartDate")
                         .HasColumnType("datetime2");
 
                     b.Property<double>("X")

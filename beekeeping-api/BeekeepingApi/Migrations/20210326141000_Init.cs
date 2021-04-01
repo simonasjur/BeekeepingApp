@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BeekeepingApi.Migrations
 {
-    public partial class init : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -162,7 +162,7 @@ namespace BeekeepingApi.Migrations
                     ArriveDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     X = table.Column<double>(type: "float", nullable: false),
                     Y = table.Column<double>(type: "float", nullable: false),
-                    DepartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DepartDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ApiaryId = table.Column<long>(type: "bigint", nullable: false),
                     BeehiveId = table.Column<long>(type: "bigint", nullable: false)
                 },

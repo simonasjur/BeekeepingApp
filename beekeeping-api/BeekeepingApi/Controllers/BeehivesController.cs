@@ -137,6 +137,8 @@ namespace BeekeepingApi.Controllers
                 return Forbid();
             }
 
+            await _context.Entry(beehive).Collection(b => b.ApiaryBeehives).LoadAsync();
+
             _context.Beehives.Remove(beehive);
             await _context.SaveChangesAsync();
 

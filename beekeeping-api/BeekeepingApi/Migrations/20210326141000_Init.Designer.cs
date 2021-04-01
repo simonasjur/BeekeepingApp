@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BeekeepingApi.Migrations
 {
     [DbContext(typeof(BeekeepingContext))]
-    [Migration("20210322164119_init")]
-    partial class init
+    [Migration("20210326141000_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -64,7 +64,7 @@ namespace BeekeepingApi.Migrations
                     b.Property<long>("BeehiveId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("DepartDate")
+                    b.Property<DateTime?>("DepartDate")
                         .HasColumnType("datetime2");
 
                     b.Property<double>("X")
