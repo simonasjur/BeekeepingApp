@@ -29,6 +29,12 @@ namespace BeekeepingApi.Models
                 .WithOne(ab => ab.Apiary)
                 .HasForeignKey(ab => ab.ApiaryId)
                 .OnDelete(DeleteBehavior.ClientCascade);
+
+            modelBuilder.Entity<Food>()
+                .HasMany<Feeding>(fo => fo.Feedings)
+                .WithOne(fe => fe.Food)
+                .HasForeignKey(fe => fe.FoodId)
+                .OnDelete(DeleteBehavior.ClientCascade);
         }
 
         public DbSet<User> Users { get; set; }
@@ -50,5 +56,7 @@ namespace BeekeepingApi.Models
         public DbSet<Harvest> Harvests { get; set; }
 
         public DbSet<TodoItem> TodoItems { get; set; }
+
+        public DbSet<NestShortening> NestShortenings { get; set; }
     }
 }

@@ -83,8 +83,10 @@ namespace BeekeepingApi.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Type = table.Column<int>(type: "int", nullable: false),
                     No = table.Column<int>(type: "int", nullable: false),
-                    AcquireDay = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Color = table.Column<int>(type: "int", nullable: false),
+                    AcquireDay = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Color = table.Column<int>(type: "int", nullable: true),
+                    NestCombs = table.Column<int>(type: "int", nullable: true),
+                    RequiredFoodForWinter = table.Column<double>(type: "float", nullable: true),
                     FarmId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
@@ -92,6 +94,26 @@ namespace BeekeepingApi.Migrations
                     table.PrimaryKey("PK_Beehives", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Beehives_Farms_FarmId",
+                        column: x => x.FarmId,
+                        principalTable: "Farms",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Food",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FarmId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Food", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Food_Farms_FarmId",
                         column: x => x.FarmId,
                         principalTable: "Farms",
                         principalColumn: "Id",
@@ -184,6 +206,29 @@ namespace BeekeepingApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "NestShortenings",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    StayedCombs = table.Column<int>(type: "int", nullable: false),
+                    StayedHoney = table.Column<double>(type: "float", nullable: false),
+                    StayedBroodCombs = table.Column<int>(type: "int", nullable: false),
+                    BeehiveId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NestShortenings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_NestShortenings_Beehives_BeehiveId",
+                        column: x => x.BeehiveId,
+                        principalTable: "Beehives",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Supers",
                 columns: table => new
                 {
@@ -243,6 +288,34 @@ namespace BeekeepingApi.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Feeding",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Quantity = table.Column<double>(type: "float", nullable: false),
+                    FoodId = table.Column<long>(type: "bigint", nullable: false),
+                    BeehiveId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Feeding", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Feeding_Beehives_BeehiveId",
+                        column: x => x.BeehiveId,
+                        principalTable: "Beehives",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Feeding_Food_FoodId",
+                        column: x => x.FoodId,
+                        principalTable: "Food",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Apiaries_FarmId",
                 table: "Apiaries",
@@ -269,6 +342,21 @@ namespace BeekeepingApi.Migrations
                 column: "FarmId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Feeding_BeehiveId",
+                table: "Feeding",
+                column: "BeehiveId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Feeding_FoodId",
+                table: "Feeding",
+                column: "FoodId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Food_FarmId",
+                table: "Food",
+                column: "FarmId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Harvests_ApiaryId",
                 table: "Harvests",
                 column: "ApiaryId");
@@ -277,6 +365,11 @@ namespace BeekeepingApi.Migrations
                 name: "IX_Harvests_FarmId",
                 table: "Harvests",
                 column: "FarmId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_NestShortenings_BeehiveId",
+                table: "NestShortenings",
+                column: "BeehiveId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Supers_BeehiveId",
@@ -308,10 +401,16 @@ namespace BeekeepingApi.Migrations
                 name: "FarmWorkers");
 
             migrationBuilder.DropTable(
+                name: "Feeding");
+
+            migrationBuilder.DropTable(
                 name: "Harvests");
 
             migrationBuilder.DropTable(
                 name: "Manufacturers");
+
+            migrationBuilder.DropTable(
+                name: "NestShortenings");
 
             migrationBuilder.DropTable(
                 name: "Supers");
@@ -321,6 +420,9 @@ namespace BeekeepingApi.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Food");
 
             migrationBuilder.DropTable(
                 name: "Apiaries");

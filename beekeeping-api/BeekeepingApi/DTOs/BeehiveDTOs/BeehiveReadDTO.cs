@@ -14,9 +14,13 @@ namespace BeekeepingApi.DTOs.BeehiveDTOs
 
         public int No { get; set; }
 
-        public DateTime AcquireDay { get; set; }
+        public DateTime? AcquireDay { get; set; }
 
-        public Colors Color { get; set; }
+        public Colors? Color { get; set; }
+
+        public int? NestCombs { get; set; }
+
+        public double? RequiredFoodForWinter { get; set; }
 
         public long FarmId { get; set; }
     }

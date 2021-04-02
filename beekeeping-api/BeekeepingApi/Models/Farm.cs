@@ -24,5 +24,6 @@ namespace BeekeepingApi.Models
         public virtual ICollection<Beehive> Beehives { get; set; }
         public virtual ICollection<Harvest> Harvests { get; set; }
         public virtual ICollection<TodoItem> TodoItems { get; set; }
+        public virtual ICollection<Food> Foods { get; set; }
     }
 }

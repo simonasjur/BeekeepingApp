@@ -28,9 +28,13 @@ namespace BeekeepingApi.Models
         [Required]
         public int No { get; set; }
 
-        public DateTime AcquireDay { get; set; }
+        public DateTime? AcquireDay { get; set; }
 
-        public Colors Color { get; set; }
+        public Colors? Color { get; set; }
+
+        public int? NestCombs { get; set; }
+
+        public double? RequiredFoodForWinter { get; set; }
 
         public long FarmId { get; set; }
 
@@ -38,8 +42,9 @@ namespace BeekeepingApi.Models
         public Farm Farm { get; set; }
 
         public virtual ICollection<Super> Supers { get; set; }
-
         public virtual ICollection<ApiaryBeehive> ApiaryBeehives { get; set; }
         public virtual ICollection<TodoItem> TodoItems { get; set; }
+        public virtual ICollection<NestShortening> NestShortenings { get; set; }
+        public virtual ICollection<Feeding> Feedings { get; set; }
     }
 }
