@@ -177,7 +177,7 @@ namespace BeekeepingApi.Migrations
 
                     b.HasIndex("FoodId");
 
-                    b.ToTable("Feeding");
+                    b.ToTable("Feedings");
                 });
 
             modelBuilder.Entity("BeekeepingApi.Models.Food", b =>
@@ -198,7 +198,7 @@ namespace BeekeepingApi.Migrations
 
                     b.HasIndex("FarmId");
 
-                    b.ToTable("Food");
+                    b.ToTable("Foods");
                 });
 
             modelBuilder.Entity("BeekeepingApi.Models.Harvest", b =>
@@ -260,6 +260,9 @@ namespace BeekeepingApi.Migrations
 
                     b.Property<long>("BeehiveId")
                         .HasColumnType("bigint");
+
+                    b.Property<int?>("CombsBefore")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");

@@ -101,7 +101,7 @@ namespace BeekeepingApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Food",
+                name: "Foods",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -111,9 +111,9 @@ namespace BeekeepingApi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Food", x => x.Id);
+                    table.PrimaryKey("PK_Foods", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Food_Farms_FarmId",
+                        name: "FK_Foods_Farms_FarmId",
                         column: x => x.FarmId,
                         principalTable: "Farms",
                         principalColumn: "Id",
@@ -212,6 +212,7 @@ namespace BeekeepingApi.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CombsBefore = table.Column<int>(type: "int", nullable: true),
                     StayedCombs = table.Column<int>(type: "int", nullable: false),
                     StayedHoney = table.Column<double>(type: "float", nullable: false),
                     StayedBroodCombs = table.Column<int>(type: "int", nullable: false),
@@ -289,7 +290,7 @@ namespace BeekeepingApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Feeding",
+                name: "Feedings",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -301,17 +302,17 @@ namespace BeekeepingApi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Feeding", x => x.Id);
+                    table.PrimaryKey("PK_Feedings", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Feeding_Beehives_BeehiveId",
+                        name: "FK_Feedings_Beehives_BeehiveId",
                         column: x => x.BeehiveId,
                         principalTable: "Beehives",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Feeding_Food_FoodId",
+                        name: "FK_Feedings_Foods_FoodId",
                         column: x => x.FoodId,
-                        principalTable: "Food",
+                        principalTable: "Foods",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -342,18 +343,18 @@ namespace BeekeepingApi.Migrations
                 column: "FarmId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Feeding_BeehiveId",
-                table: "Feeding",
+                name: "IX_Feedings_BeehiveId",
+                table: "Feedings",
                 column: "BeehiveId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Feeding_FoodId",
-                table: "Feeding",
+                name: "IX_Feedings_FoodId",
+                table: "Feedings",
                 column: "FoodId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Food_FarmId",
-                table: "Food",
+                name: "IX_Foods_FarmId",
+                table: "Foods",
                 column: "FarmId");
 
             migrationBuilder.CreateIndex(
@@ -401,7 +402,7 @@ namespace BeekeepingApi.Migrations
                 name: "FarmWorkers");
 
             migrationBuilder.DropTable(
-                name: "Feeding");
+                name: "Feedings");
 
             migrationBuilder.DropTable(
                 name: "Harvests");
@@ -422,7 +423,7 @@ namespace BeekeepingApi.Migrations
                 name: "Users");
 
             migrationBuilder.DropTable(
-                name: "Food");
+                name: "Foods");
 
             migrationBuilder.DropTable(
                 name: "Apiaries");

@@ -14,6 +14,8 @@ namespace BeekeepingApi.Models
 
         public DateTime Date { get; set; }
 
+        public int? CombsBefore { get; set; }
+
         public int StayedCombs{ get; set; }
 
         public double StayedHoney { get; set; }

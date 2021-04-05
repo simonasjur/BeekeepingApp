@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BeekeepingApi.Migrations
 {
     [DbContext(typeof(BeekeepingContext))]
-    [Migration("20210402102106_Init")]
+    [Migration("20210405133315_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -179,7 +179,7 @@ namespace BeekeepingApi.Migrations
 
                     b.HasIndex("FoodId");
 
-                    b.ToTable("Feeding");
+                    b.ToTable("Feedings");
                 });
 
             modelBuilder.Entity("BeekeepingApi.Models.Food", b =>
@@ -200,7 +200,7 @@ namespace BeekeepingApi.Migrations
 
                     b.HasIndex("FarmId");
 
-                    b.ToTable("Food");
+                    b.ToTable("Foods");
                 });
 
             modelBuilder.Entity("BeekeepingApi.Models.Harvest", b =>
@@ -262,6 +262,9 @@ namespace BeekeepingApi.Migrations
 
                     b.Property<long>("BeehiveId")
                         .HasColumnType("bigint");
+
+                    b.Property<int?>("CombsBefore")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
