@@ -9,13 +9,11 @@ namespace BeekeepingApi.DTOs.SuperDTOs
 {
     public class SuperCreateDTO
     {
-        [Required]
+        [Range(1, 9)]
         public int Position { get; set; }
 
-        [Required]
         public Colors Color { get; set; }
 
-        [Required]
         public DateTime InstallationDate { get; set; }
 
         public long BeehiveId { get; set; }

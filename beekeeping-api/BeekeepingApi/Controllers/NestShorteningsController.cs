@@ -92,18 +92,21 @@ namespace BeekeepingApi.Controllers
 
             var nestShortening = _mapper.Map<NestShortening>(nestShorteningCreateDTO);
 
-            //If new nest shortening done current year and was latest, beehive combs value is changed and old value is stored to new nest shortening
-            var currentYear = DateTime.Now.Year;
-            if (nestShorteningCreateDTO.Date.Year == currentYear)
+            if (beehive.Type == BeehiveTypes.Dadano)
             {
-                await _context.Entry(beehive).Collection(b => b.NestShortenings).LoadAsync();
-                var lastNestShortening = beehive.NestShortenings.OrderByDescending(ns => ns.Date).FirstOrDefault();
-                if (lastNestShortening == null ||
-                    DateTime.Compare(nestShorteningCreateDTO.Date, lastNestShortening.Date) > 0)
+                //If new nest shortening done current year and was latest, beehive combs value is changed and old value is stored to new nest shortening
+                var currentYear = DateTime.Now.Year;
+                if (nestShorteningCreateDTO.Date.Year == currentYear)
                 {
-                    nestShortening.CombsBefore = beehive.NestCombs;
-                    beehive.NestCombs = nestShorteningCreateDTO.StayedCombs;
-                    _context.Entry(beehive).State = EntityState.Modified;
+                    await _context.Entry(beehive).Collection(b => b.NestShortenings).LoadAsync();
+                    var lastNestShortening = beehive.NestShortenings.OrderByDescending(ns => ns.Date).FirstOrDefault();
+                    if (lastNestShortening == null ||
+                        DateTime.Compare(nestShorteningCreateDTO.Date, lastNestShortening.Date) > 0)
+                    {
+                        nestShortening.CombsBefore = beehive.NestCombs;
+                        beehive.NestCombs = nestShorteningCreateDTO.StayedCombs;
+                        _context.Entry(beehive).State = EntityState.Modified;
+                    }
                 }
             }
 
@@ -137,26 +140,29 @@ namespace BeekeepingApi.Controllers
                 return Forbid();
             }
 
-            var lastNestShortening = await _context.NestShortenings.Where(ns => ns.BeehiveId == beehive.Id)
+            if (beehive.Type == BeehiveTypes.Dadano)
+            {
+                var lastNestShortening = await _context.NestShortenings.Where(ns => ns.BeehiveId == beehive.Id)
                                                                    .OrderByDescending(ns => ns.Date)
                                                                    .FirstOrDefaultAsync();
-            //If edited nest shortening is not this year latest and have information about combs before nest shortening,
-            //this object cannot be edited
-            if (DateTime.Now.Year == nestShortening.Date.Year &&
-                nestShortening.CombsBefore != null &&
-                nestShortening.Id != lastNestShortening.Id)
-            {
-                return BadRequest("If you want to change this nest shortening data, " +
-                                  "you must delete this beehive latest nest shortenings first");
+                //If edited nest shortening is not this year latest and have information about combs before nest shortening,
+                //this object cannot be edited
+                if (DateTime.Now.Year == nestShortening.Date.Year &&
+                    nestShortening.CombsBefore != null &&
+                    nestShortening.Id != lastNestShortening.Id)
+                {
+                    return BadRequest("If you want to change this nest shortening data, " +
+                                      "you must delete this beehive latest nest shortenings first");
+                }
+                //If edited nest shortening is latest, beehive combs value is changed
+                if (lastNestShortening.Id == id &&
+                    lastNestShortening.StayedCombs != nestShorteningEditDTO.StayedCombs)
+                {
+                    beehive.NestCombs = nestShorteningEditDTO.StayedCombs;
+                    _context.Entry(beehive).State = EntityState.Modified;
+                }
             }
-            //If edited nest shortening is latest, beehive combs value is changed
-            if (lastNestShortening.Id == id &&
-                lastNestShortening.StayedCombs != nestShorteningEditDTO.StayedCombs)
-            {
-                beehive.NestCombs = nestShorteningEditDTO.StayedCombs;
-                _context.Entry(beehive).State = EntityState.Modified;
-            }
-
+            
             _mapper.Map(nestShorteningEditDTO, nestShortening);
 
             await _context.SaveChangesAsync();
@@ -199,21 +205,24 @@ namespace BeekeepingApi.Controllers
 
             _context.NestShortenings.Remove(nestShortening);
 
-            //If deleted nest shortening done current year and was latest, beehive combs value is changed to old value
-            if (DateTime.Now.Year == nestShortening.Date.Year && lastNestShortening.Id == id)
+            if (beehive.Type == BeehiveTypes.Dadano)
             {
-                var nestCombs = nestShortening.CombsBefore;
-                var secondLastNestShortening = nestShortenings.ElementAtOrDefault(1);
-                if (secondLastNestShortening != null && 
-                    DateTime.Now.Year == secondLastNestShortening.Date.Year && 
-                    secondLastNestShortening.CombsBefore == null)
+                //If deleted nest shortening done current year and was latest, beehive combs value is changed to old value
+                if (DateTime.Now.Year == nestShortening.Date.Year && lastNestShortening.Id == id)
                 {
-                    nestCombs = secondLastNestShortening.StayedCombs;
-                    secondLastNestShortening.CombsBefore = nestShortening.CombsBefore;
+                    var nestCombs = nestShortening.CombsBefore;
+                    var secondLastNestShortening = nestShortenings.ElementAtOrDefault(1);
+                    if (secondLastNestShortening != null &&
+                        DateTime.Now.Year == secondLastNestShortening.Date.Year &&
+                        secondLastNestShortening.CombsBefore == null)
+                    {
+                        nestCombs = secondLastNestShortening.StayedCombs;
+                        secondLastNestShortening.CombsBefore = nestShortening.CombsBefore;
+                    }
+                    beehive.NestCombs = nestCombs;
+                    _context.Entry(beehive).State = EntityState.Modified;
                 }
-                beehive.NestCombs = nestCombs;
-                _context.Entry(beehive).State = EntityState.Modified;
-            }
+            }           
 
             await _context.SaveChangesAsync();
 
