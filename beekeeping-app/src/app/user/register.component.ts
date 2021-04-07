@@ -3,7 +3,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AbstractControlOptions, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
-import { UserService, AlertService } from '../_services';
+import { UserService } from '../_services/user.service';
+import { AlertService } from '../_services/alert.service';
 import { MustMatch } from '../_helpers';
 
 @Component({ templateUrl: 'register.component.html' })

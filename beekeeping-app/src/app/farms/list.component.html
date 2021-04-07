@@ -1,0 +1,29 @@
+<h1>Farms</h1>
+<a routerLink="add" class="btn btn-sm btn-success mb-2">Add Farm</a>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th style="width: 45%">Name</th>
+            <th style="width: 45%">Date Created</th>
+            <th style="width: 10%"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let farm of farms">
+            <td>{{farm.name}}</td>
+            <td>{{farm.creationDate}}</td>
+            <td style="white-space: nowrap">
+                <a routerLink="edit/{{farm.id}}" class="btn btn-sm btn-primary mr-1">Edit</a>
+                <button (click)="deleteFarm(farm.id)" class="btn btn-sm btn-danger btn-delete-farm" [disabled]="farm.isDeleting">
+                    <span *ngIf="farm.isDeleting" class="spinner-border spinner-border-sm"></span>
+                    <span *ngIf="!farm.isDeleting">Delete</span>
+                </button>
+            </td>
+        </tr>
+        <tr *ngIf="!farms">
+            <td colspan="4" class="text-center">
+                <span class="spinner-border spinner-border-lg align-center"></span>
+            </td>
+        </tr>
+    </tbody>
+</table>

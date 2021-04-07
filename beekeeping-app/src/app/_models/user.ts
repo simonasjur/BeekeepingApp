@@ -5,5 +5,6 @@ export class User {
     firstName: string;
     lastName: string;
     email: string;
-    authdata?: string;
+    token: string;
+    defaultFarmId?: number;
 }

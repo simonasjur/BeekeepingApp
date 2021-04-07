@@ -10,13 +10,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BeekeepingApi.Migrations
 {
     [DbContext(typeof(BeekeepingContext))]
-<<<<<<< Updated upstream:beekeeping-api/BeekeepingApi/Migrations/20210405133315_Init.Designer.cs
-=======
 <<<<<<< HEAD:beekeeping-api/BeekeepingApi/Migrations/20210406141134_init.Designer.cs
     [Migration("20210406141134_init")]
     partial class init
 =======
->>>>>>> Stashed changes:beekeeping-api/BeekeepingApi/Migrations/20210402102106_Init.Designer.cs
     [Migration("20210405133315_Init")]
     partial class Init
 >>>>>>> 643a21df3ea1d42f5a0209377ac35f383b5433e0:beekeeping-api/BeekeepingApi/Migrations/20210405133315_Init.Designer.cs

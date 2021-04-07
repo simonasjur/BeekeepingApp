@@ -140,7 +140,7 @@ namespace BeekeepingApi
             app.UseMvc(routeBuilder =>
             {
                 routeBuilder.EnableDependencyInjection();
-                routeBuilder.Select().OrderBy().Filter();
+                routeBuilder.Select().OrderBy().Filter().MaxTop(100).Count();
             });
         }
     }
