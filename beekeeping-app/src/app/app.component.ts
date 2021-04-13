@@ -10,11 +10,10 @@ export class AppComponent {
     title = 'Beekeeping app'
     user: User;
     farms = null;
-    counter = 0;
 
     constructor(private userService: UserService,
                 private farmService: FarmService) {
-        this.user = this.userService.userValue;
+        this.userService.user.subscribe(user => this.user = user);
     }
 
     getUserAndFarms() {

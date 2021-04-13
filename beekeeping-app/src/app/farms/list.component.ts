@@ -15,11 +15,11 @@ export class ListComponent implements OnInit {
             .subscribe(farms => this.farms = farms);
     }
 
-    /*deleteFarm(id: string) {
+    deleteFarm(id: string) {
         const farm = this.farms.find(x => x.id === id);
         farm.isDeleting = true;
         this.farmService.delete(id)
             .pipe(first())
             .subscribe(() => this.farms = this.farms.filter(x => x.id !== id));
-    }*/
+    }
 }

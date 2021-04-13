@@ -1,2 +1,6 @@
 <div class="card mt-4">
+    <div *ngIf="user && !user.defaultFarmId">
+        <h4 class="card-header">Jūs neturite jokio bitininkystės ūkio.</h4>
+        <a routerLink="farms/add" class="btn btn-sm btn-success mb-2">Pridėti ūkį</a>
+      </div>
 </div>

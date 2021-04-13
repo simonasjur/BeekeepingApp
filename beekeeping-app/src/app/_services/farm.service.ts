@@ -33,4 +33,39 @@ export class FarmService {
     getDefaultFarm() {
         return this.http.get<Farm>(`${environment.apiUrl}/farms/${this.farmValue.id}`);
     }
+
+    create(farm: Farm) {
+        return this.http.post(`${environment.apiUrl}/farms`, farm);
+    }
+
+    getById(id) {
+        return this.http.get<Farm>(`${environment.apiUrl}/farms/${id}`);
+    }
+
+    update(id, params) {
+        return this.http.put(`${environment.apiUrl}/farms/${id}`, params)
+            .pipe(map(x => {
+                // update stored farm if the logged in user updated current farm
+                if (id == this.farmValue.id) {
+                    // update local storage
+                    const farm = { ...this.farmValue, ...params };
+                    localStorage.setItem('farm', JSON.stringify(farm));
+
+                    // publish updated farm to subscribers
+                    this.farmSubject.next(farm);
+                }
+                return x;
+            }));
+    }
+
+    delete(id) {
+        return this.http.delete(`${environment.apiUrl}/farms/${id}`)
+            .pipe(map(x => {
+                // auto logout if the logged in user deleted their own record
+                if (id == this.farmValue.id) {
+                    //this.logout();
+                }
+                return x;
+            }));
+    }
 }
