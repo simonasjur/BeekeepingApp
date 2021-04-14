@@ -6,11 +6,14 @@ import { first } from 'rxjs/operators';
 import { UserService } from '../_services/user.service';
 import { AlertService } from '../_services/alert.service';
 
-@Component({ templateUrl: 'login.component.html' })
+@Component({
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.css']
+  })
 export class LoginComponent implements OnInit {
     form: FormGroup;
-    loading = false;
-    submitted = false;
+    public loading = false;
+    public submitted = false;
 
     constructor(
         private formBuilder: FormBuilder,
