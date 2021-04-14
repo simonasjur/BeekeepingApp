@@ -5,7 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
-import { Farm } from '../_models';
+import { Farm, User } from '../_models';
 import { UserService } from '../_services/user.service';
 
 @Injectable({ providedIn: 'root' })
@@ -30,12 +30,12 @@ export class FarmService {
         return this.http.get<Farm[]>(`${environment.apiUrl}/users/${this.userService.userValue.id}/farms?$top=${count}`);
     }
 
-    getDefaultFarm() {
-        return this.http.get<Farm>(`${environment.apiUrl}/farms/${this.farmValue.id}`);
-    }
-
     create(farm: Farm) {
-        return this.http.post(`${environment.apiUrl}/farms`, farm);
+        return this.http.post(`${environment.apiUrl}/farms`, farm)
+            .pipe(map(x => {
+                this.userService.updateLocalStorageUser().subscribe();
+                return x;
+            }));
     }
 
     getById(id) {
@@ -61,10 +61,11 @@ export class FarmService {
     delete(id) {
         return this.http.delete(`${environment.apiUrl}/farms/${id}`)
             .pipe(map(x => {
+                this.userService.updateLocalStorageUser().subscribe();
                 // auto logout if the logged in user deleted their own record
-                if (id == this.farmValue.id) {
+                /*if (id == this.farmValue.id) {
                     //this.logout();
-                }
+                }*/
                 return x;
             }));
     }

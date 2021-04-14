@@ -5,7 +5,9 @@ import { UserService } from './_services/user.service';
 import { FarmService } from './_services/farm.service';
 import { User } from './_models';
 
-@Component({ selector: 'app', templateUrl: 'app.component.html' })
+@Component({ selector: 'app',
+ templateUrl: 'app.component.html',
+ styleUrls: ['app.component.css']})
 export class AppComponent {
     title = 'Beekeeping app'
     user: User;
@@ -17,9 +19,7 @@ export class AppComponent {
     }
 
     getUserAndFarms() {
-        this.farmService.getAll(5)
-            .pipe(first())
-            .subscribe(farms => this.farms = farms);
+        this.farmService.getAll(5).subscribe(farms => this.farms = farms);
     }
 
     logout() {

@@ -79,4 +79,14 @@ export class UserService {
                 return x;
             }));
     }
+
+    updateLocalStorageUser() {
+        return this.http.get<User>(`${environment.apiUrl}/users/${this.userValue.id}`)
+        .pipe(map(user => {
+            user.token = this.userValue.token;
+            localStorage.setItem('user', JSON.stringify(user));
+            this.userSubject.next(user);
+            return user;
+        }));
+    }
 }
