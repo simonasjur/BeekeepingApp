@@ -4,10 +4,10 @@ import { first } from 'rxjs/operators';
 import { UserService } from './_services/user.service';
 import { FarmService } from './_services/farm.service';
 import { User } from './_models';
+import { Router } from '@angular/router';
 
 @Component({ selector: 'app',
- templateUrl: 'app.component.html',
- styleUrls: ['app.component.css']})
+ templateUrl: 'app.component.html'})
  
 export class AppComponent {
     title = 'Beekeeping app'
@@ -19,11 +19,17 @@ export class AppComponent {
         this.userService.user.subscribe(user => this.user = user);
     }
 
-    getUserAndFarms() {
-        this.farmService.getAll(5).subscribe(farms => this.farms = farms);
+    ngOnInit() {
+        if (this.userService.userValue && this.userService.userValue.id)
+        this.farmService.getAll().subscribe(farms => this.farms = farms);
+    }
+
+    loadFarms() {
+        this.farmService.getAll().subscribe(farms => this.farms = farms);
     }
 
     logout() {
+        this.farmService.clearFarm();
         this.userService.logout();
     }
 }

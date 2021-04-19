@@ -35,7 +35,7 @@ export class UserService {
     }
 
     logout() {
-        // remove user from local storage and set current user to null
+        // remove user and farm from local storage and set current user and farm to null
         localStorage.removeItem('user');
         this.userSubject.next(null);
         this.router.navigate(['/user/login']);
@@ -67,6 +67,16 @@ export class UserService {
                 }
                 return x;
             }));
+    }
+
+
+
+    updatePassword(id, params) {
+        return this.http.put(`${environment.apiUrl}/users/${id}/updatepassword`, params)
+    }
+
+    updateEmail(id, params) {
+        return this.http.put(`${environment.apiUrl}/users/${id}/updateemail`, params)
     }
 
     delete(id) {

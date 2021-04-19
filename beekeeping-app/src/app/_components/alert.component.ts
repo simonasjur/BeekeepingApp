@@ -29,7 +29,6 @@ export class AlertComponent implements OnInit, OnDestroy {
                     this.alerts.forEach(x => delete x.keepAfterRouteChange);
                     return;
                 }
-
                 // add alert to array
                 this.alerts.push(alert);
 

@@ -4,17 +4,18 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BeekeepingApi.DTOs.UserDTOs
+namespace BeekeepingApi.Helpers
 {
-    public class UserEditDTO
+    public class ChangePasswordModel
     {
         [Key]
         public long Id { get; set; }
 
-        [MinLength(6)]
+        [Required]
         public string Password { get; set; }
 
         [Required]
-        public long? DefaultFarmId { get; set; }
+        [MinLength(6)]
+        public string NewPassword { get; set; }
     }
 }

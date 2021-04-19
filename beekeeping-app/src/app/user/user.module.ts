@@ -14,6 +14,7 @@ import { MatIconModule } from  '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 @NgModule({
     imports: [
@@ -27,11 +28,13 @@ import { MatInputModule } from '@angular/material/input';
         MatIconModule,
         MatMenuModule,
         MatCardModule,
-        MatInputModule
+        MatInputModule,
+        MatProgressSpinnerModule
     ],
     declarations: [
         LayoutComponent,
-        LoginComponent
+        LoginComponent,
+        RegisterComponent
     ]
 })
 export class UserModule { }

@@ -1,29 +1,24 @@
-<h1>Farms</h1>
-<a routerLink="add" class="btn btn-sm btn-success mb-2">Add Farm</a>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th style="width: 45%">Name</th>
-            <th style="width: 45%">Date Created</th>
-            <th style="width: 10%"></th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let farm of farms">
-            <td>{{farm.name}}</td>
-            <td>{{farm.creationDate}}</td>
-            <td style="white-space: nowrap">
-                <a routerLink="edit/{{farm.id}}" class="btn btn-sm btn-primary mr-1">Edit</a>
-                <button (click)="deleteFarm(farm.id)" class="btn btn-sm btn-danger btn-delete-farm" [disabled]="farm.isDeleting">
-                    <span *ngIf="farm.isDeleting" class="spinner-border spinner-border-sm"></span>
-                    <span *ngIf="!farm.isDeleting">Delete</span>
-                </button>
-            </td>
-        </tr>
-        <tr *ngIf="!farms">
-            <td colspan="4" class="text-center">
-                <span class="spinner-border spinner-border-lg align-center"></span>
-            </td>
-        </tr>
-    </tbody>
-</table>
+<h1>Bitininkystės ūkių sąrašas</h1>
+<button mat-raised-button color="primary" routerLink="add">Pridėti naują ūkį</button>
+<mat-selection-list [multiple]="false">
+    <mat-list-option *ngFor="let farm of farms">
+        <h3 mat-line routerLink="/apiaries">{{farm.name}}</h3>
+        <p class="default" *ngIf="farm.id == user.defaultFarmId">Numatytasis</p>
+        <p mat-line>{{farm.creationDate}}</p>
+        <a matLine href=""></a>
+        <!--<button mat-icon-button >
+            <mat-icon routerLink="edit/{{farm.id}}">edit</mat-icon>
+        </button>
+		<button mat-icon-button (click)="deleteFarm(farm.id)">
+            <mat-icon>delete</mat-icon>
+        </button>-->
+    </mat-list-option>
+    <!--<mat-paginator #paginator
+        [length]="totalItems"
+        [pageSize]="itemsPerPage"
+        [pageSizeOptions]="[5, 10, 25, 100]"
+        (page)="onPaginate($event)"
+    >
+</mat-paginator>-->
+</mat-selection-list>
+

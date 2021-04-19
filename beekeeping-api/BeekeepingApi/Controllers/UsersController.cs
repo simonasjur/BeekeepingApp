@@ -166,6 +166,60 @@ namespace BeekeepingApi.Controllers
             return userWithToken;
         }
 
+        [Authorize]
+        [HttpPut("{id}/updatepassword")]
+        public async Task<ActionResult> ChangeUserPassword(long id, ChangePasswordModel changePasswordModel)
+        {
+            var currentUserId = long.Parse(User.Identity.Name);
+            if (id != currentUserId)
+                return Forbid();
+
+            if (id != changePasswordModel.Id)
+            {
+                return BadRequest();
+            }
+
+            var user = await _context.Users.FindAsync(id);
+
+            if (!_userService.VerifyPassword(user, changePasswordModel.Password))
+            {
+                return BadRequest(new { message = "Password is incorrect" });
+            }
+
+            if (!string.IsNullOrWhiteSpace(changePasswordModel.NewPassword))
+            {
+                _userService.CreateHashedPassword(user, changePasswordModel.NewPassword);
+            }
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        [Authorize]
+        [HttpPut("{id}/updateemail")]
+        public async Task<ActionResult> ChangeUserEmail(long id, ChangeUserEmailModel changeUserEmailModel)
+        {
+            var currentUserId = long.Parse(User.Identity.Name);
+            if (id != currentUserId)
+                return Forbid();
+
+            if (id != changeUserEmailModel.Id)
+            {
+                return BadRequest();
+            }
+
+            var user = await _context.Users.FindAsync(id);
+
+            if (!_userService.VerifyPassword(user, changeUserEmailModel.Password))
+            {
+                return BadRequest(new { message = "Password is incorrect" });
+            }
+            _mapper.Map(changeUserEmailModel, user);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
         /*private bool UserExists(long id)
         {
             return _context.Users.Any(e => e.Id == id);

@@ -1,0 +1,31 @@
+<div class="change-email-dialog">
+    <div class="dialog-close-button-container">
+        <button mat-icon-button class="dialog-close-button" mat-dialog-close>
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <h1 mat-dialog-title>Pakeisti el. paštą</h1>
+    <alert id="alert-2"></alert>
+    <div mat-dialog-content [formGroup]="form" (keyup.enter)="updateEmail()" class="email">
+        <mat-form-field appearance="outline">
+            <mat-label>Dabartinis slaptažodis</mat-label>
+            <input matInput type="password" formControlName="password" required>
+            <mat-error *ngIf="submitted && f.password.errors">
+                Šis laukas yra būtinas
+            </mat-error>     
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Naujas el. paštas</mat-label>
+            <input matInput type="email" formControlName="newEmail" required>
+            <mat-error *ngIf="submitted && f.newEmail.errors">
+                Šis laukas yra būtinas
+            </mat-error>
+            <!--<mat-error *ngIf="submitted && f.newEmail.errors.email">
+                Netinkamas el. pašto formatas
+            </mat-error>-->
+        </mat-form-field>
+    </div>
+    <div mat-dialog-actions>
+        <button mat-flat-button color="primary" (click)="updateEmail()" [disabled]="!form.valid">Išsaugoti</button>
+    </div>
+</div>

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BeekeepingApi.DTOs.UserDTOs;
+using BeekeepingApi.Helpers;
 using BeekeepingApi.Models;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace BeekeepingApi.Profiles
             CreateMap<UserCreateDTO, User>();
             CreateMap<User, UserWithTokenDTO>();
             CreateMap<UserEditDTO, User>();
+            CreateMap<ChangeUserEmailModel, User>();
         }
     }
 }

@@ -1,0 +1,20 @@
+::ng-deep.change-email-dialog {
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+}
+
+::ng-deep.mat-dialog-content.email {
+    display: flex !important;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 170px;
+    width: 400px;
+}
+
+.dialog-close-button-container {
+    width: 100% !important;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}

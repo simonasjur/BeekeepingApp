@@ -1,20 +1,20 @@
 <mat-card>
-    <mat-card-title>Prisijungimas</mat-card-title>
+    <mat-card-title>Prisijunkite</mat-card-title>
     <mat-card-content>
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
-            <mat-form-field class="full-width-input">
-              <input matInput placeholder="Slapyvardis" formControlName="username" required>
-              <mat-error>
-                Netinkamas vartotojo vardas
-              </mat-error>
+            <mat-form-field class="full-width-input" appearance="outline">
+              <mat-label>El. pašto adresas arba slapyvardis</mat-label>
+              <input matInput formControlName="username">
             </mat-form-field>
-            <mat-form-field class="full-width-input">
-              <input matInput type="password" placeholder="Slaptažodis" formControlName="password" required>
-              <mat-error>
-                Netinkamas slaptažodis
-              </mat-error>
+            <mat-form-field class="full-width-input" appearance="outline">
+              <mat-label>Slaptažodis</mat-label>
+              <input matInput type="password" formControlName="password">
             </mat-form-field>
-            <button mat-raised-button color="primary">Prisijungti</button>
+            <button mat-raised-button [disabled]="loading" color="primary">
+              Prisijungti
+              <mat-icon *ngIf="loading"><mat-spinner diameter="20">
+              </mat-spinner></mat-icon>
+            </button>
           </form>
     </mat-card-content>
 </mat-card>

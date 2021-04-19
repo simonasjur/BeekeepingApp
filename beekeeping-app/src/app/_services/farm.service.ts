@@ -26,8 +26,24 @@ export class FarmService {
         return this.farmSubject.value;
     }
 
-    getAll(count: number) {
-        return this.http.get<Farm[]>(`${environment.apiUrl}/users/${this.userService.userValue.id}/farms?$top=${count}`);
+    public get userId(): number {
+        return this.userService.userValue.id;
+    }
+
+    clearFarm() {
+        localStorage.removeItem('farm');
+        this.farmSubject.next(null);
+    }
+
+    getAll() {
+        if (this.userService.userValue.id)
+            return this.http.get<Farm[]>(`${environment.apiUrl}/users/${this.userId}/farms`);
+    }
+
+    getFarms(itemsPerPage: number, pageNumber: number) {
+        const top = itemsPerPage;
+        const skip = pageNumber * itemsPerPage;
+        return this.http.get<Farm[]>(`${environment.apiUrl}/users/${this.userId}/farms?$top=${top}&$skip=${skip}`);
     }
 
     create(farm: Farm) {
@@ -68,5 +84,14 @@ export class FarmService {
                 }*/
                 return x;
             }));
+    }
+
+    updateLocalStorageFarm(id) {
+        return this.http.get<Farm>(`${environment.apiUrl}/farms/${id}`)
+        .pipe(map(farm => {
+            localStorage.setItem('farm', JSON.stringify(farm));
+            this.farmSubject.next(farm);
+            return farm;
+        }));
     }
 }
