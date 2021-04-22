@@ -5,13 +5,15 @@ import { SettingsComponent } from '../settings/settings.component';
 import { AuthGuard } from '../_helpers';
 
 const farmsModule = () => import('../farms/farms.module').then(x => x.FarmsModule);
+const beehivesModule = () => import('../beehives/beehives.module').then(x => x.BeehivesModule);
 
 const routes: Routes = [
     {
         path: '', component: HomeComponent,
         children: [
             { path: 'farms', loadChildren: farmsModule, canActivate: [AuthGuard] },
-            { path: 'settings', component: SettingsComponent, canActivate: [AuthGuard] }
+            { path: 'settings', component: SettingsComponent, canActivate: [AuthGuard] },
+            { path: 'beehives', loadChildren: beehivesModule, canActivate: [AuthGuard] }
         ]
     }
     

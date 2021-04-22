@@ -1,0 +1,38 @@
+<h1>Sukurti Avilį</h1>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <mat-form-field>
+        <mat-label>Tipas</mat-label>
+        <mat-select formControlName="type" #typeField>
+            <mat-option *ngFor="let beehiveType of beehiveTypesNames" [value]="beehiveType">
+                {{beehiveType2LabelMapping[beehiveType]}}
+            </mat-option>
+        </mat-select>
+        <mat-error *ngIf="submitted && f.type.errors">
+            Šis laukas yra būtinas
+        </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Numeris</mat-label>
+        <input matInput formControlName="no">
+        <mat-error *ngIf="submitted && f.no.errors">
+            <p *ngIf="f.no.errors.required">Šis laukas yra būtinas</p>
+            <p *ngIf="f.no.errors.pattern">Numeris privalo būti teigiamas natūralus skaičius</p>
+        </mat-error>      
+    </mat-form-field>
+    <mat-form-field appearance="fill" *ngIf="typeField.value === beehiveTypes.Dadano">
+        <mat-label>Įsigijimo Data</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="acquireDay">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="submitted && f.acquireDay.errors">
+            Neteisingas datos formatas
+        </mat-error>
+    </mat-form-field>
+    <div class="form-group">
+        <button [disabled]="loading" class="btn btn-primary">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+            Save
+        </button>
+        <a routerLink="/beehives" class="btn btn-link">Cancel</a>
+    </div>
+</form>

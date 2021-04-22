@@ -28,6 +28,9 @@ namespace BeekeepingApi.Models
         [Required]
         public int No { get; set; }
 
+        [Required]
+        public bool IsEmpty { get; set; }
+
         public DateTime? AcquireDay { get; set; }
 
         public Colors? Color { get; set; }

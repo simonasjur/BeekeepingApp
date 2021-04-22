@@ -6,7 +6,7 @@ import { SettingsComponent } from './settings/settings.component';
 import { AuthGuard } from './_helpers';
 
 const userModule = () => import('./user/user.module').then(x => x.UserModule);
-const homeModule = () => import('./home/home.module').then(x => x.HomeModule);
+const homeModule = () => import('./home/home.module').then(x => x.HomeModule)
 
 const routes: Routes = [
     { path: '', loadChildren: homeModule },

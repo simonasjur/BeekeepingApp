@@ -71,6 +71,11 @@ namespace BeekeepingApi.Controllers
         [HttpPost]
         public async Task<ActionResult<BeehiveReadDTO>> CreateBeehive(BeehiveCreateDTO beehiveCreateDTO)
         {
+            if (beehiveCreateDTO.Type == BeehiveTypes.Daugiaaukštis && beehiveCreateDTO.NestCombs != null)
+            {
+                return BadRequest();
+            }
+
             var farm = await _context.Farms.FindAsync(beehiveCreateDTO.FarmId);
             if (farm == null)
             {
