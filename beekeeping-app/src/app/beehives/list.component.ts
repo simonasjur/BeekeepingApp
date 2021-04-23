@@ -58,7 +58,7 @@ export class ListComponent implements OnInit {
     openAddApiaryBeehiveDialog(currentBeehiveId: any) {
         const dialogRef = this.dialog.open(AddApiaryBeehiveDialog, {
             data: {
-                apiaryId: 1,
+                apiaryId: this.apiaryId,
                 beehiveId: currentBeehiveId,
                 beehive: this.beehives.find(b => b.id === currentBeehiveId)
             }

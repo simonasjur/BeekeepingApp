@@ -13,4 +13,8 @@ export class ApiaryService {
     getFarmApiaries(farmId: number) {
         return this.http.get<Apiary[]>(`${baseUrl}/farms/${farmId}/apiaries`);
     }
+
+    create(params: any) {
+        return this.http.post(`${baseUrl}/apiaries`, params);
+    }
 }

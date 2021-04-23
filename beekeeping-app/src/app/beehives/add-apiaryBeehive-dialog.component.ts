@@ -1,7 +1,7 @@
 import { Component, Inject } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { concat, merge } from "rxjs";
 import { ApiaryBeehive, Beehive, BeehiveTypes, Super } from "../_models";
 import { ApiaryBeehiveService } from "../_services/apiaryBeehive.service";
@@ -24,7 +24,8 @@ import { SuperService } from "../_services/super.service";
                 private apiaryBeehiveService: ApiaryBeehiveService,
                 private beehiveService: BeehiveService,
                 private superService: SuperService,
-                private router: Router) {
+                private router: Router,
+                private route: ActivatedRoute) {
     }
     
     ngOnInit() {
@@ -118,8 +119,9 @@ import { SuperService } from "../_services/super.service";
     closeDialog() {
         this.dialogRef.close();
         this.loading = false;
+        /*const url = this.route.snapshot.pathFromRoot;
         this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-            this.router.navigate(['/beehives']);
-        });
+            this.router.navigate([url]);
+        });*/
     }
 }

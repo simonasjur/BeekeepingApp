@@ -6,21 +6,26 @@ import { CommonModule } from '@angular/common';
 import { ListComponent } from './list.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
-//import { ApiaryBeehiveComponent } from '../apiaryBeehives/apiaryBeehives.component';
-//import { AddComponent } from './add.component';
-//import { AddApiaryBeehiveDialog } from './add-apiaryBeehive-dialog.component';
-//import { AddEditComponent } from './add-edit.component';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { AddComponent } from './add.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
     imports: [
         CommonModule,
         ApiariesRoutingModule,
         MatTableModule,
-        MatIconModule
+        MatIconModule,
+        MatTableModule,
+        MatInputModule,
+        MatFormFieldModule, 
+        ReactiveFormsModule
     ],
     declarations: [
         LayoutComponent,
-        ListComponent
+        ListComponent,
+        AddComponent
     ]
 })
 export class ApiariesModule { }
