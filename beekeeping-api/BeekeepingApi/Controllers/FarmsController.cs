@@ -101,11 +101,11 @@ namespace BeekeepingApi.Controllers
         }
 
         // PUT: api/Farms/1
-        [HttpPut("{farmId}")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> EditFarm(long id, FarmEditDTO farmEditDTO)
         {
             if (id != farmEditDTO.Id)
-                return BadRequest();
+                return BadRequest("suds");
 
             var farm = await _context.Farms.FindAsync(id);
             if (farm == null)

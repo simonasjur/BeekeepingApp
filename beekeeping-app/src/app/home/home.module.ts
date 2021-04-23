@@ -22,8 +22,11 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatDialogModule} from '@angular/material/dialog';
 import {OverlayModule} from '@angular/cdk/overlay';
+import {MatSelectModule} from '@angular/material/select';
 import { AlertComponent } from '../_components';
 import { ChangeEmailComponent } from '../settings/change-email.component';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatFormFieldModule} from '@angular/material/form-field';
 
 @NgModule({
     imports: [
@@ -44,7 +47,10 @@ import { ChangeEmailComponent } from '../settings/change-email.component';
         MatProgressSpinnerModule,
         MatTabsModule,
         MatDialogModule,
-        OverlayModule
+        OverlayModule,
+        MatSelectModule,
+        MatDatepickerModule,
+        MatFormFieldModule
     ],
     declarations: [
         SettingsComponent,

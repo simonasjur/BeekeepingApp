@@ -1,7 +1,11 @@
-mat-nav-list {
+mat-list {
     max-width: 600px;
 }
 
 mat-icon {
-    font-size: 35px;
+    font-size: 30px;
+}
+
+.default {
+    font-style: italic;
 }

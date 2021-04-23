@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { UserService } from '../_services/user.service';
 import { FarmService } from '../_services/farm.service';
 import { AlertService } from '../_services/alert.service';
-import { User } from '../_models';
+import { Farm, User } from '../_models';
 import { MatDialog } from '@angular/material/dialog';
 import { ChangePasswordComponent } from './change-password.component';
 import { first } from 'rxjs/operators';
@@ -15,6 +15,8 @@ import { ChangeEmailComponent } from './change-email.component';
  
 export class SettingsComponent {
     user: User;
+    farm: Farm;
+    defaultFarm: Farm;
     farms = null;
     loading: boolean;
 
@@ -23,10 +25,21 @@ export class SettingsComponent {
                 private alertService: AlertService,
                 private dialog: MatDialog) {
         this.userService.user.subscribe(user => this.user = user);
+        this.farmService.farm.subscribe(farm => this.farm = farm);
         this.farmService.getAll().subscribe(farms => this.farms = farms);
+        this.farmService.defaultFarm.subscribe(defaultFarm => this.defaultFarm = defaultFarm);
     }
 
-
+    changeDefaultFarm(id: number): void {
+      let user = { defaultFarmId: id,
+                    id: this.user.id };
+      this.userService.update(this.user.id, user)
+          .pipe(first())
+          .subscribe(() => {
+              this.alertService.success('Numatytasis ūkis pakeistas', { autoClose: true });
+          })
+          .add(() => this.loading = false);
+    }
 
     openChangePasswordDialog(): void {
         const dialogRef = this.dialog.open(ChangePasswordComponent, {
@@ -44,5 +57,9 @@ export class SettingsComponent {
           autoFocus: false,
           disableClose: true
         });
+      }
+
+      openChangeDefaultFarmDialog(): void {
+        
       }
 }

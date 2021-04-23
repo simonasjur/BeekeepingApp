@@ -19,20 +19,23 @@ export class HomeComponent {
                 private farmService: FarmService,
                 private router: Router,
                 public alertService: AlertService) {
-        this.userService.user.subscribe(user => this.user = user);
-        this.farmService.getAll().subscribe(farms => this.farms = farms);
-        this.farmService.farm.subscribe(farm => this.currentFarm = farm);
     }
 
     ngOnInit() {
-        if (this.user.defaultFarmId != null) {
+        this.userService.user.subscribe(user => this.user = user);
+        this.farmService.getAll().subscribe(() => {
+            this.farmService.farms.subscribe(farms => this.farms = farms);
+        });
+        this.farmService.farm.subscribe(farm => this.currentFarm = farm);
+        if (this.user.defaultFarmId != null && !localStorage.getItem('farm')) {
             this.farmService.updateLocalStorageFarm(this.user.defaultFarmId).subscribe();
         }
         console.log('configured routes: ', this.router.config);
     }
 
-    loadFarm(id) {
-        this.farmService.updateLocalStorageFarm(id);
+    loadFarm(id) {       
+        this.farmService.updateLocalStorageFarm(id).subscribe();
+        this.currentFarm = this.farmService.farmValue;
     }
 
     logout() {

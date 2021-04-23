@@ -1,0 +1,53 @@
+table {
+    width: 100%;
+}
+
+.low-priority {
+    background-color: #CCFFFF;
+    width: 14px;
+    height: 14px;
+    margin-right: 7px;
+}
+
+.normal-priority {
+    background-color: #99FF99;
+    width: 14px;
+    height: 14px;
+    margin-right: 7px;
+}
+
+.high-priority {
+    background-color: #FFFF66;
+    width: 14px;
+    height: 14px;
+    margin-right: 7px;
+}
+
+.critical-priority {
+    background-color: #FF0066;
+    width: 14px;
+    height: 14px;
+    margin-right: 7px;
+}
+
+.priority-container {
+    display: flex;
+}
+
+.example-loading-shade {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 56px;
+    right: 0;
+    background: rgba(0, 0, 0, 0.15);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .example-container {
+    position: relative;
+    min-height: 200px;
+  }

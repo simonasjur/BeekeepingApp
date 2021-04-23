@@ -12,6 +12,10 @@ import { UserService } from '../_services/user.service';
 export class FarmService {
     private farmSubject: BehaviorSubject<Farm>;
     public farm: Observable<Farm>;
+    private farmsSubject: BehaviorSubject<Farm[]>;
+    public farms: Observable<Farm[]>;
+    private defaultFarmSubject: BehaviorSubject<Farm>;
+    public defaultFarm: Observable<Farm>;
 
     constructor(
         private router: Router,
@@ -20,6 +24,14 @@ export class FarmService {
     ) {
         this.farmSubject = new BehaviorSubject<Farm>(JSON.parse(localStorage.getItem('farm')));
         this.farm = this.farmSubject.asObservable();
+        this.farmsSubject = new BehaviorSubject<Farm[]>(null);
+        this.farms = this.farmsSubject.asObservable();
+        this.defaultFarmSubject = new BehaviorSubject<Farm>(null);
+        this.defaultFarm = this.defaultFarmSubject.asObservable();
+    }
+
+    public get farmsValue(): Farm[] {
+        return this.farmsSubject.value;
     }
 
     public get farmValue(): Farm {
@@ -30,6 +42,10 @@ export class FarmService {
         return this.userService.userValue.id;
     }
 
+    public get defaultFarmValue(): Farm {
+        return this.defaultFarmSubject.value;
+    }
+
     clearFarm() {
         localStorage.removeItem('farm');
         this.farmSubject.next(null);
@@ -37,7 +53,11 @@ export class FarmService {
 
     getAll() {
         if (this.userService.userValue.id)
-            return this.http.get<Farm[]>(`${environment.apiUrl}/users/${this.userId}/farms`);
+            return this.http.get<Farm[]>(`${environment.apiUrl}/users/${this.userId}/farms`)
+                .pipe(map(x => {
+                    this.farmsSubject.next(x);
+                    return x;
+                }));
     }
 
     getFarms(itemsPerPage: number, pageNumber: number) {
@@ -47,9 +67,12 @@ export class FarmService {
     }
 
     create(farm: Farm) {
-        return this.http.post(`${environment.apiUrl}/farms`, farm)
+        return this.http.post<Farm>(`${environment.apiUrl}/farms`, farm)
             .pipe(map(x => {
                 this.userService.updateLocalStorageUser().subscribe();
+                let farms = this.farmsValue;
+                farms.push(x);
+                this.farmsSubject.next(farms);
                 return x;
             }));
     }
@@ -58,9 +81,13 @@ export class FarmService {
         return this.http.get<Farm>(`${environment.apiUrl}/farms/${id}`);
     }
 
-    update(id, params) {
+    update(id, params: Farm) {
+        params.id = id;
         return this.http.put(`${environment.apiUrl}/farms/${id}`, params)
             .pipe(map(x => {
+                let farms = this.farmsSubject.value.filter(f => f.id !== id);
+                farms.push(params);
+                this.farmsSubject.next(farms);
                 // update stored farm if the logged in user updated current farm
                 if (id == this.farmValue.id) {
                     // update local storage
@@ -75,10 +102,24 @@ export class FarmService {
     }
 
     delete(id) {
-        return this.http.delete(`${environment.apiUrl}/farms/${id}`)
+        return this.http.delete<Farm>(`${environment.apiUrl}/farms/${id}`)
             .pipe(map(x => {
-                this.userService.updateLocalStorageUser().subscribe();
+                this.userService.updateLocalStorageUser().subscribe(user => {
+                    if (user.defaultFarmId !== null) {
+                        this.getById(user.defaultFarmId).subscribe(farm => {
+                            this.defaultFarmSubject.next(farm);
+                        });
+                    }
+                });
+                let farms = this.farmsSubject.value.filter(f => f.id !== x.id);
+                this.farmsSubject.next(farms);
+
+
                 // auto logout if the logged in user deleted their own record
+                if (this.farmValue &&  id == this.farmValue.id) {
+                    localStorage.removeItem('farm');
+                    this.farmSubject.next(null);
+                }
                 /*if (id == this.farmValue.id) {
                     //this.logout();
                 }*/

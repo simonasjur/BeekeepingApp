@@ -5,6 +5,7 @@ import { User } from '../_models';
 
 import { FarmService } from '../_services/farm.service';
 import { UserService } from '../_services/user.service';
+import { AlertService } from '../_services/alert.service';
 
 @Component({ templateUrl: 'list.component.html',
 styleUrls: ['list.component.css'] })
@@ -16,7 +17,8 @@ export class ListComponent implements OnInit {
     totalItems:number;
 
     constructor(private farmService: FarmService,
-                private userService: UserService) {
+                private userService: UserService,
+                private alertService: AlertService) {
                     
                 }
 
@@ -40,11 +42,13 @@ export class ListComponent implements OnInit {
         console.log("items per page " + this.itemsPerPage);
     }*/
 
-    deleteFarm(id: string) {
+    deleteFarm(id: number) {
         const farm = this.farms.find(x => x.id === id);
         farm.isDeleting = true;
         this.farmService.delete(id)
             .pipe(first())
-            .subscribe(() => this.farms = this.farms.filter(x => x.id !== id));
+            .subscribe(() => { this.farms = this.farms.filter(x => x.id !== id);
+                this.alertService.success('Ūkis ' + farm.name + ' ištrintas', { keepAfterRouteChange: true, autoClose: true });
+            })
     }
 }

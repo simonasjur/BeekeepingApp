@@ -34,3 +34,15 @@
     font-size: 50px;
   }
   
+.menu-icon {
+  height: 24px;
+  width: 24px;
+}
+
+.menu-icon-title-gap {
+  width: 15px;
+}
+
+mat-sidenav {
+  width: 160px;
+}

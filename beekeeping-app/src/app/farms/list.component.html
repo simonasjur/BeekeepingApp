@@ -1,18 +1,17 @@
 <h1>Bitininkystės ūkių sąrašas</h1>
 <button mat-raised-button color="primary" routerLink="add">Pridėti naują ūkį</button>
-<mat-selection-list [multiple]="false">
-    <mat-list-option *ngFor="let farm of farms">
-        <h3 mat-line routerLink="/apiaries">{{farm.name}}</h3>
+<mat-list>
+    <mat-list-item *ngFor="let farm of farms">
+        <a mat-line routerLink="/farms/{{farm.id}}">{{farm.name}}</a>
         <p class="default" *ngIf="farm.id == user.defaultFarmId">Numatytasis</p>
         <p mat-line>{{farm.creationDate}}</p>
-        <a matLine href=""></a>
-        <!--<button mat-icon-button >
+        <button mat-icon-button >
             <mat-icon routerLink="edit/{{farm.id}}">edit</mat-icon>
         </button>
 		<button mat-icon-button (click)="deleteFarm(farm.id)">
             <mat-icon>delete</mat-icon>
-        </button>-->
-    </mat-list-option>
+        </button>
+    </mat-list-item>
     <!--<mat-paginator #paginator
         [length]="totalItems"
         [pageSize]="itemsPerPage"
@@ -20,5 +19,4 @@
         (page)="onPaginate($event)"
     >
 </mat-paginator>-->
-</mat-selection-list>
-
+</mat-list>

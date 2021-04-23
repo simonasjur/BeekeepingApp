@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
-import { FarmsRoutingModule } from './farms-routing.module';
+import { TodoRoutingModule } from './todo-routing.module';
 import { LayoutComponent } from './layout.component';
 import { ListComponent } from './list.component';
 import { AddEditComponent } from './add-edit.component';
@@ -14,12 +14,16 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { DateAdapter, MatNativeDateModule, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
+import {MatTableModule} from '@angular/material/table';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatSortModule } from '@angular/material/sort';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
     imports: [
         CommonModule,
         ReactiveFormsModule,
-        FarmsRoutingModule,
+        TodoRoutingModule,
         MatListModule,
         MatButtonModule,
         MatIconModule,
@@ -27,7 +31,11 @@ import { MatInputModule } from '@angular/material/input';
         MatFormFieldModule,
         MatDatepickerModule,
         MatNativeDateModule,
-        MatInputModule
+        MatInputModule,
+        MatTableModule,
+        MatTabsModule,
+        MatSortModule,
+        MatProgressSpinnerModule
     ],
     declarations: [
         LayoutComponent,
@@ -39,4 +47,4 @@ import { MatInputModule } from '@angular/material/input';
         { provide: MAT_DATE_LOCALE, useValue: 'lt' }
     ]
 })
-export class FarmsModule { }
+export class TodoModule { }

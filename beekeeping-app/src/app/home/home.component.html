@@ -26,7 +26,10 @@
           </div>
           <mat-divider></mat-divider>
           <mat-spinner diameter="40" *ngIf="!user || !farms"></mat-spinner>
-          <button mat-menu-item *ngFor="let farm of farms" class="default-farm-button" [disabled]="farm.id == currentFarm.id">"{{farm.name}}" ūkis
+          <button mat-menu-item *ngFor="let farm of farms" class="default-farm-button" 
+          [disabled]="currentFarm && farm.id == currentFarm.id" (click)="loadFarm(farm.id)"
+          routerLink="/">
+            "{{farm.name}}" ūkis
             <p *ngIf="farm.id == user.defaultFarmId" class="default-p">Numatytasis</p>
           </button>
           <mat-divider></mat-divider>
@@ -101,9 +104,38 @@
   <mat-sidenav-container>
     <mat-sidenav *ngIf="user" mode="side" opened>
       <mat-nav-list>
- 
-        <a mat-list-item [routerLink]='"/hfhf"'> Bitynai </a>
-        <a mat-list-item [routerLink]='"/todos"'> Darbai </a>
+        <a mat-list-item [routerLink]='"/"'>
+          <mat-icon>home</mat-icon>
+          <div class="menu-icon-title-gap"></div>
+          Namai 
+        </a>
+        <mat-divider></mat-divider>
+        <a mat-list-item [routerLink]='"/apiaries"'>
+          <img src="assets/beehives.svg" alt="apiary icon" class="menu-icon">
+          <div class="menu-icon-title-gap"></div>
+          Bitynai
+        </a>
+        <a mat-list-item [routerLink]='"/beehives"'>
+          <img src="assets/beehive.svg" alt="beehive icon" class="menu-icon">
+          <div class="menu-icon-title-gap"></div>
+          Aviliai 
+        </a>
+        <a mat-list-item [routerLink]='"/harvests"'>
+          <img src="assets/harvest.svg" alt="harvest icon" class="menu-icon">
+          <div class="menu-icon-title-gap"></div>
+          Kopimai
+        </a>
+        <a mat-list-item [routerLink]='"/todos"'>
+          <mat-icon>task</mat-icon>
+          <div class="menu-icon-title-gap"></div>
+          Užduotys
+        </a>
+        <mat-divider></mat-divider>
+        <a mat-list-item [routerLink]='"/farms"'>
+          <img src="assets/beekeeper.svg" alt="beekeeper icon" class="menu-icon">
+          <div class="menu-icon-title-gap"></div>
+          Ūkiai
+        </a>
  
       </mat-nav-list>
     </mat-sidenav>

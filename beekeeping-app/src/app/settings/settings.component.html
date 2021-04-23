@@ -24,9 +24,21 @@
         </div>
         </mat-tab>
         <mat-tab label="Ūkiai">
-        <div>
-            Large content
-        </div>
+            <div *ngIf="farms && farm" class="tab-section">
+                <h1 class="tab-title">Ūkių nustatymai</h1>
+                <h2>Numatytasis ūkis</h2>
+                <mat-divider></mat-divider>
+                <mat-list>
+                    <mat-list-item>
+                        <div mat-line>Numatytasis ūkis</div>
+                        <div mat-line *ngIf="defaultFarm">{{defaultFarm.name}}</div>
+                        <button mat-flat-button [matMenuTriggerFor]="farmsMenu" class="empty-button">Keisti</button>
+                        <mat-menu #farmsMenu="matMenu">
+                            <button mat-menu-item *ngFor="let farm of farms" (click)="changeDefaultFarm(farm.id)">{{farm.name}}</button>
+                        </mat-menu>
+                    </mat-list-item>
+                </mat-list>
+            </div>
         </mat-tab>
     </mat-tab-group>
 </div>

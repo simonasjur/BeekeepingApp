@@ -5,7 +5,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
-import { User } from '../_models';
+import { Farm, User } from '../_models';
+import { FarmService } from './farm.service';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -23,6 +24,7 @@ export class UserService {
     public get userValue(): User {
         return this.userSubject.value;
     }
+
 
     login(username, password) {
         return this.http.post<User>(`${environment.apiUrl}/users/authenticate`, { username, password })
@@ -93,6 +95,7 @@ export class UserService {
     updateLocalStorageUser() {
         return this.http.get<User>(`${environment.apiUrl}/users/${this.userValue.id}`)
         .pipe(map(user => {
+            
             user.token = this.userValue.token;
             localStorage.setItem('user', JSON.stringify(user));
             this.userSubject.next(user);
