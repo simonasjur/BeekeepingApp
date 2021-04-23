@@ -1,110 +1,60 @@
-<h1>Farm Beehives</h1>
-<a routerLink="add" class="btn btn-sm btn-success mb-2">Naujas Avilys</a>
-<div>
-    <table style="float: left">
-        <thead>
-            <tr>
-                <th style="width: 10%">No</th>
-                <th style="width: 10%">Type</th>
-                <th style="width: 10%"></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let apiaryBeehive of apiaryBeehives">
-                <td>{{apiaryBeehive.beehive.no}}</td>
-                <td *ngIf="BeehiveTypes.Daugiaaukstis === apiaryBeehive.beehive.type">Daugiaaukštis</td>
-                <td *ngIf="BeehiveTypes.Dadano === apiaryBeehive.beehive.type">Dadano</td>
-                <!--<td style="white-space: nowrap">
-                    <a routerLink="edit/{{user.id}}" class="btn btn-sm btn-primary mr-1">Edit</a>
-                    <button (click)="deleteUser(user.id)" class="btn btn-sm btn-danger btn-delete-user" [disabled]="user.isDeleting">
-                        <span *ngIf="user.isDeleting" class="spinner-border spinner-border-sm"></span>
-                        <span *ngIf="!user.isDeleting">Delete</span>
-                    </button>
-                </td>-->
-            </tr>
-            <tr *ngIf="!apiaryBeehives">
-                <td colspan="4" class="text-center">
-                    <span class="spinner-border spinner-border-lg align-center"></span>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
+<h1>Bityno Aviliai</h1>
+<div class="buttons-container">
+    <a routerLink="add" class="first-button">Naujas Avilys</a>
     <div *ngIf="beehives">
         <button *ngIf="!showEmptyBeehives"
             (click)="changeShowEmptyBeehivesValue()">Tušti Aviliai({{beehives.length}}) ˃</button>
         <button *ngIf="showEmptyBeehives"
             (click)="changeShowEmptyBeehivesValue()">Tušti Aviliai({{beehives.length}}) ˅</button>
     </div>
-
-    <table style="display: inline-block;"
-           *ngIf="showEmptyBeehives">
-        <thead>
-            <tr>
-                <th style="width: 10%">No</th>
-                <th style="width: 10%">Types</th>
-                <th style="width: 30%">Data</th>
-                <th style="width: 10%"></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let beehive of beehives">
-                <td>{{beehive.no}}</td>
-                <td *ngIf="BeehiveTypes.Daugiaaukstis === beehive.type">Daugiaaukštis</td>
-                <td *ngIf="BeehiveTypes.Dadano === beehive.type">Dadano</td>
-                <td>{{beehive.acquireDay}}</td>
-                <td>
-                    <button (click)="openAddApiaryBeehiveDialog(beehive.id)">Perkelti į bityną</button>
-                </td>
-                <!--<td style="white-space: nowrap">
-                    <a routerLink="edit/{{user.id}}" class="btn btn-sm btn-primary mr-1">Edit</a>
-                    <button (click)="deleteUser(user.id)" class="btn btn-sm btn-danger btn-delete-user" [disabled]="user.isDeleting">
-                        <span *ngIf="user.isDeleting" class="spinner-border spinner-border-sm"></span>
-                        <span *ngIf="!user.isDeleting">Delete</span>
+</div>
+<div class="tables-container">
+    <table mat-table [dataSource]="apiaryBeehives" class="first-table">
+        <ng-container matColumnDef="no">
+            <th mat-header-cell *matHeaderCellDef>Nr.</th>
+            <td mat-cell *matCellDef="let element">{{element.beehive.no}}</td>
+        </ng-container>
+        <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef>Tipas</th>
+            <td mat-cell *matCellDef="let element">{{beehiveType2LabelMapping[element.beehive.type]}}</td>
+        </ng-container>
+        <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef> Veiksmas </th>
+            <td mat-cell *matCellDef="let element">
+                <button mat-icon-button >
+                    <mat-icon routerLink="edit/{{element.beehive.id}}">edit</mat-icon>
+                </button>
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="firstTableDisplayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: firstTableDisplayedColumns;"></tr>
+    </table>
+    
+    <table mat-table [dataSource]="beehives" *ngIf="showEmptyBeehives">
+        <ng-container matColumnDef="no">
+            <th mat-header-cell *matHeaderCellDef>Nr.</th>
+            <td mat-cell *matCellDef="let element">{{element.no}}</td>
+        </ng-container>
+        <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef>Tipas</th>
+            <td mat-cell *matCellDef="let element">{{beehiveType2LabelMapping[element.type]}}</td>
+        </ng-container>
+        <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef>Įsigijimo data</th>
+            <td mat-cell *matCellDef="let element">{{element.acquireDay}}</td>
+        </ng-container>
+        <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef> Veiksmas </th>
+            <td mat-cell *matCellDef="let element">
+                <div class="buttons-container">
+                    <button mat-icon-button >
+                        <mat-icon routerLink="edit/{{element.id}}">edit</mat-icon>
                     </button>
-                </td>-->
-            </tr>
-            <tr *ngIf="!beehives">
-                <td colspan="4" class="text-center">
-                    <span class="spinner-border spinner-border-lg align-center"></span>
-                </td>
-            </tr>
-        </tbody>
+                    <button mat-button (click)="openAddApiaryBeehiveDialog(element.id)">Perkelti į bityną</button>
+                </div>
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="secondTableDisplayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: secondTableDisplayedColumns;"></tr>
     </table>
 </div>
-
-<br>
-
-<!--<mat-list>
-    <div mat-subheader>Tušti Aviliai</div>
-    <mat-list-item *ngFor="let beehive of beehives">
-        <div mat-line>Nr. {{beehive.no}}</div>
-        <div mat-line *ngIf="BeehiveTypes.Dadano === beehive.type">
-            <div>Dadano avilys</div>
-            <div>Geltonas</div>
-        </div>
-        <div mat-line *ngIf="BeehiveTypes.Daugiaaukstis === beehive.type">Daugiaaukštis avilys</div>
-    </mat-list-item>
-</mat-list>
-
-<mat-list>
-    <div mat-subheader>Bityno Aviliai</div>
-    <mat-list-item *ngFor="let apiaryBeehive of apiaryBeehives">
-        <div mat-line>Nr. {{apiaryBeehive.beehive.no}}</div>
-        <div mat-line *ngIf="BeehiveTypes.Dadano === apiaryBeehive.beehive.type">Dadano avilys</div>
-        <div mat-line *ngIf="BeehiveTypes.Daugiaaukstis === apiaryBeehive.beehive.type">Daugiaaukštis avilys</div>
-    </mat-list-item>
-</mat-list>-->
-
-<!--<div cdkDropList="beehives"
-     class="example-list" 
-     (cdkDropListDropped)="drop($event)">
-    <div cdkDrag class="example-box" *ngFor="let beehive of beehives">{{beehive.id}}</div>
-</div> 
-<br>
-<button (click)="extract()">Uzkrauti</button>
-<div cdkDropList
-     class="example-list"
-     *ngIf="aBeehives.length != 0">
-    <div cdkDrag class="example-box" *ngFor="let aBeehive of aBeehives">{{aBeehive.no}}</div>
-</div>-->

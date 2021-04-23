@@ -8,6 +8,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule, MatRippleModule, MAT_NATIVE_DATE_FORMATS } from '@angular/material/core';
+import { MatTableModule } from '@angular/material/table';
+import { MatButtonModule } from '@angular/material/button';
 
 import { BeehivesRoutingModule } from './beehives-routing.module';
 import { LayoutComponent } from './layout.component';
@@ -29,7 +31,9 @@ import { AddApiaryBeehiveDialog } from './add-apiaryBeehive-dialog.component';
         MatInputModule,
         MatDatepickerModule,
         MatRippleModule,
-        MatNativeDateModule
+        MatNativeDateModule,
+        MatTableModule,
+        MatButtonModule
     ],
     declarations: [
         LayoutComponent,

@@ -10,7 +10,8 @@ import { SuperService } from "../_services/super.service";
 
 @Component({
     selector: 'add-apiaryBeehive-dialog',
-    templateUrl: 'add-apiaryBeehive-dialog.component.html'
+    templateUrl: 'add-apiaryBeehive-dialog.component.html',
+    styleUrls: ['add-apiaryBeehive-dialog.component.css']
   })
   export class AddApiaryBeehiveDialog {
     form: FormGroup;

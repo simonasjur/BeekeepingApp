@@ -20,9 +20,9 @@ export class BeehiveService {
             map(beehives => beehives.filter(beehive => beehive.isEmpty === true)));
     }
 
-    /*getById(id: string) {
+    getById(id: number) {
         return this.http.get<Beehive>(`${baseUrl}/beehives/${id}`);
-    }*/
+    }
 
     create(params: any) {
         return this.http.post(`${baseUrl}/beehives`, params);
