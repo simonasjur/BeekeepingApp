@@ -119,9 +119,9 @@ import { SuperService } from "../_services/super.service";
     closeDialog() {
         this.dialogRef.close();
         this.loading = false;
-        /*const url = this.route.snapshot.pathFromRoot;
+        const url = this.route.snapshot['_routerState'].url;
         this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
             this.router.navigate([url]);
-        });*/
+        });
     }
 }

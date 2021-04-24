@@ -28,7 +28,7 @@
     </mat-form-field>
 </div>
 <div mat-dialog-actions>
-    <button mat-button (click)="onNoClick()">Atšaukti</button>
+    <a class="btn btn-link" (click)="onNoClick()">Atšaukti</a>
     <button mat-button (click)="addApiaryBeehive()" [disabled]="loading">
         <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
         Išsaugoti

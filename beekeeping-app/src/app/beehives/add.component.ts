@@ -58,23 +58,20 @@ export class AddComponent implements OnInit {
     get f() { return this.form.controls; }
 
     onSubmit() {
-        this.submitted = true;
-
-        if (this.isAddMode) {
-            this.form.patchValue({isEmpty: 'true', farmId: '1', nestCombs: '0'});
+        if (!this.submitted) {
+            if (this.isAddMode) {
+                this.form.patchValue({isEmpty: 'true', farmId: '1', nestCombs: '0'});
+            }
+            if (this.form.controls['type'].value === this.beehiveTypes.Daugiaaukstis) {
+                this.form.removeControl('nestCombs');
+            }
         }
+
+        this.submitted = true;
         
         if (this.form.invalid) {
-            console.log('invalidas');
             return;
         }
-        /*const incorrectDate = this.form.controls['acquireDay'].value;
-        var correctDate.DatePipe.transform(incorrectDate, 'yyyy-MM-dd');
-        this.form.patchValue({acquireDay: correctDate});
-        if (this.form.invalid) {
-            console.log('invalidas 2');
-            return;
-        }*/
 
         this.loading = true;
 
@@ -88,7 +85,7 @@ export class AddComponent implements OnInit {
     private createBeehive() {
         this.beehiveService.create(this.form.value).pipe(first())
             .subscribe(() => {
-                this.router.navigate(['../'], { relativeTo: this.route });
+                this.backToBeehivesList();
             })
             .add(() => this.loading = false);
     }
@@ -96,8 +93,16 @@ export class AddComponent implements OnInit {
     private updateBeehive() {
         this.beehiveService.update(this.id, this.form.value).pipe(first())
             .subscribe(() => {
-                this.router.navigate(['../../'], { relativeTo: this.route });
+                this.backToBeehivesList();
             })
             .add(() => this.loading = false);
+    }
+
+    backToBeehivesList() {
+        if (this.isAddMode) {
+            this.router.navigate(['../'], { relativeTo: this.route });
+        } else {
+            this.router.navigate(['../../'], { relativeTo: this.route });
+        }
     }
 }

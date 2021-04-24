@@ -23,6 +23,8 @@ import {MatDividerModule} from '@angular/material/divider';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { HomeRoutingModule } from './home/home-routing.module';
 import { AlertModule } from './_components/alert.module';
+import { MatRippleModule, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from '@angular/material-moment-adapter';
 
 @NgModule({
     imports: [
@@ -43,14 +45,18 @@ import { AlertModule } from './_components/alert.module';
         MatDividerModule,
         MatProgressSpinnerModule,
         HomeRoutingModule,
-        AlertModule
+        AlertModule,
+        MatRippleModule,
+        MatMomentDateModule
     ],
     declarations: [
         AppComponent
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-        { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
+        { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+        { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: {useUtc: true, strict: true}},
+        { provide: MAT_DATE_LOCALE, useValue: 'lt-LT'}
     ],
     bootstrap: [AppComponent]
 })
