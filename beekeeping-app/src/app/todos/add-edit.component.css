@@ -1,0 +1,28 @@
+.category-selection-list {
+    display: flex;
+}
+
+.form-fields {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 600px;
+    height: 550px;
+}
+
+.priority-field {
+    width: 180px;
+}
+
+.date-field {
+    width: 180px;
+}
+
+.category {
+    display: flex;
+    flex-direction: column;
+}
+
+.category-title {
+    margin-bottom: -8px;
+}

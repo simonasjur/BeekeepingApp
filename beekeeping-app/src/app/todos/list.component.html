@@ -1,13 +1,41 @@
 <h1>Užduotys</h1>
+<button mat-raised-button color="primary" routerLink="add">Pridėti naują užduotį</button>
+
 <mat-tab-group dynamicHeight animationDuration="0ms">
     <mat-tab label="Neatliktos">
+        
+        <form [formGroup]="form">
+            <mat-form-field class="filter">
+                <mat-label>Ieškoti (pavadinimas, aprašymas)</mat-label>
+                <input matInput formControlName="filter" #input>
+            </mat-form-field>
+            <mat-form-field *ngIf="apiaries && apiaries.length != 0" appearance="fill">
+                <mat-label>Bitynas</mat-label>
+                <mat-select formControlName="apiaryId">
+                    <mat-option [value]="null">Visi</mat-option>
+                    <mat-option *ngFor="let apiary of apiaries" [value]="apiary.id">
+                        {{apiary.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field *ngIf="beehives && beehives.length != 0" appearance="fill">
+                <mat-label>Avilys</mat-label>
+                <mat-select formControlName="beehiveId">
+                    <mat-option [value]="null">Visi</mat-option>
+                    <mat-option *ngFor="let beehive of beehives" [value]="beehive.id">
+                        Nr. {{beehive.no}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </form>
+       
         <div class="example-container mat-elevation-z8">
             <div class="example-loading-shade" *ngIf="loading">
                 <mat-spinner *ngIf="loading"></mat-spinner>
             </div>
             <table mat-table #firstSort="matSort" [dataSource]="filteredAndPagedTodos" matSort
             matSortActive="dueDate" matSortDisableClear matSortDirection="asc"
-            (matSortChange)="resetPaging()">
+            (matSortChange)="resetPaging()" multiTemplateDataRows>
                 <ng-container matColumnDef="priority">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Prioritetas </th>
                     <td mat-cell *matCellDef="let element">
@@ -34,8 +62,16 @@
                 <ng-container matColumnDef="category">
                     <th mat-header-cell *matHeaderCellDef> Kategorija </th>
                     <td mat-cell *matCellDef="let element">
-                        <div *ngIf="element.hiveId">avilys</div>
-                        <div *ngIf="element.apiaryId">bitynas</div>
+                        <div *ngIf="element.hiveId">
+                            <div *ngFor="let beehive of beehives">
+                                <a *ngIf="beehive.id == element.beehiveId">Avilys nr. {{beehive.no}}</a>
+                            </div>
+                        </div>
+                        <div *ngIf="element.apiaryId">
+                            <div *ngFor="let apiary of apiaries">
+                                <a *ngIf="apiary.id == element.apiaryId">{{apiary.name}}</a>
+                            </div>
+                        </div>
                         <div *ngIf="!element.hiveId && !element.apiaryId">Bendras</div>
                     </td>
                 </ng-container>
@@ -54,23 +90,62 @@
                         </button>
                     </td>
                 </ng-container>
+                
+                <ng-container matColumnDef="expandedDetail">
+                    <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+                      <div class="element-detail"
+                           [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                        <div class="element-description">
+                            Aprašymas:
+                            {{element.description}}
+                        </div>
+                      </div>
+                    </td>
+                </ng-container>
 
-                <tr mat-header-row *matHeaderRowDef="displayedColumns">
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let element; columns: displayedColumns;"
+                class="element-row"
+                [class.example-expanded-row]="expandedElement === element"
+                (click)="expandedElement = expandedElement === element ? null : element">
                 </tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;">
-                </tr>
+                <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
             </table>
         <mat-paginator #firstPaginator [length]="resultsLength" [hidePageSize]="true" [pageSizeOptions]="[10]"></mat-paginator>
     </div>
     </mat-tab>
     <mat-tab label="Atliktos">
+        <form [formGroup]="formSecond">
+            <mat-form-field class="filter">
+                <mat-label>Ieškoti (pavadinimas, aprašymas)</mat-label>
+                <input matInput formControlName="filter" #input>
+            </mat-form-field>
+            <mat-form-field *ngIf="apiaries && apiaries.length != 0" appearance="fill">
+                <mat-label>Bitynas</mat-label>
+                <mat-select formControlName="apiaryId">
+                    <mat-option [value]="null">Visi</mat-option>
+                    <mat-option *ngFor="let apiary of apiaries" [value]="apiary.id">
+                        {{apiary.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field *ngIf="beehives && beehives.length != 0" appearance="fill">
+                <mat-label>Avilys</mat-label>
+                <mat-select formControlName="beehiveId">
+                    <mat-option [value]="null">Visi</mat-option>
+                    <mat-option *ngFor="let beehive of beehives" [value]="beehive.id">
+                        Nr. {{beehive.no}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </form>
         <div class="example-container mat-elevation-z8">
             <div class="example-loading-shade" *ngIf="loading">
                 <mat-spinner *ngIf="loading"></mat-spinner>
             </div>
             <table mat-table #secondSort="matSort" [dataSource]="filteredAndPagedTodosCompleted" matSort
             matSortActive="dueDate" matSortDisableClear matSortDirection="desc"
-            (matSortChange)="resetPaging()">
+            (matSortChange)="resetPaging()" multiTemplateDataRows>
                 <ng-container matColumnDef="priority">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Prioritetas </th>
                     <td mat-cell *matCellDef="let element">
@@ -97,8 +172,16 @@
                 <ng-container matColumnDef="category">
                     <th mat-header-cell *matHeaderCellDef> Kategorija </th>
                     <td mat-cell *matCellDef="let element">
-                        <div *ngIf="element.hiveId">avilys</div>
-                        <div *ngIf="element.apiaryId">bitynas</div>
+                        <div *ngIf="element.hiveId">
+                            <div *ngFor="let beehive of beehives">
+                                <a *ngIf="beehive.id == element.beehiveId">Avilys nr. {{beehive.no}}</a>
+                            </div>
+                        </div>
+                        <div *ngIf="element.apiaryId">
+                            <div *ngFor="let apiary of apiaries">
+                                <a *ngIf="apiary.id == element.apiaryId">{{apiary.name}}</a>
+                            </div>
+                        </div>
                         <div *ngIf="!element.hiveId && !element.apiaryId">Bendras</div>
                     </td>
                 </ng-container>
@@ -115,10 +198,26 @@
                     </td>
                 </ng-container>
 
+                <ng-container matColumnDef="expandedDetail">
+                    <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+                      <div class="element-detail"
+                           [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                        <div class="element-description">
+                            Aprašymas:
+                            {{element.description}}
+                        </div>
+                      </div>
+                    </td>
+                </ng-container>
+
                 <tr mat-header-row *matHeaderRowDef="displayedColumns">
                 </tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+                <tr mat-row *matRowDef="let element; columns: displayedColumns;"
+                class="element-row"
+                [class.example-expanded-row]="expandedElement === element"
+                (click)="expandedElement = expandedElement === element ? null : element">
                 </tr>
+                <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
             </table>
             <mat-paginator #secondPaginator [length]="resultsLengthCompleted" [hidePageSize]="true" [pageSizeOptions]="[10]"></mat-paginator>
         </div>

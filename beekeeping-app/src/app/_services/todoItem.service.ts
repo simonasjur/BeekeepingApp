@@ -18,6 +18,49 @@ export class TodoService {
         return this.http.post(`${environment.apiUrl}/todoItems`, todoItem);
     }
 
+    getAllFarmTodosByFilterPaged(farmId: number, isComplete: boolean, filter: string, sort: string, order: string, page: number) {
+        if (filter === null) {
+            filter = '';
+        }
+        const top = 10;
+        const skip = page * top;
+        return this.http.get<TodoItem[]>(`${environment.apiUrl}/farms/${farmId}/todoItems?$filter=isComplete eq ${isComplete} and (contains(title,'${filter}') or contains(description,'${filter}'))&$top=${top}&$skip=${skip}&$orderby=${sort} ${order}`);
+    }
+
+    getAllFarmTodosByApiary(farmId: number, isComplete: boolean, filter: string, sort: string, order: string, page: number, apiaryId: number) {
+        if (filter === null) {
+            filter = '';
+        }
+        const top = 10;
+        const skip = page * top;
+        return this.http.get<TodoItem[]>(`${environment.apiUrl}/farms/${farmId}/todoItems?$filter=isComplete eq ${isComplete} and apiaryId eq ${apiaryId} and (contains(title,'${filter}') or contains(description,'${filter}'))&$top=${top}&$skip=${skip}&$orderby=${sort} ${order}`);
+    }
+
+    getAllFarmTodosByBeehive(farmId: number, isComplete: boolean, filter: string, sort: string, order: string, page: number, beehiveId: number) {
+        if (filter === null) {
+            filter = '';
+        }
+        const top = 10;
+        const skip = page * top;
+        return this.http.get<TodoItem[]>(`${environment.apiUrl}/farms/${farmId}/todoItems?$filter=isComplete eq ${isComplete} and beehiveId eq ${beehiveId} and (contains(title,'${filter}') or contains(description,'${filter}'))&$top=${top}&$skip=${skip}&$orderby=${sort} ${order}`);
+    }
+
+    getAllFarmTodosByApiaryAndBeehive(farmId: number, isComplete: boolean, filter: string, sort: string, order: string, page: number, apiaryId: number, beehiveId: number) {
+        if (filter === null) {
+            filter = '';
+        }
+        const top = 10;
+        const skip = page * top;
+        return this.http.get<TodoItem[]>(`${environment.apiUrl}/farms/${farmId}/todoItems?$filter=isComplete eq ${isComplete} and apiaryId eq ${apiaryId} and beehiveId eq ${beehiveId} and (contains(title,'${filter}') or contains(description,'${filter}'))&$top=${top}&$skip=${skip}&$orderby=${sort} ${order}`);
+    }
+
+    getAllFarmTodosByFilter(farmId: number, isComplete: boolean, filter: string) {
+        if (filter === null) {
+            filter = '';
+        }
+        return this.http.get<TodoItem[]>(`${environment.apiUrl}/farms/${farmId}/todoItems?$filter=isComplete eq ${isComplete} and contains(title,'${filter}') or contains(description,'${filter}')`);
+    }
+
     getAllFarmFilteredAnPaged(farmId: number, sort: string, order: string, page: number, completed: boolean) {
         const top = 10;
         const skip = page * top;
@@ -37,6 +80,7 @@ export class TodoService {
     }
 
     update(id, params) {
+        params.id = id;
         return this.http.put(`${environment.apiUrl}/todoItems/${id}`, params);
     }
 

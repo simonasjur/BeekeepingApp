@@ -17,4 +17,8 @@ export class ApiaryService {
     create(params: any) {
         return this.http.post(`${baseUrl}/apiaries`, params);
     }
+
+    getById(id: number) {
+        return this.http.get<Apiary>(`${baseUrl}/apiaries/${id}`);
+    }
 }

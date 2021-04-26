@@ -24,3 +24,10 @@ export const TodoItemPriority2LabelMapping: Record<TodoItemPriorities, string> =
     [TodoItemPriorities.High]: "Aukštas",
     [TodoItemPriorities.Critical]: "Kritinis"
 };
+
+export enum TodoItemPriorities2 {
+    Žemas,
+    Normalus,
+    Aukštas,
+    Kritinis
+}
