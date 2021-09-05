@@ -12,7 +12,6 @@ namespace BeekeepingApi.Models
         [Key]
         public long Id { get; set; }
 
-        [Required]
         public DateTime ArriveDate { get; set; }
 
         [Required]
@@ -21,7 +20,7 @@ namespace BeekeepingApi.Models
         [Required]
         public double Y { get; set; }
 
-        public DateTime DepartDate { get; set; }
+        public DateTime? DepartDate { get; set; }
 
         public long ApiaryId { get; set; }
 

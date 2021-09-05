@@ -125,6 +125,8 @@ namespace BeekeepingApi.Controllers
             if (farmWorker == null)
                 return Forbid();
 
+            await _context.Entry(apiary).Collection(a => a.Harvests).LoadAsync();
+
             _context.Apiaries.Remove(apiary);
             await _context.SaveChangesAsync();
 

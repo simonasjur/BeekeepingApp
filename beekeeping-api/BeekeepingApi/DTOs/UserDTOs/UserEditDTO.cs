@@ -10,8 +10,11 @@ namespace BeekeepingApi.DTOs.UserDTOs
     {
         [Key]
         public long Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+
+        [MinLength(6)]
         public string Password { get; set; }
+
+        [Required]
+        public long? DefaultFarmId { get; set; }
     }
 }

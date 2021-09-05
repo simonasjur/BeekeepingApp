@@ -1,1 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/*mat-form-field {
+    appearance="outline";
+}*/
+
+.empty-button {
+    margin-bottom: 8px !important;
+    border: 1px solid #DADCE0 !important;
+    border-radius: 25px !important;
+  }
+  

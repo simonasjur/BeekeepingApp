@@ -151,7 +151,7 @@ namespace BeekeepingApi.Controllers
 
         // PUT: api/TodoItems/1
         [HttpPut("{id}")]
-        public async Task<IActionResult> EditHarvest(long id, TodoItemEditDTO todoItemEditDTO)
+        public async Task<IActionResult> EditTodoItem(long id, TodoItemEditDTO todoItemEditDTO)
         {
             if (id != todoItemEditDTO.Id)
                 return BadRequest();

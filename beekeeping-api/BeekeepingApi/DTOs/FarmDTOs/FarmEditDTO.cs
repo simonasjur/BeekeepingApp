@@ -14,7 +14,6 @@ namespace BeekeepingApi.DTOs.FarmDTOs
 
         public string Name { get; set; }
 
-        [Column(TypeName = "date")]
         [DisplayFormat(DataFormatString = "{yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime CreationDate { get; set; }
     }

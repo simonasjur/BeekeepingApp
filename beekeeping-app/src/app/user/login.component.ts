@@ -3,13 +3,17 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
-import { UserService, AlertService } from '../_services';
+import { UserService } from '../_services/user.service';
+import { AlertService } from '../_services/alert.service';
 
-@Component({ templateUrl: 'login.component.html' })
+@Component({
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.css']
+  })
 export class LoginComponent implements OnInit {
     form: FormGroup;
-    loading = false;
-    submitted = false;
+    public loading = false;
+    public submitted = false;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -41,18 +45,20 @@ export class LoginComponent implements OnInit {
         }
 
         this.loading = true;
+        
         this.userService.login(this.f.username.value, this.f.password.value)
-            .pipe(first())
-            .subscribe({
-                next: () => {
-                    // get return url from query parameters or default to home page
-                    const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-                    this.router.navigateByUrl(returnUrl);
-                },
-                error: error => {
-                    this.alertService.error(error);
-                    this.loading = false;
-                }
-            });
+        .pipe(first())
+        .subscribe({
+            next: () => {
+                // get return url from query parameters or default to home page
+                const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+                this.router.navigateByUrl(returnUrl);
+            },
+            error: error => {
+                this.alertService.error(error);
+                this.loading = false;
+            }
+        });
+        
     }
 }

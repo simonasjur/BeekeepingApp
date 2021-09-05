@@ -1,0 +1,93 @@
+table {
+    width: 100%;
+}
+
+.low-priority {
+    background-color: #CCFFFF;
+    width: 14px;
+    height: 14px;
+    margin-right: 7px;
+}
+
+.normal-priority {
+    background-color: #99FF99;
+    width: 14px;
+    height: 14px;
+    margin-right: 7px;
+}
+
+.high-priority {
+    background-color: #FFFF66;
+    width: 14px;
+    height: 14px;
+    margin-right: 7px;
+}
+
+.critical-priority {
+    background-color: #FF0066;
+    width: 14px;
+    height: 14px;
+    margin-right: 7px;
+}
+
+.priority-container {
+    display: flex;
+}
+
+.example-loading-shade {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 56px;
+    right: 0;
+    background: rgba(0, 0, 0, 0.15);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.example-container {
+    position: relative;
+    min-height: 200px;
+}
+
+tr.detail-row {
+    height: 0;
+}
+
+tr.element-row:not(.example-expanded-row):hover {
+    background: whitesmoke;
+}
+  
+tr.element-row:not(.example-expanded-row):active {
+    background: #efefef;
+}
+  
+.element-row td {
+    border-bottom-width: 0;
+}
+
+.element-detail {
+    overflow: hidden;
+    display: flex;
+}
+
+.element-description {
+    padding: 16px;
+}
+
+.filter {
+    width: 300px !important;
+}
+
+form {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+mat-tab-group {
+    margin-top: 20px;
+}

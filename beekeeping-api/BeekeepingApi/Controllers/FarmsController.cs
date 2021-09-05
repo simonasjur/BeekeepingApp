@@ -72,11 +72,20 @@ namespace BeekeepingApi.Controllers
         public async Task<ActionResult<FarmReadDTO>> CreateFarm(FarmCreateDTO farmCreateDTO)
         {          
             var currentUserId = long.Parse(User.Identity.Name);
-
             var farm = _mapper.Map<Farm>(farmCreateDTO);
+
             _context.Farms.Add(farm);
             await _context.SaveChangesAsync();
 
+            var farmWorkersList = await _context.FarmWorkers.Where(l => l.UserId == currentUserId).ToListAsync();
+            if (!farmWorkersList.Any())
+            {
+                var user = await _context.Users.FindAsync(currentUserId);
+                user.DefaultFarmId = farm.Id;
+                _context.Entry(user).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+            }
+                
             var farmWorker = new FarmWorker
             {
                 Role = WorkerRole.Owner,
@@ -92,11 +101,11 @@ namespace BeekeepingApi.Controllers
         }
 
         // PUT: api/Farms/1
-        [HttpPut("{farmId}")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> EditFarm(long id, FarmEditDTO farmEditDTO)
         {
             if (id != farmEditDTO.Id)
-                return BadRequest();
+                return BadRequest("suds");
 
             var farm = await _context.Farms.FindAsync(id);
             if (farm == null)
@@ -127,6 +136,24 @@ namespace BeekeepingApi.Controllers
             _context.Farms.Remove(farm);
             await _context.SaveChangesAsync();
 
+            var user = await _context.Users.FindAsync(currentUserId);
+            if (user.DefaultFarmId == farm.Id)
+            {
+                var farmWorkersList = await _context.FarmWorkers.Where(l => l.UserId == user.Id).ToListAsync();
+                if (farmWorkersList.Any())
+                {
+                    var farm2 = await _context.Farms.FindAsync(farmWorkersList.First().FarmId);
+                    user.DefaultFarmId = farm2.Id;
+                    _context.Entry(user).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    user.DefaultFarmId = null;
+                    _context.Entry(user).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+                }
+            }
             return _mapper.Map<FarmReadDTO>(farm);
         }
     }

@@ -1,0 +1,43 @@
+<h1>Bitynų Sąrašas</h1>
+<a routerLink="add" class="btn btn-sm btn-success mb-2">Naujas Bitynas</a>
+<table mat-table [dataSource]="apiaries">
+    <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Pavadinimas</th>
+        <td mat-cell *matCellDef="let element">
+            <a routerLink="{{element.id}}/beehives">{{element.name}}</a>
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef> Veiksmas </th>
+        <td mat-cell *matCellDef="let element">
+            <button mat-icon-button >
+                <mat-icon routerLink="edit/{{element.id}}">edit</mat-icon>
+            </button>
+        </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+
+<!--<a routerLink="add" class="btn btn-sm btn-success mb-2">Naujas Bitynas</a>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th style="width: 30%">Pavadinimas</th>
+            <th style="width: 10%"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let apiary of apiaries">
+            <td>{{apiary.name}}</td>
+            <td style="white-space: nowrap">
+                <a routerLink="edit/{{apiary.id}}" class="btn btn-sm btn-primary mr-1">Redaguoti</a>
+            </td>
+        </tr>
+        <tr *ngIf="!apiaries">
+            <td colspan="4" class="text-center">
+                <span class="spinner-border spinner-border-lg align-center"></span>
+            </td>
+        </tr>
+    </tbody>
+</table>-->

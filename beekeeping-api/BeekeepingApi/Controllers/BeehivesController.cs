@@ -3,6 +3,7 @@ using BeekeepingApi.DTOs.BeehiveDTOs;
 using BeekeepingApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +28,7 @@ namespace BeekeepingApi.Controllers
         //GET: api/beehives/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<BeehiveReadDTO>> GetBeehive(long id)
-        {           
+        {
             var beehive = await _context.Beehives.FindAsync(id);
             if (beehive == null)
             {
@@ -44,12 +45,45 @@ namespace BeekeepingApi.Controllers
             return _mapper.Map<BeehiveReadDTO>(beehive);
         }
 
+        //GET: api/farms/{farmId}/beehives
+        [HttpGet("/api/farms/{farmId}/beehives")]
+        public async Task<ActionResult<IEnumerable<BeehiveReadDTO>>> GetFarmBeehives(long farmId)
+        {
+            var farm = await _context.Farms.FindAsync(farmId);
+            if (farm == null)
+            {
+                return NotFound();
+            }
+
+            var currentUserId = long.Parse(User.Identity.Name);
+            var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, farmId);
+            if (farmWorker == null)
+            {
+                return Forbid();
+            }
+
+            var beehives = await _context.Beehives.Where(b => b.FarmId == farmId).ToListAsync();
+
+            return _mapper.Map<IEnumerable<BeehiveReadDTO>>(beehives).ToList();
+        }
+
         //POST: api/beehives
         [HttpPost]
         public async Task<ActionResult<BeehiveReadDTO>> CreateBeehive(BeehiveCreateDTO beehiveCreateDTO)
         {
+            if (beehiveCreateDTO.Type == BeehiveTypes.Daugiaaukštis && beehiveCreateDTO.NestCombs != null)
+            {
+                return BadRequest();
+            }
+
+            var farm = await _context.Farms.FindAsync(beehiveCreateDTO.FarmId);
+            if (farm == null)
+            {
+                return BadRequest();
+            }
+
             var currentUserId = long.Parse(User.Identity.Name);
-            var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, beehiveCreateDTO.FarmId);
+            var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, farm.Id);
             if (farmWorker == null)
             {
                 return Forbid();
@@ -72,17 +106,17 @@ namespace BeekeepingApi.Controllers
                 return BadRequest();
             }
 
-            var currentUserId = long.Parse(User.Identity.Name);
-            var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, beehiveEditDTO.FarmId);
-            if (farmWorker == null)
-            {
-                return Forbid();
-            }
-
             var beehive = await _context.Beehives.FindAsync(id);
             if (beehive == null)
             {
                 return NotFound();
+            }
+
+            var currentUserId = long.Parse(User.Identity.Name);
+            var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, beehive.FarmId);
+            if (farmWorker == null)
+            {
+                return Forbid();
             }
 
             _mapper.Map(beehiveEditDTO, beehive);
@@ -107,6 +141,8 @@ namespace BeekeepingApi.Controllers
             {
                 return Forbid();
             }
+
+            await _context.Entry(beehive).Collection(b => b.ApiaryBeehives).LoadAsync();
 
             _context.Beehives.Remove(beehive);
             await _context.SaveChangesAsync();

@@ -3,7 +3,7 @@ import { Router, NavigationStart } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { Alert, AlertType } from '../_models';
-import { AlertService } from '../_services';
+import { AlertService } from '../_services/alert.service';
 
 @Component({ selector: 'alert', templateUrl: 'alert.component.html' })
 export class AlertComponent implements OnInit, OnDestroy {
@@ -29,7 +29,6 @@ export class AlertComponent implements OnInit, OnDestroy {
                     this.alerts.forEach(x => delete x.keepAfterRouteChange);
                     return;
                 }
-
                 // add alert to array
                 this.alerts.push(alert);
 

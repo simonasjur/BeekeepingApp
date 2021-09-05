@@ -5,7 +5,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
-import { User } from '../_models';
+import { Farm, User } from '../_models';
+import { FarmService } from './farm.service';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -24,6 +25,7 @@ export class UserService {
         return this.userSubject.value;
     }
 
+
     login(username, password) {
         return this.http.post<User>(`${environment.apiUrl}/users/authenticate`, { username, password })
             .pipe(map(user => {
@@ -35,7 +37,7 @@ export class UserService {
     }
 
     logout() {
-        // remove user from local storage and set current user to null
+        // remove user and farm from local storage and set current user and farm to null
         localStorage.removeItem('user');
         this.userSubject.next(null);
         this.router.navigate(['/user/login']);
@@ -69,6 +71,16 @@ export class UserService {
             }));
     }
 
+
+
+    updatePassword(id, params) {
+        return this.http.put(`${environment.apiUrl}/users/${id}/updatepassword`, params)
+    }
+
+    updateEmail(id, params) {
+        return this.http.put(`${environment.apiUrl}/users/${id}/updateemail`, params)
+    }
+
     delete(id) {
         return this.http.delete(`${environment.apiUrl}/users/${id}`)
             .pipe(map(x => {
@@ -78,5 +90,16 @@ export class UserService {
                 }
                 return x;
             }));
+    }
+
+    updateLocalStorageUser() {
+        return this.http.get<User>(`${environment.apiUrl}/users/${this.userValue.id}`)
+        .pipe(map(user => {
+            
+            user.token = this.userValue.token;
+            localStorage.setItem('user', JSON.stringify(user));
+            this.userSubject.next(user);
+            return user;
+        }));
     }
 }

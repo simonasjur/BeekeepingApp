@@ -1,0 +1,9 @@
+<p *ngIf="!apiaryBeehives">Nera</p>
+<div class="example-list"
+     cdkDropList>
+    <div *ngFor="let apiaryBeehive of apiaryBeehives"
+         class="example-box"
+         cdkDrop>
+        {{apiaryBeehive.beehive.no}}
+    </div>
+</div>

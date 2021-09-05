@@ -1,0 +1,36 @@
+<h1 mat-dialog-title>Avilio perkėlimas</h1>
+<div mat-dialog-content [formGroup]="form" class="container">
+    <mat-form-field>
+        <mat-label>Perkėlimo data</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="arriveDate">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="submitted && f.arriveDate.errors">
+            Neteisingas datos formatas
+        </mat-error>   
+    </mat-form-field>
+    <mat-form-field *ngIf="isTypeDadano()">
+        <mat-label>Lizdinių korių kiekis</mat-label>
+        <input matInput formControlName="nestCombs">
+        <mat-error *ngIf="submitted && f.nestCombs.errors">
+            <p *ngIf="f.nestCombs.errors.required">Šis laukas yra būtinas</p>
+            <p *ngIf="f.nestCombs.errors.pattern">Reikšmė privalo būti teigiamas natūralus skaičius</p>
+            <p *ngIf="f.nestCombs.errors.max">Avilyje telpa tik 16 korių</p>
+        </mat-error>
+    </mat-form-field>
+    <mat-form-field *ngIf="!isTypeDadano()">
+        <mat-label>Avilio aukštų kiekis</mat-label>
+        <input matInput formControlName="supersCount">
+        <mat-error *ngIf="submitted && f.supersCount.errors">
+            <p *ngIf="f.supersCount.errors.required">Šis laukas yra būtinas</p>
+            <p *ngIf="f.supersCount.errors.pattern">Avilys susideda tik iš 9 aukštų</p>
+        </mat-error>
+    </mat-form-field>
+</div>
+<div mat-dialog-actions>
+    <a class="btn btn-link" (click)="onNoClick()">Atšaukti</a>
+    <button mat-button (click)="addApiaryBeehive()" [disabled]="loading">
+        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+        Išsaugoti
+    </button>
+</div>

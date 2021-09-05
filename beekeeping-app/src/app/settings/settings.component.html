@@ -1,0 +1,44 @@
+<div class="p-4 px-5">
+    <div class="settings-title">
+        <mat-icon class="settings-icon">settings</mat-icon>
+        <h1>Naudotojo nustatymai</h1>
+    </div>
+    <mat-tab-group dynamicHeight animationDuration="0ms">
+        <mat-tab label="Paskyra">
+        <div class="tab-section">
+            <h1 class="tab-title">Paskyros nustatymai</h1>
+            <h2>Paskyros duomenys</h2>
+            <mat-divider></mat-divider>
+            <mat-list>
+                <mat-list-item>
+                    <div mat-line>El. paštas</div>
+                    <div mat-line>{{user.email}}</div>
+                    <button mat-flat-button (click)="openChangeEmailDialog()" class="empty-button">Keisti</button>
+                </mat-list-item>
+                <mat-list-item>
+                    <div mat-line>Keisti slaptažodį</div>
+                    <div mat-line>Slaptažodis turi būti bent 6 simbolių ilgio</div>
+                    <button mat-flat-button (click)="openChangePasswordDialog()" class="empty-button">Keisti</button>
+                </mat-list-item>
+            </mat-list>
+        </div>
+        </mat-tab>
+        <mat-tab label="Ūkiai">
+            <div *ngIf="farms && farm" class="tab-section">
+                <h1 class="tab-title">Ūkių nustatymai</h1>
+                <h2>Numatytasis ūkis</h2>
+                <mat-divider></mat-divider>
+                <mat-list>
+                    <mat-list-item>
+                        <div mat-line>Numatytasis ūkis</div>
+                        <div mat-line *ngIf="defaultFarm">{{defaultFarm.name}}</div>
+                        <button mat-flat-button [matMenuTriggerFor]="farmsMenu" class="empty-button">Keisti</button>
+                        <mat-menu #farmsMenu="matMenu">
+                            <button mat-menu-item *ngFor="let farm of farms" (click)="changeDefaultFarm(farm.id)">{{farm.name}}</button>
+                        </mat-menu>
+                    </mat-list-item>
+                </mat-list>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>

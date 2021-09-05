@@ -1,0 +1,11 @@
+mat-list {
+    max-width: 600px;
+}
+
+mat-icon {
+    font-size: 30px;
+}
+
+.default {
+    font-style: italic;
+}
