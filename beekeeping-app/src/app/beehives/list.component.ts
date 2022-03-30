@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { BeehiveService } from '../_services/beehive.service';
-import { Beehive, BeehiveTypes, User, Colors, ApiaryBeehive, BeehiveType2LabelMapping } from '../_models';
-import { ApiaryBeehiveService } from '../_services/apiaryBeehive.service';
+import { BeeFamilyService } from '../_services/beeFamily.service';
+import { BeeFamily, User, ApiaryBeeFamily, Apiary, BeeFamilyState2LabelMapping, BeeFamilyOrigin2LabelMapping } from '../_models';
+import { ApiaryBeeFamilyService } from '../_services/apiaryBeeFamily.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddApiaryBeehiveDialog } from './add-apiaryBeehive-dialog.component';
 import { FarmService } from '../_services/farm.service';
+import { ApiaryService } from '../_services/apiary.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
     selector: 'beehive-list',
@@ -14,32 +16,46 @@ import { FarmService } from '../_services/farm.service';
     styleUrls: ['list.component.css']
 })
 export class ListComponent implements OnInit {
-    beehives: Beehive[];
-    apiaryBeehives: ApiaryBeehive[];
+    beeFamilies: BeeFamily[];
+    apiaryBeeFamilies: ApiaryBeeFamily[];
+    apiaries: Apiary[];
     user: User;
     apiaryId: number;
-    showEmptyBeehives: boolean;
-    firstTableDisplayedColumns: string[] = ['no', 'type', 'action'];
-    secondTableDisplayedColumns: string[] = ['no', 'type', 'date', 'action'];
+    currentApiary: Apiary;
+    apiarySelectForm: FormGroup;
+    //showEmptyBeehives: boolean;
+    firstTableDisplayedColumns: string[] = ['id', 'state', 'origin', 'arriveDate', 'action'];
 
-    constructor(private beehiveService: BeehiveService,
-                private apiaryBeehiveService: ApiaryBeehiveService,
-                private farmService: FarmService,
-                private router: Router,
+    constructor(//private beehiveService: BeeFamilyService,
+                private apiaryBeehiveService: ApiaryBeeFamilyService,
+                //private farmService: FarmService,
+                //private apiaryService: ApiaryService,
+                //private formBuilder: FormBuilder,
+                //private router: Router,
                 private route: ActivatedRoute,
                 private dialog: MatDialog) {
-        this.showEmptyBeehives = false;
+        //this.showEmptyBeehives = false;
     }
 
     ngOnInit() {
         this.apiaryId = this.route.snapshot.params['apiaryId'];
-        this.beehiveService.getFarmEmptyBeehives(this.farmService.farmValue.id)
-            .subscribe(beehives => this.beehives = beehives);
-        this.apiaryBeehiveService.getOneApiaryBeehives(this.apiaryId)
-            .subscribe(apiaryBeehives => this.apiaryBeehives = apiaryBeehives);
+        /*this.apiarySelectForm = this.formBuilder.group({
+            apiary: []
+        });
+        this.apiaryService.getFarmApiaries(this.farmService.farmValue.id)
+            .subscribe(apiaries => { 
+                this.apiaries = apiaries;
+                this.currentApiary = apiaries.find(({id}) => id == this.apiaryId);
+                console.log(this.apiaryId);
+                console.log(this.currentApiary);
+                this.apiarySelectForm.controls['apiary'].setValue(this.currentApiary);
+                console.log(this.apiarySelectForm.get('apiary').value);
+            });*/
+        this.apiaryBeehiveService.getOneApiaryBeeFamilies(this.apiaryId)
+            .subscribe(apiaryBeehives => this.apiaryBeeFamilies = apiaryBeehives);       
     }
 
-    get BeehiveTypes() {
+    /*get BeehiveTypes() {
         return BeehiveTypes;
     }
 
@@ -49,18 +65,26 @@ export class ListComponent implements OnInit {
 
     get beehiveType2LabelMapping() {
         return BeehiveType2LabelMapping;
+    }*/
+
+    get beeFamilyState2LabelMapping() {
+        return BeeFamilyState2LabelMapping;
     }
 
-    changeShowEmptyBeehivesValue() {
-        this.showEmptyBeehives = !this.showEmptyBeehives;
+    get beeFamilyOrigin2LabelMapping() {
+        return BeeFamilyOrigin2LabelMapping;
     }
+
+    /*changeShowEmptyBeehivesValue() {
+        this.showEmptyBeehives = !this.showEmptyBeehives;
+    }*/
 
     openAddApiaryBeehiveDialog(currentBeehiveId: any) {
         const dialogRef = this.dialog.open(AddApiaryBeehiveDialog, {
             data: {
                 apiaryId: this.apiaryId,
                 beehiveId: currentBeehiveId,
-                beehive: this.beehives.find(b => b.id === currentBeehiveId)
+                beehive: this.beeFamilies.find(b => b.id === currentBeehiveId)
             }
         });
     }

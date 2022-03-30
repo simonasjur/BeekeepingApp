@@ -4,21 +4,15 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BeekeepingApi.DTOs.ApiaryBeehiveDTOs
+namespace BeekeepingApi.DTOs.BeehiveBeeFamilyDTOs
 {
-    public class ApiaryBeehiveEditDTO
+    public class BeehiveBeeFamilyEditDTO
     {
         [Key]
         public long Id { get; set; }
 
         [Required]
         public DateTime ArriveDate { get; set; }
-
-        [Required]
-        public double X { get; set; }
-
-        [Required]
-        public double Y { get; set; }
 
         public DateTime? DepartDate { get; set; }
     }

@@ -18,12 +18,12 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field>
-            <mat-form-field *ngIf="beehives && beehives.length != 0" appearance="fill">
+            <mat-form-field *ngIf="beeFamilies && beeFamilies.length != 0" appearance="fill">
                 <mat-label>Avilys</mat-label>
-                <mat-select formControlName="beehiveId">
+                <mat-select formControlName="beeFamilyId">
                     <mat-option [value]="null">Visi</mat-option>
-                    <mat-option *ngFor="let beehive of beehives" [value]="beehive.id">
-                        Nr. {{beehive.no}}
+                    <mat-option *ngFor="let beeFamily of beeFamilies" [value]="beeFamily.id">
+                        Nr. {{beeFamily.no}}
                     </mat-option>
                 </mat-select>
             </mat-form-field>
@@ -63,8 +63,8 @@
                     <th mat-header-cell *matHeaderCellDef> Kategorija </th>
                     <td mat-cell *matCellDef="let element">
                         <div *ngIf="element.hiveId">
-                            <div *ngFor="let beehive of beehives">
-                                <a *ngIf="beehive.id == element.beehiveId">Avilys nr. {{beehive.no}}</a>
+                            <div *ngFor="let beeFamily of beeFamilies">
+                                <a *ngIf="beeFamily.id == element.beeFamilyId">Avilys nr. {{beeFamily.no}}</a>
                             </div>
                         </div>
                         <div *ngIf="element.apiaryId">
@@ -129,12 +129,12 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field>
-            <mat-form-field *ngIf="beehives && beehives.length != 0" appearance="fill">
+            <mat-form-field *ngIf="beeFamilies && beeFamilies.length != 0" appearance="fill">
                 <mat-label>Avilys</mat-label>
-                <mat-select formControlName="beehiveId">
+                <mat-select formControlName="beeFamilyId">
                     <mat-option [value]="null">Visi</mat-option>
-                    <mat-option *ngFor="let beehive of beehives" [value]="beehive.id">
-                        Nr. {{beehive.no}}
+                    <mat-option *ngFor="let beeFamily of beeFamilies" [value]="beeFamily.id">
+                        Nr. {{beeFamily.no}}
                     </mat-option>
                 </mat-select>
             </mat-form-field>
@@ -173,8 +173,8 @@
                     <th mat-header-cell *matHeaderCellDef> Kategorija </th>
                     <td mat-cell *matCellDef="let element">
                         <div *ngIf="element.hiveId">
-                            <div *ngFor="let beehive of beehives">
-                                <a *ngIf="beehive.id == element.beehiveId">Avilys nr. {{beehive.no}}</a>
+                            <div *ngFor="let beeFamily of beeFamilies">
+                                <a *ngIf="beeFamily.id == element.beeFamilyId">Avilys nr. {{beeFamily.no}}</a>
                             </div>
                         </div>
                         <div *ngIf="element.apiaryId">

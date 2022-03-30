@@ -1,21 +1,34 @@
-<h1>Bityno Aviliai</h1>
+<!--<form [formGroup]="apiarySelectForm">
+    <mat-form-field appearance="fill">
+        <mat-label for="apiary"></mat-label>
+        <mat-select formControlName="apiary">
+            <mat-option *ngFor="let apiary of apiaries" [value]="apiary">
+                {{apiary.name}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+</form>-->
+
+<h1 *ngIf="currentApiary">{{currentApiary.name}} Aviliai</h1>
 <div class="buttons-container">
-    <a routerLink="add" class="first-button">Naujas Avilys</a>
-    <div *ngIf="beehives">
-        <button *ngIf="!showEmptyBeehives"
-            (click)="changeShowEmptyBeehivesValue()">Tušti Aviliai({{beehives.length}}) ˃</button>
-        <button *ngIf="showEmptyBeehives"
-            (click)="changeShowEmptyBeehivesValue()">Tušti Aviliai({{beehives.length}}) ˅</button>
-    </div>
+    <a routerLink="add">Naujas Avilys</a>
 </div>
-<table mat-table [dataSource]="apiaryBeehives" style="float: left;margin-right:30px">
-    <ng-container matColumnDef="no">
-        <th mat-header-cell *matHeaderCellDef>Nr.</th>
-        <td mat-cell *matCellDef="let element">{{element.beehive.no}}</td>
+<table mat-table [dataSource]="apiaryBeeFamilies">
+    <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>Id</th>
+        <td mat-cell *matCellDef="let element">{{element.beeFamily.id}}</td>
     </ng-container>
-    <ng-container matColumnDef="type">
-        <th mat-header-cell *matHeaderCellDef>Tipas</th>
-        <td mat-cell *matCellDef="let element">{{beehiveType2LabelMapping[element.beehive.type]}}</td>
+    <ng-container matColumnDef="state">
+        <th mat-header-cell *matHeaderCellDef>Būsena</th>
+        <td mat-cell *matCellDef="let element">{{beeFamilyState2LabelMapping[element.beeFamily.state]}}</td>
+    </ng-container>
+    <ng-container matColumnDef="origin">
+        <th mat-header-cell *matHeaderCellDef>Kilmė</th>
+        <td mat-cell *matCellDef="let element">{{beeFamilyOrigin2LabelMapping[element.beeFamily.origin]}}</td>
+    </ng-container>
+    <ng-container matColumnDef="arriveDate">
+        <th mat-header-cell *matHeaderCellDef>Pastatymo data</th>
+        <td mat-cell *matCellDef="let element">{{element.arriveDate}}</td>
     </ng-container>
     <ng-container matColumnDef="action">
         <th mat-header-cell *matHeaderCellDef> Veiksmas </th>
@@ -29,7 +42,8 @@
     <tr mat-row *matRowDef="let row; columns: firstTableDisplayedColumns;"></tr>
 </table>
 
-<table mat-table [dataSource]="beehives" *ngIf="showEmptyBeehives" style="float: left;">
+<!--Tusti aviliai-->
+<!--<table mat-table [dataSource]="beehives" *ngIf="showEmptyBeehives" style="float: left;">
     <ng-container matColumnDef="no">
         <th mat-header-cell *matHeaderCellDef>Nr.</th>
         <td mat-cell *matCellDef="let element">{{element.no}}</td>
@@ -55,7 +69,9 @@
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="secondTableDisplayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: secondTableDisplayedColumns;"></tr>
-</table>
+</table>-->
+
+
 <!--<div class="tables-container">
     <table mat-table [dataSource]="apiaryBeehives" class="first-table">
         <ng-container matColumnDef="no">

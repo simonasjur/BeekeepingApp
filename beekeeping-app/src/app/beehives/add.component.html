@@ -5,6 +5,31 @@
         <mat-form-field>
             <mat-label>Tipas</mat-label>
             <mat-select formControlName="type" #typeField>
+                <mat-option *ngFor="let origin of beeFamilyOriginsNames" [value]="origin">
+                    {{beeFamilyOrigin2LabelMapping[origin]}}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="submitted && f.type.errors">
+                Šis laukas yra būtinas
+            </mat-error>
+        </mat-form-field>
+    </div>
+    <div class="form-group">
+        <button [disabled]="loading" class="btn btn-primary">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+            Išsaugoti
+        </button>
+        <a (click)="backToBeeFamiliesList()" class="btn btn-link">Atšaukti</a>
+    </div>
+</form>
+
+<!--<h1 *ngIf="isAddMode">Sukurti Avilį</h1>
+<h1 *ngIf="!isAddMode">Redaguoti Avilį</h1>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="container">
+        <mat-form-field>
+            <mat-label>Tipas</mat-label>
+            <mat-select formControlName="type" #typeField>
                 <mat-option *ngFor="let beehiveType of beehiveTypesNames" [value]="beehiveType">
                     {{beehiveType2LabelMapping[beehiveType]}}
                 </mat-option>
@@ -47,4 +72,4 @@
         </button>
         <a (click)="backToBeehivesList()" class="btn btn-link">Atšaukti</a>
     </div>
-</form>
+</form>-->

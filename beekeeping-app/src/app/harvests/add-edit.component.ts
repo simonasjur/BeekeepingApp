@@ -5,9 +5,9 @@ import { first } from 'rxjs/operators';
 
 import { FarmService } from '../_services/farm.service';
 import { AlertService } from '../_services/alert.service';
-import { Apiary, Beehive, Farm, TodoItem, TodoItemPriorities2, TodoItemPriority2LabelMapping } from '../_models';
+import { Apiary, BeeFamily, Farm, TodoItem, TodoItemPriorities2, TodoItemPriority2LabelMapping } from '../_models';
 import { TodoService } from '../_services/todoItem.service';
-import { BeehiveService } from '../_services/beehive.service';
+import { BeeFamilyService } from '../_services/beeFamily.service';
 import { ApiaryService } from '../_services/apiary.service';
 
 @Component({ templateUrl: 'add-edit.component.html'})
@@ -19,7 +19,7 @@ export class AddEditComponent implements OnInit {
     submitted = false;
     todo: TodoItem;
     typesOfCategories: string[] = ['Bendra', 'Bitynas', 'Avilys'];
-    beehives: Beehive[];
+    beeFamilies: BeeFamily[];
     apiaries: Apiary[];
     checked = false;
 
@@ -30,13 +30,13 @@ export class AddEditComponent implements OnInit {
         private farmService: FarmService,
         private alertService: AlertService,
         private todoService: TodoService,
-        private beehiveService: BeehiveService,
+        private beehiveService: BeeFamilyService,
         private apiaryService: ApiaryService
     ) {}
 
     ngOnInit() {
-        this.beehiveService.getFarmAllBeehives(this.farmService.farmValue.id)
-        .subscribe(beehives => this.beehives = beehives);
+        this.beehiveService.getFarmAllBeeFamilies(this.farmService.farmValue.id)
+        .subscribe(beehives => this.beeFamilies = beehives);
         this.apiaryService.getFarmApiaries(this.farmService.farmValue.id)
         .subscribe(apiaries => this.apiaries = apiaries);
 

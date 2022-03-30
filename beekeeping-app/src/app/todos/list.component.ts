@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { catchError, count, debounceTime, delay, distinctUntilChanged, first, map, startWith, switchMap, tap } from 'rxjs/operators';
-import { Apiary, Beehive, Farm, TodoItem, TodoItemPriority2LabelMapping, User } from '../_models';
+import { Apiary, BeeFamily, Farm, TodoItem, TodoItemPriority2LabelMapping, User } from '../_models';
 
 import { FarmService } from '../_services/farm.service';
 import { UserService } from '../_services/user.service';
@@ -12,7 +12,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatSort } from '@angular/material/sort';
 import { Observable, merge, of as observableOf, of } from 'rxjs';
 import { ApiaryService } from '../_services/apiary.service';
-import { BeehiveService } from '../_services/beehive.service';
+import { BeeFamilyService } from '../_services/beeFamily.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
@@ -40,7 +40,7 @@ export class ListComponent {
     resultsLengthCompleted = 0;
     filteredAndPagedTodos: Observable<TodoItem[]>;
     filteredAndPagedTodosCompleted: Observable<TodoItem[]>;
-    beehives: Beehive[];
+    beeFamilies: BeeFamily[];
     apiaries: Apiary[];
     expandedElement: TodoItem | null;
     filter = new FormControl();
@@ -55,7 +55,7 @@ export class ListComponent {
     constructor(private todoService: TodoService,
                 private farmService: FarmService,
                 private apiaryService: ApiaryService,
-                private beehiveService: BeehiveService,
+                private beeFamiliesService: BeeFamilyService,
                 private alertService: AlertService,
                 private formBuilder: FormBuilder) {
                     
@@ -66,28 +66,28 @@ export class ListComponent {
         this.form = this.formBuilder.group({
             filter: [],
             apiaryId: [],
-            beehiveId: [],
+            beeFamilyId: [],
         });
         this.formSecond = this.formBuilder.group({
             filter: [],
             apiaryId: [],
-            beehiveId: [],
+            beeFamilyId: [],
         });
     }
     
     ngAfterViewInit() {
         this.apiaryService.getFarmApiaries(this.farmService.farmValue.id).subscribe(apiaries => {
             this.apiaries = apiaries;
-            this.beehiveService.getFarmAllBeehives(this.farmService.farmValue.id).subscribe(beehives => {
-                this.beehives = beehives;
+            this.beeFamiliesService.getFarmAllBeeFamilies(this.farmService.farmValue.id).subscribe(beeFamilies => {
+                this.beeFamilies = beeFamilies;
                 this.filteredAndPagedTodos = merge(this.form.valueChanges, this.firstSort.sortChange, this.firstPaginator.page)
                     .pipe(
                         startWith({}),
                         debounceTime(200),
                         switchMap(() => {
                         this.loading = true;
-                        if (this.form.get('apiaryId').value !== null && this.form.get('beehiveId').value !== null) {
-                            return this.todoService.getAllFarmTodosByApiaryAndBeehive(
+                        if (this.form.get('apiaryId').value !== null && this.form.get('beeFamilyId').value !== null) {
+                            return this.todoService.getAllFarmTodosByApiaryAndBeeFamily(
                                 this.farmService.farmValue.id,
                                 false,
                                 this.form.get('filter').value,
@@ -95,7 +95,7 @@ export class ListComponent {
                                 this.firstSort.direction,
                                 this.firstPaginator.pageIndex,
                                 this.form.get('apiaryId').value,
-                                this.form.get('beehiveId').value
+                                this.form.get('beeFamilyId').value
                             );
                         } else if (this.form.get('apiaryId').value !== null) {
                             return this.todoService.getAllFarmTodosByApiary(
@@ -107,15 +107,15 @@ export class ListComponent {
                                 this.firstPaginator.pageIndex,
                                 this.form.get('apiaryId').value
                             );
-                        } else if (this.form.get('beehiveId').value !== null) {
-                            return this.todoService.getAllFarmTodosByBeehive(
+                        } else if (this.form.get('beeFamilyId').value !== null) {
+                            return this.todoService.getAllFarmTodosByBeeFamily(
                                 this.farmService.farmValue.id,
                                 false,
                                 this.form.get('filter').value,
                                 this.firstSort.active,
                                 this.firstSort.direction,
                                 this.firstPaginator.pageIndex,
-                                this.form.get('beehiveId').value
+                                this.form.get('beeFamilyId').value
                             );}                        
                         else {
                             return this.todoService.getAllFarmTodosByFilterPaged(
@@ -130,8 +130,8 @@ export class ListComponent {
                         map(data => {
                         // Flip flag to show that loading has finished.
                         this.loading = false;
-                        if (this.form.get('apiaryId').value !== null && this.form.get('beehiveId').value !== null) {
-                            this.todoService.getAllFarmTodosByApiaryAndBeehive(
+                        if (this.form.get('apiaryId').value !== null && this.form.get('beeFamilyId').value !== null) {
+                            this.todoService.getAllFarmTodosByApiaryAndBeeFamily(
                                 this.farmService.farmValue.id,
                                 false,
                                 this.form.get('filter').value,
@@ -139,7 +139,7 @@ export class ListComponent {
                                 this.firstSort.direction,
                                 this.firstPaginator.pageIndex,
                                 this.form.get('apiaryId').value,
-                                this.form.get('beehiveId').value
+                                this.form.get('beeFamilyId').value
                             ).subscribe(todos => this.resultsLength = todos.length);
                         } else if (this.form.get('apiaryId').value !== null) {
                             this.todoService.getAllFarmTodosByApiary(
@@ -151,15 +151,15 @@ export class ListComponent {
                                 this.firstPaginator.pageIndex,
                                 this.form.get('apiaryId').value
                             ).subscribe(todos => this.resultsLength = todos.length);
-                        } else if (this.form.get('beehiveId').value !== null) {
-                            this.todoService.getAllFarmTodosByBeehive(
+                        } else if (this.form.get('beeFamilyId').value !== null) {
+                            this.todoService.getAllFarmTodosByBeeFamily(
                                 this.farmService.farmValue.id,
                                 false,
                                 this.form.get('filter').value,
                                 this.firstSort.active,
                                 this.firstSort.direction,
                                 this.firstPaginator.pageIndex,
-                                this.form.get('beehiveId').value
+                                this.form.get('beeFamilyId').value
                             ).subscribe(todos => this.resultsLength = todos.length);
                         } else {
                             this.todoService.getAllFarmTodosByFilterPaged(
@@ -185,8 +185,8 @@ export class ListComponent {
                         debounceTime(200),
                         switchMap(() => {
                         this.loading = true;
-                        if (this.formSecond.get('apiaryId').value !== null && this.formSecond.get('beehiveId').value !== null) {
-                            return this.todoService.getAllFarmTodosByApiaryAndBeehive(
+                        if (this.formSecond.get('apiaryId').value !== null && this.formSecond.get('beeFamilyId').value !== null) {
+                            return this.todoService.getAllFarmTodosByApiaryAndBeeFamily(
                                 this.farmService.farmValue.id,
                                 true,
                                 this.formSecond.get('filter').value,
@@ -194,7 +194,7 @@ export class ListComponent {
                                 this.secondSort.direction,
                                 this.secondPaginator.pageIndex,
                                 this.formSecond.get('apiaryId').value,
-                                this.formSecond.get('beehiveId').value
+                                this.formSecond.get('beeFamilyId').value
                             );
                         } else if (this.formSecond.get('apiaryId').value !== null) {
                             return this.todoService.getAllFarmTodosByApiary(
@@ -206,15 +206,15 @@ export class ListComponent {
                                 this.secondPaginator.pageIndex,
                                 this.formSecond.get('apiaryId').value
                             );
-                        } else if (this.formSecond.get('beehiveId').value !== null) {
-                            return this.todoService.getAllFarmTodosByBeehive(
+                        } else if (this.formSecond.get('beeFamilyId').value !== null) {
+                            return this.todoService.getAllFarmTodosByBeeFamily(
                                 this.farmService.farmValue.id,
                                 true,
                                 this.formSecond.get('filter').value,
                                 this.secondSort.active,
                                 this.secondSort.direction,
                                 this.secondPaginator.pageIndex,
-                                this.formSecond.get('beehiveId').value
+                                this.formSecond.get('beeFamilyId').value
                             );}                        
                         else {
                             return this.todoService.getAllFarmTodosByFilterPaged(
@@ -229,8 +229,8 @@ export class ListComponent {
                         map(data => {
                         // Flip flag to show that loading has finished.
                         this.loading = false;
-                        if (this.formSecond.get('apiaryId').value !== null && this.formSecond.get('beehiveId').value !== null) {
-                            this.todoService.getAllFarmTodosByApiaryAndBeehive(
+                        if (this.formSecond.get('apiaryId').value !== null && this.formSecond.get('beeFamilyId').value !== null) {
+                            this.todoService.getAllFarmTodosByApiaryAndBeeFamily(
                                 this.farmService.farmValue.id,
                                 true,
                                 this.formSecond.get('filter').value,
@@ -238,7 +238,7 @@ export class ListComponent {
                                 this.secondSort.direction,
                                 this.secondPaginator.pageIndex,
                                 this.formSecond.get('apiaryId').value,
-                                this.formSecond.get('beehiveId').value
+                                this.formSecond.get('beeFamilyId').value
                             ).subscribe(todos => this.resultsLengthCompleted = todos.length);
                         } else if (this.formSecond.get('apiaryId').value !== null) {
                             this.todoService.getAllFarmTodosByApiary(
@@ -250,15 +250,15 @@ export class ListComponent {
                                 this.secondPaginator.pageIndex,
                                 this.formSecond.get('apiaryId').value
                             ).subscribe(todos => this.resultsLengthCompleted = todos.length);
-                        } else if (this.formSecond.get('beehiveId').value !== null) {
-                            this.todoService.getAllFarmTodosByBeehive(
+                        } else if (this.formSecond.get('beeFamilyId').value !== null) {
+                            this.todoService.getAllFarmTodosByBeeFamily(
                                 this.farmService.farmValue.id,
                                 true,
                                 this.formSecond.get('filter').value,
                                 this.secondSort.active,
                                 this.secondSort.direction,
                                 this.secondPaginator.pageIndex,
-                                this.formSecond.get('beehiveId').value
+                                this.formSecond.get('beeFamilyId').value
                             ).subscribe(todos => this.resultsLengthCompleted = todos.length);
                         } else {
                             this.todoService.getAllFarmTodosByFilterPaged(

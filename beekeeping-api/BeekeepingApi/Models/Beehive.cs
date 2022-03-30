@@ -9,14 +9,13 @@ namespace BeekeepingApi.Models
 {
     public enum BeehiveTypes
     {
-        Dadano, Daugiaaukštis
+        Dadano, Daugiaaukštis, NukleosoSekcija
     }
 
     public enum Colors
     {
         Mėlyna, Geltona, Balta, Raudona, Žalia
     }
-
     public class Beehive
     {
         [Key]
@@ -26,28 +25,30 @@ namespace BeekeepingApi.Models
         public BeehiveTypes Type { get; set; }
 
         [Required]
-        public int No { get; set; }
-
-        [Required]
         public bool IsEmpty { get; set; }
+
+        [Range(0, int.MaxValue)]
+        public int? No { get; set; }
 
         public DateTime? AcquireDay { get; set; }
 
         public Colors? Color { get; set; }
 
+        [Range(0, 30)]
+        public int? MaxNestCombs { get; set; }
+
+        [Range(0, 30)]
         public int? NestCombs { get; set; }
 
-        public double? RequiredFoodForWinter { get; set; }
+        [Range(0, 4)]
+        public int? MaxHoneyCombsSupers { get; set; }
 
         public long FarmId { get; set; }
 
         [ForeignKey("FarmId")]
         public Farm Farm { get; set; }
 
-        public virtual ICollection<Super> Supers { get; set; }
-        public virtual ICollection<ApiaryBeehive> ApiaryBeehives { get; set; }
-        public virtual ICollection<TodoItem> TodoItems { get; set; }
-        public virtual ICollection<NestShortening> NestShortenings { get; set; }
-        public virtual ICollection<Feeding> Feedings { get; set; }
+        public virtual ICollection<BeehiveBeeFamily> BeehiveBeeFamilies { get; set; }
+        public virtual ICollection<BeehiveComponent> Components { get; set; }
     }
 }

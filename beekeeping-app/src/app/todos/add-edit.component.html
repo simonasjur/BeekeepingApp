@@ -21,16 +21,16 @@
                     </mat-list-option>
                 </div>
             </mat-selection-list>
-            <div *ngIf="beehives && categories.selectedOptions.selected[0]?.value === 'Avilys'">
-                <mat-form-field *ngIf="beehives.length != 0" appearance="fill">
+            <div *ngIf="beeFamilies && categories.selectedOptions.selected[0]?.value === 'Avilys'">
+                <mat-form-field *ngIf="beeFamilies.length != 0" appearance="fill">
                     <mat-label>Pasirinkite avilį</mat-label>
-                    <mat-select formControlName="beehiveId">
-                    <mat-option *ngFor="let beehive of beehives" [value]="beehive.id">
-                        {{beehive.no}}
+                    <mat-select formControlName="beeFamilyId">
+                    <mat-option *ngFor="let beeFamily of beeFamilies" [value]="beeFamily.id">
+                        {{beeFamily.no}}
                     </mat-option>
                     </mat-select>
                 </mat-form-field>
-                <div *ngIf="beehives.length == 0">Jūs neturite avilių</div>
+                <div *ngIf="beeFamilies.length == 0">Jūs neturite avilių</div>
             </div>
             <div *ngIf="apiaries && categories.selectedOptions.selected[0]?.value === 'Bitynas'">
                 <mat-form-field *ngIf="apiaries.length != 0" appearance="fill">

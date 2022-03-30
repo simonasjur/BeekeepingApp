@@ -18,6 +18,6 @@ namespace BeekeepingApi.DTOs.TodoItemDTOs
         public bool IsComplete { get; set; }
         public long FarmId { get; set; }
         public long ApiaryId { get; set; }
-        public long BeehiveId { get; set; }
+        public long BeeFamilyId { get; set; }
     }
 }

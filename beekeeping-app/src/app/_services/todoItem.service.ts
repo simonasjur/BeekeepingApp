@@ -36,22 +36,22 @@ export class TodoService {
         return this.http.get<TodoItem[]>(`${environment.apiUrl}/farms/${farmId}/todoItems?$filter=isComplete eq ${isComplete} and apiaryId eq ${apiaryId} and (contains(title,'${filter}') or contains(description,'${filter}'))&$top=${top}&$skip=${skip}&$orderby=${sort} ${order}`);
     }
 
-    getAllFarmTodosByBeehive(farmId: number, isComplete: boolean, filter: string, sort: string, order: string, page: number, beehiveId: number) {
+    getAllFarmTodosByBeeFamily(farmId: number, isComplete: boolean, filter: string, sort: string, order: string, page: number, beeFamilyId: number) {
         if (filter === null) {
             filter = '';
         }
         const top = 10;
         const skip = page * top;
-        return this.http.get<TodoItem[]>(`${environment.apiUrl}/farms/${farmId}/todoItems?$filter=isComplete eq ${isComplete} and beehiveId eq ${beehiveId} and (contains(title,'${filter}') or contains(description,'${filter}'))&$top=${top}&$skip=${skip}&$orderby=${sort} ${order}`);
+        return this.http.get<TodoItem[]>(`${environment.apiUrl}/farms/${farmId}/todoItems?$filter=isComplete eq ${isComplete} and beeFamilyId eq ${beeFamilyId} and (contains(title,'${filter}') or contains(description,'${filter}'))&$top=${top}&$skip=${skip}&$orderby=${sort} ${order}`);
     }
 
-    getAllFarmTodosByApiaryAndBeehive(farmId: number, isComplete: boolean, filter: string, sort: string, order: string, page: number, apiaryId: number, beehiveId: number) {
+    getAllFarmTodosByApiaryAndBeeFamily(farmId: number, isComplete: boolean, filter: string, sort: string, order: string, page: number, apiaryId: number, beeFamilyId: number) {
         if (filter === null) {
             filter = '';
         }
         const top = 10;
         const skip = page * top;
-        return this.http.get<TodoItem[]>(`${environment.apiUrl}/farms/${farmId}/todoItems?$filter=isComplete eq ${isComplete} and apiaryId eq ${apiaryId} and beehiveId eq ${beehiveId} and (contains(title,'${filter}') or contains(description,'${filter}'))&$top=${top}&$skip=${skip}&$orderby=${sort} ${order}`);
+        return this.http.get<TodoItem[]>(`${environment.apiUrl}/farms/${farmId}/todoItems?$filter=isComplete eq ${isComplete} and apiaryId eq ${apiaryId} and beeFamilyId eq ${beeFamilyId} and (contains(title,'${filter}') or contains(description,'${filter}'))&$top=${top}&$skip=${skip}&$orderby=${sort} ${order}`);
     }
 
     getAllFarmTodosByFilter(farmId: number, isComplete: boolean, filter: string) {

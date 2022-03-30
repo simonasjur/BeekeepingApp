@@ -26,7 +26,7 @@ namespace BeekeepingApi.Models
         [ForeignKey("FarmId")]
         public Farm Farm { get; set; }
 
-        public virtual ICollection<ApiaryBeehive> ApiaryBeehives { get; set; }
+        public virtual ICollection<ApiaryBeeFamily> ApiaryBeeFamilies { get; set; }
         public virtual ICollection<Harvest> Harvests { get; set; }
         public virtual ICollection<TodoItem> TodoItems { get; set; }
     }

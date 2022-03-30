@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BeekeepingApi.DTOs.ApiaryBeehiveDTOs;
+using BeekeepingApi.DTOs.ApiaryBeeFamilyDTOs;
 using BeekeepingApi.Models;
 using System;
 using System.Collections.Generic;
@@ -12,11 +12,11 @@ namespace BeekeepingApi.Profiles
     {
         public ApiaryBeehiveProfile()
         {
-            CreateMap<ApiaryBeehiveCreateDTO, ApiaryBeehive>();
-            CreateMap<ApiaryBeehive, ApiaryBeehiveReadDTO>();
-            CreateMap<ApiaryBeehiveEditDTO, ApiaryBeehive>();
-            CreateMap<ApiaryBeehive, ApiaryBeehiveReadForApiaryDTO>();
-            CreateMap<ApiaryBeehive, ApiaryBeehiveReadForBeehiveDTO>();
+            CreateMap<ApiaryBeeFamilyCreateDTO, ApiaryBeeFamily>();
+            CreateMap<ApiaryBeeFamily, ApiaryBeeFamilyReadDTO>();
+            CreateMap<ApiaryBeeFamilyEditDTO, ApiaryBeeFamily>();
+            CreateMap<ApiaryBeeFamily, ApiaryBeeFamilyReadForApiaryDTO>();
+            CreateMap<ApiaryBeeFamily, ApiaryBeeFamilyReadForBeeFamilyDTO>();
         }
     }
 }

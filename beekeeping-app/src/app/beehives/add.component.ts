@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { first } from 'rxjs/operators';
-import { BeehiveTypes, BeehiveType2LabelMapping } from '../_models';
-import { BeehiveService } from '../_services/beehive.service';
+import { BeeFamilyOrigin2LabelMapping, BeeFamilyOrigins } from '../_models';
+import { BeeFamilyService } from '../_services/beeFamily.service';
 
 @Component({
-    selector: 'add-beehive',
+    selector: 'add-beeFamily',
     templateUrl: 'add.component.html',
     styleUrls: ['add.component.css']
 })
@@ -18,19 +18,21 @@ export class AddComponent implements OnInit {
     loading = false;
 
     constructor(private formBuilder: FormBuilder,
-                private beehiveService: BeehiveService,
+                private beeFamilyService: BeeFamilyService,
                 private router: Router,
                 private route: ActivatedRoute) {
     }
 
     ngOnInit() {
         this.form = this.formBuilder.group({
-            type: ['', Validators.required],
+            /*type: ['', Validators.required],
             no: ['', [Validators.required, Validators.pattern('^([1-9][0-9]*)$')]],
             isEmpty: ['', Validators.required],
             farmId: ['', Validators.required],
             nestCombs: ['', [Validators.required, Validators.max(16), Validators.pattern('^(0|[1-9][0-9]*)$')]],
-            acquireDay: ['']
+            acquireDay: ['']*/
+            origin: ['', Validators.required],
+            farmId: ['', Validators.required]
         });
 
         this.id = this.route.snapshot.params['id'];
@@ -38,11 +40,19 @@ export class AddComponent implements OnInit {
         if (this.id !== undefined) {
             this.isAddMode = false;
             this.form.addControl('id', new FormControl('', Validators.required));
-            this.beehiveService.getById(this.id).subscribe(beehive => this.form.patchValue(beehive));
+            this.beeFamilyService.getById(this.id).subscribe(beehive => this.form.patchValue(beehive));
         }
     }
 
-    get beehiveTypes() {
+    get beeFamilyOriginsNames() {
+        return Object.values(BeeFamilyOrigins).filter(value => typeof value === 'number');
+    }
+
+    get beeFamilyOrigin2LabelMapping() {
+        return BeeFamilyOrigin2LabelMapping;
+    }
+
+    /*get beehiveTypes() {
         return BeehiveTypes;
     }
 
@@ -52,7 +62,7 @@ export class AddComponent implements OnInit {
 
     get beehiveType2LabelMapping() {
         return BeehiveType2LabelMapping;
-    }
+    }*/
 
     // convenience getter for easy access to form fields
     get f() { return this.form.controls; }
@@ -60,11 +70,11 @@ export class AddComponent implements OnInit {
     onSubmit() {
         if (!this.submitted) {
             if (this.isAddMode) {
-                this.form.patchValue({isEmpty: 'true', farmId: '1', nestCombs: '0'});
+                this.form.patchValue({farmId: '1'});
             }
-            if (this.form.controls['type'].value === this.beehiveTypes.Daugiaaukstis) {
+            /*if (this.form.controls['type'].value === this.beehiveTypes.Daugiaaukstis) {
                 this.form.removeControl('nestCombs');
-            }
+            }*/
         }
 
         this.submitted = true;
@@ -76,29 +86,29 @@ export class AddComponent implements OnInit {
         this.loading = true;
 
         if (this.isAddMode) {
-            this.createBeehive();
+            this.createBeeFamily();
         } else {
-            this.updateBeehive();
+            this.updateBeeFamily();
         }
     }
 
-    private createBeehive() {
-        this.beehiveService.create(this.form.value).pipe(first())
+    private createBeeFamily() {
+        this.beeFamilyService.create(this.form.value).pipe(first())
             .subscribe(() => {
-                this.backToBeehivesList();
+                this.backToBeeFamiliesList();
             })
             .add(() => this.loading = false);
     }
 
-    private updateBeehive() {
-        this.beehiveService.update(this.id, this.form.value).pipe(first())
+    private updateBeeFamily() {
+        this.beeFamilyService.update(this.id, this.form.value).pipe(first())
             .subscribe(() => {
-                this.backToBeehivesList();
+                this.backToBeeFamiliesList();
             })
             .add(() => this.loading = false);
     }
 
-    backToBeehivesList() {
+    backToBeeFamiliesList() {
         if (this.isAddMode) {
             this.router.navigate(['../'], { relativeTo: this.route });
         } else {

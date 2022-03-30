@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { ApiaryBeehive } from '../_models';
-import { ApiaryBeehiveService } from '../_services/apiaryBeehive.service';
+import { ApiaryBeeFamily } from '../_models';
+import { ApiaryBeeFamilyService } from '../_services/apiaryBeeFamily.service';
 
 @Component({
     selector: 'apiaryBeehives',
@@ -9,12 +9,12 @@ import { ApiaryBeehiveService } from '../_services/apiaryBeehive.service';
     styleUrls: ['./apiaryBeehives.component.css']
   })
 export class ApiaryBeehiveComponent implements OnInit {
-    apiaryBeehives: ApiaryBeehive[];
+    apiaryBeehives: ApiaryBeeFamily[];
 
-    constructor(private apiaryBeehiveService: ApiaryBeehiveService) {}
+    constructor(private apiaryBeehiveService: ApiaryBeeFamilyService) {}
 
     ngOnInit() {
-        this.apiaryBeehiveService.getOneApiaryBeehives(1)
+        this.apiaryBeehiveService.getOneApiaryBeeFamilies(1)
             .subscribe(apiaryBeehives => this.apiaryBeehives = apiaryBeehives);
     }
 }

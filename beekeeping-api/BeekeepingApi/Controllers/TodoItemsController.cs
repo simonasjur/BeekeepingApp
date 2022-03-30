@@ -87,7 +87,7 @@ namespace BeekeepingApi.Controllers
             if (farmWorker == null)
                 return Forbid();
 
-            var todoItemList = await _context.TodoItems.Where(l => l.BeehiveId == beehiveId).ToListAsync();
+            var todoItemList = await _context.TodoItems.Where(l => l.BeeFamilyId == beehiveId).ToListAsync();
 
             return _mapper.Map<IEnumerable<TodoItemReadDTO>>(todoItemList).ToList();
         }
@@ -118,19 +118,19 @@ namespace BeekeepingApi.Controllers
             if (farm == null)
                 return BadRequest();
 
-            if (todoItemCreateDTO.ApiaryId != null && todoItemCreateDTO.BeehiveId == null)
+            if (todoItemCreateDTO.ApiaryId != null && todoItemCreateDTO.BeeFamilyId == null)
             {
                 var apiary = await _context.Apiaries.FindAsync(todoItemCreateDTO.ApiaryId);
                 if (apiary == null || apiary.FarmId != farm.Id)
                     return BadRequest();                
             }
-            else if (todoItemCreateDTO.BeehiveId != null && todoItemCreateDTO.ApiaryId == null)
+            else if (todoItemCreateDTO.BeeFamilyId != null && todoItemCreateDTO.ApiaryId == null)
             {
-                var beehive = await _context.Beehives.FindAsync(todoItemCreateDTO.BeehiveId);
+                var beehive = await _context.BeeFamilies.FindAsync(todoItemCreateDTO.BeeFamilyId);
                 if (beehive == null || beehive.FarmId != farm.Id)
                     return BadRequest();
             }
-            else if (todoItemCreateDTO.BeehiveId != null && todoItemCreateDTO.ApiaryId != null)
+            else if (todoItemCreateDTO.BeeFamilyId != null && todoItemCreateDTO.ApiaryId != null)
             {
                 return BadRequest();
             }

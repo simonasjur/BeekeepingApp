@@ -13,18 +13,24 @@ namespace BeekeepingApi.DTOs.BeehiveDTOs
         public BeehiveTypes? Type { get; set; }
 
         [Required]
-        public int? No { get; set; }
-
-        [Required]
         public bool? IsEmpty { get; set; }
+
+        [Range(0, int.MaxValue)]
+        public int? No { get; set; }
 
         public DateTime? AcquireDay { get; set; }
 
         public Colors? Color { get; set; }
 
+        [Range(0, 30)]
+        public int? MaxNestCombs { get; set; }
+
+        [Range(0, 30)]
         public int? NestCombs { get; set; }
 
-        [Required]
-        public long? FarmId { get; set; }
+        [Range(0, 4)]
+        public int? MaxHoneyCombsSupers { get; set; }
+
+        public long FarmId { get; set; }
     }
 }

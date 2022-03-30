@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { catchError, first, map, startWith, switchMap } from 'rxjs/operators';
-import { Apiary, Beehive, Farm, TodoItem, TodoItemPriority2LabelMapping, User } from '../_models';
+import { Apiary, BeeFamily, Farm, TodoItem, TodoItemPriority2LabelMapping, User } from '../_models';
 
 import { FarmService } from '../_services/farm.service';
 import { UserService } from '../_services/user.service';
@@ -11,7 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatSort } from '@angular/material/sort';
 import { Observable, merge, of as observableOf } from 'rxjs';
 import { ApiaryService } from '../_services/apiary.service';
-import { BeehiveService } from '../_services/beehive.service';
+import { BeeFamilyService } from '../_services/beeFamily.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({ templateUrl: 'list.component.html'})
@@ -26,7 +26,7 @@ export class ListComponent {
     resultsLengthCompleted = 0;
     filteredAndPagedTodos: Observable<TodoItem[]>;
     filteredAndPagedTodosCompleted: Observable<TodoItem[]>;
-    beehives: Beehive[];
+    beeFamilies: BeeFamily[];
     apiaries: Apiary[];
     expandedElement: TodoItem | null;
 
@@ -41,7 +41,7 @@ export class ListComponent {
                 private farmService: FarmService,
                 private userService: UserService,
                 private apiaryService: ApiaryService,
-                private beehiveService: BeehiveService,
+                private beehiveService: BeeFamilyService,
                 private alertService: AlertService,
                 private router: Router,
                 private route: ActivatedRoute) {

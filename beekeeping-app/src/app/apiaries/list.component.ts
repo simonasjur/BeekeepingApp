@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { BeehiveService } from '../_services/beehive.service';
+import { BeeFamilyService } from '../_services/beeFamily.service';
 import { User, Apiary } from '../_models';
 import { ApiaryService } from '../_services/apiary.service';
 import { FarmService } from '../_services/farm.service';

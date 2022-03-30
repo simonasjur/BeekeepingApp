@@ -6,7 +6,7 @@ export class TodoItem {
     dueDate: Date;
     isComplete: boolean;
     farmId: number;
-    beehiveId: number;
+    beeFamilyId: number;
     apiaryId: number;
     isDeleting: boolean = false;
 }

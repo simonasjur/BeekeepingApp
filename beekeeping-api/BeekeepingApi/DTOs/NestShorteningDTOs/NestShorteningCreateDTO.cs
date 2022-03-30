@@ -15,6 +15,6 @@ namespace BeekeepingApi.DTOs.NestShorteningDTOs
 
         public int StayedBroodCombs { get; set; }
 
-        public long BeehiveId { get; set; }
+        public long BeeFamilyId { get; set; }
     }
 }

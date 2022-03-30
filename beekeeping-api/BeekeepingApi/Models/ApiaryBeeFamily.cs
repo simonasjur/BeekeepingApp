@@ -7,30 +7,24 @@ using System.Threading.Tasks;
 
 namespace BeekeepingApi.Models
 {
-    public class ApiaryBeehive
+    public class ApiaryBeeFamily
     {
         [Key]
         public long Id { get; set; }
 
         public DateTime ArriveDate { get; set; }
 
-        [Required]
-        public double X { get; set; }
-
-        [Required]
-        public double Y { get; set; }
-
         public DateTime? DepartDate { get; set; }
 
         public long ApiaryId { get; set; }
 
-        public long BeehiveId { get; set; }
+        public long BeeFamilyId { get; set; }
 
 
         [ForeignKey("ApiaryId")]
         public Apiary Apiary { get; set; }
 
-        [ForeignKey("BeehiveId")]
-        public Beehive Beehive { get; set; }
+        [ForeignKey("BeeFamilyId")]
+        public BeeFamily BeeFamily { get; set; }
     }
 }

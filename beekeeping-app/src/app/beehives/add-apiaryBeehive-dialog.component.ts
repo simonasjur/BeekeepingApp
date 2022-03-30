@@ -3,10 +3,9 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { ActivatedRoute, Router } from "@angular/router";
 import { concat, merge } from "rxjs";
-import { ApiaryBeehive, Beehive, BeehiveTypes, Super } from "../_models";
-import { ApiaryBeehiveService } from "../_services/apiaryBeehive.service";
-import { BeehiveService } from "../_services/beehive.service";
-import { SuperService } from "../_services/super.service";
+//import { ApiaryBeeFamily, BeeFamily, BeehiveTypes, Super } from "../_models";
+import { ApiaryBeeFamilyService } from "../_services/apiaryBeeFamily.service";
+import { BeeFamilyService } from "../_services/beeFamily.service";
 
 @Component({
     selector: 'add-apiaryBeehive-dialog',
@@ -19,11 +18,10 @@ import { SuperService } from "../_services/super.service";
     loading = false;
 
     constructor(public dialogRef: MatDialogRef<AddApiaryBeehiveDialog>,
-                                  @Inject(MAT_DIALOG_DATA) public data: ApiaryBeehive,
+                                  //@Inject(MAT_DIALOG_DATA) public data: ApiaryBeeFamily,
                 private formBuilder: FormBuilder,
-                private apiaryBeehiveService: ApiaryBeehiveService,
-                private beehiveService: BeehiveService,
-                private superService: SuperService,
+                private apiaryBeehiveService: ApiaryBeeFamilyService,
+                private beehiveService: BeeFamilyService,
                 private router: Router,
                 private route: ActivatedRoute) {
     }
@@ -40,9 +38,9 @@ import { SuperService } from "../_services/super.service";
         return this.form.controls;
     }
 
-    isTypeDadano() {
-        return this.data.beehive.type === BeehiveTypes.Dadano;
-    }
+    /*isTypeDadano() {
+        return this.data.beeFamily.type === BeehiveTypes.Dadano;
+    }*/
 
     onNoClick() {
         this.dialogRef.close();
@@ -51,11 +49,11 @@ import { SuperService } from "../_services/super.service";
     addApiaryBeehive() {
         //Adds missing form control value
         if (!this.submitted) {
-            if (this.isTypeDadano()) {
+            /*if (this.isTypeDadano()) {
                 this.form.patchValue({supersCount: 1});
             } else {
                 this.form.patchValue({nestCombs: 1});
-            }
+            }*/
         }
 
         this.submitted = true;
@@ -71,33 +69,33 @@ import { SuperService } from "../_services/super.service";
             arriveDate: this.form.controls["arriveDate"].value,
             x: 0,
             y: 0,
-            apiaryId: this.data.apiaryId,
-            beehiveId: this.data.beehiveId
+            //apiaryId: this.data.apiaryId,
+            //beehiveId: this.data.beeFamilyId
         };
 
         //Construct beehive for put request
-        let beehive = this.data.beehive;
+        /*let beehive = this.data.beeFamily;
         beehive.isEmpty = false;
         if (this.isTypeDadano()) {
             beehive.nestCombs =this.form.controls['nestCombs'].value;
-        }       
+        }  */     
 
         //Supers for Daugiaaukstis beehive
-        let supers: Super[] = [];
+        /*let supers: Super[] = [];
         if (!this.isTypeDadano()) {
             for (let i = 0; i < this.form.controls['supersCount'].value; i++) {
                 const beehiveSuper: Super = {
                     position: i + 1,
                     color: 0,
                     installationDate: this.form.controls['arriveDate'].value,
-                    beehiveId: this.data.beehiveId
+                    beehiveId: this.data.beeFamilyId
                 }
                 supers.push(beehiveSuper);
             }
-        }
+        }*/
         
         //Sends requests to api
-        this.apiaryBeehiveService.create(apiaryBeehive).subscribe(() => {
+       /* this.apiaryBeehiveService.create(apiaryBeehive).subscribe(() => {
             this.beehiveService.update(beehive.id, beehive).subscribe(() => {
                 if (!this.isTypeDadano()) {
                     let superRequestSendCount = 0;
@@ -112,7 +110,7 @@ import { SuperService } from "../_services/super.service";
                     this.closeDialog();
                 }
             });           
-        });
+        });*/
     }
 
     /**Method for closing dialog after requests are finished*/

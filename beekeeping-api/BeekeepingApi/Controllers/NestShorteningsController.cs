@@ -24,7 +24,7 @@ namespace BeekeepingApi.Controllers
             _context = context;
             _mapper = mapper;
         }
-
+        /*
         //GET: api/NestShortenings/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<NestShorteningReadDTO>> GetNestShortening(long id)
@@ -35,14 +35,14 @@ namespace BeekeepingApi.Controllers
                 return NotFound();
             }
 
-            var beehive = await _context.Beehives.FindAsync(nestShortening.BeehiveId);
-            if (beehive == null)
+            var beeFamily = await _context.BeeFamilies.FindAsync(nestShortening.BeeFamilyId);
+            if (beeFamily == null)
             {
                 return NotFound();
             }
 
             var currentUserId = long.Parse(User.Identity.Name);
-            var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, beehive.FarmId);
+            var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, beeFamily.FarmId);
             if (farmWorker == null)
             {
                 return Forbid();
@@ -51,24 +51,24 @@ namespace BeekeepingApi.Controllers
             return _mapper.Map<NestShorteningReadDTO>(nestShortening);
         }
 
-        //GET: api/Beehives/{beehiveId}/NestShortenings
-        [HttpGet("/api/Beehives/{beehiveId}/NestShortenings")]
-        public async Task<ActionResult<IEnumerable<NestShorteningReadDTO>>> GetBeehiveNestShortenings(long beehiveId)
+        //GET: api/BeeFamilies/{beeFamilyId}/NestShortenings
+        [HttpGet("/api/BeeFamilies/{beeFamilyId}/NestShortenings")]
+        public async Task<ActionResult<IEnumerable<NestShorteningReadDTO>>> GetBeeFamilyNestShortenings(long beeFamilyId)
         {
-            var beehive = await _context.Beehives.FindAsync(beehiveId);
-            if (beehive == null)
+            var beeFamily = await _context.BeeFamilies.FindAsync(beeFamilyId);
+            if (beeFamily == null)
             {
                 return NotFound();
             }
 
             var currentUserId = long.Parse(User.Identity.Name);
-            var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, beehive.FarmId);
+            var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, beeFamily.FarmId);
             if (farmWorker == null)
             {
                 return Forbid();
             }
 
-            var nestShortenings = await _context.NestShortenings.Where(ns => ns.BeehiveId == beehiveId).ToListAsync();
+            var nestShortenings = await _context.NestShortenings.Where(ns => ns.BeeFamilyId == beeFamilyId).ToListAsync();
 
             return _mapper.Map<IEnumerable<NestShorteningReadDTO>>(nestShortenings).ToList();
         }
@@ -77,14 +77,14 @@ namespace BeekeepingApi.Controllers
         [HttpPost]
         public async Task<ActionResult<NestShorteningReadDTO>> CreateNestShortening(NestShorteningCreateDTO nestShorteningCreateDTO)
         {
-            var beehive = await _context.Beehives.FindAsync(nestShorteningCreateDTO.BeehiveId);
-            if (beehive == null)
+            var beeFamily = await _context.BeeFamilies.FindAsync(nestShorteningCreateDTO.BeeFamilyId);
+            if (beeFamily == null)
             {
                 return BadRequest();
             }
 
             var currentUserId = long.Parse(User.Identity.Name);
-            var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, beehive.FarmId);
+            var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, beeFamily.FarmId);
             if (farmWorker == null)
             {
                 return Forbid();
@@ -92,20 +92,20 @@ namespace BeekeepingApi.Controllers
 
             var nestShortening = _mapper.Map<NestShortening>(nestShorteningCreateDTO);
 
-            if (beehive.Type == BeehiveTypes.Dadano)
+            if (beeFamily.Type == BeehiveTypes.Dadano)
             {
                 //If new nest shortening done current year and was latest, beehive combs value is changed and old value is stored to new nest shortening
                 var currentYear = DateTime.Now.Year;
                 if (nestShorteningCreateDTO.Date.Year == currentYear)
                 {
-                    await _context.Entry(beehive).Collection(b => b.NestShortenings).LoadAsync();
-                    var lastNestShortening = beehive.NestShortenings.OrderByDescending(ns => ns.Date).FirstOrDefault();
+                    await _context.Entry(beeFamily).Collection(b => b.NestShortenings).LoadAsync();
+                    var lastNestShortening = beeFamily.NestShortenings.OrderByDescending(ns => ns.Date).FirstOrDefault();
                     if (lastNestShortening == null ||
                         DateTime.Compare(nestShorteningCreateDTO.Date, lastNestShortening.Date) > 0)
                     {
-                        nestShortening.CombsBefore = beehive.NestCombs;
-                        beehive.NestCombs = nestShorteningCreateDTO.StayedCombs;
-                        _context.Entry(beehive).State = EntityState.Modified;
+                        nestShortening.CombsBefore = beeFamily.NestCombs;
+                        beeFamily.NestCombs = nestShorteningCreateDTO.StayedCombs;
+                        _context.Entry(beeFamily).State = EntityState.Modified;
                     }
                 }
             }
@@ -132,17 +132,17 @@ namespace BeekeepingApi.Controllers
                 return BadRequest();
             }
 
-            var beehive = await _context.Beehives.FindAsync(nestShortening.BeehiveId);
+            var beeFamily = await _context.BeeFamilies.FindAsync(nestShortening.BeeFamilyId);
             var currentUserId = long.Parse(User.Identity.Name);
-            var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, beehive.FarmId);
+            var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, beeFamily.FarmId);
             if (farmWorker == null)
             {
                 return Forbid();
             }
 
-            if (beehive.Type == BeehiveTypes.Dadano)
+            if (beeFamily.Type == BeehiveTypes.Dadano)
             {
-                var lastNestShortening = await _context.NestShortenings.Where(ns => ns.BeehiveId == beehive.Id)
+                var lastNestShortening = await _context.NestShortenings.Where(ns => ns.BeeFamilyId == beeFamily.Id)
                                                                    .OrderByDescending(ns => ns.Date)
                                                                    .FirstOrDefaultAsync();
                 //If edited nest shortening is not this year latest and have information about combs before nest shortening,
@@ -158,8 +158,8 @@ namespace BeekeepingApi.Controllers
                 if (lastNestShortening.Id == id &&
                     lastNestShortening.StayedCombs != nestShorteningEditDTO.StayedCombs)
                 {
-                    beehive.NestCombs = nestShorteningEditDTO.StayedCombs;
-                    _context.Entry(beehive).State = EntityState.Modified;
+                    beeFamily.NestCombs = nestShorteningEditDTO.StayedCombs;
+                    _context.Entry(beeFamily).State = EntityState.Modified;
                 }
             }
             
@@ -180,15 +180,15 @@ namespace BeekeepingApi.Controllers
                 return NotFound();
             }
 
-            var beehive = await _context.Beehives.FindAsync(nestShortening.BeehiveId);
+            var beeFamily = await _context.BeeFamilies.FindAsync(nestShortening.BeeFamilyId);
             var currentUserId = long.Parse(User.Identity.Name);
-            var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, beehive.FarmId);
+            var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, beeFamily.FarmId);
             if (farmWorker == null)
             {
                 return Forbid();
             }
 
-            var nestShortenings = await _context.NestShortenings.Where(ns => ns.BeehiveId == beehive.Id)
+            var nestShortenings = await _context.NestShortenings.Where(ns => ns.BeeFamilyId == beeFamily.Id)
                                                                 .OrderByDescending(ns => ns.Date)
                                                                 .ToListAsync();
             var lastNestShortening = nestShortenings.ElementAtOrDefault(0);
@@ -205,7 +205,7 @@ namespace BeekeepingApi.Controllers
 
             _context.NestShortenings.Remove(nestShortening);
 
-            if (beehive.Type == BeehiveTypes.Dadano)
+            if (beeFamily.Type == BeehiveTypes.Dadano)
             {
                 //If deleted nest shortening done current year and was latest, beehive combs value is changed to old value
                 if (DateTime.Now.Year == nestShortening.Date.Year && lastNestShortening.Id == id)
@@ -219,14 +219,14 @@ namespace BeekeepingApi.Controllers
                         nestCombs = secondLastNestShortening.StayedCombs;
                         secondLastNestShortening.CombsBefore = nestShortening.CombsBefore;
                     }
-                    beehive.NestCombs = nestCombs;
-                    _context.Entry(beehive).State = EntityState.Modified;
+                    beeFamily.NestCombs = nestCombs;
+                    _context.Entry(beeFamily).State = EntityState.Modified;
                 }
             }           
 
             await _context.SaveChangesAsync();
 
             return _mapper.Map<NestShorteningReadDTO>(nestShortening);
-        }
+        }*/
     }
 }
