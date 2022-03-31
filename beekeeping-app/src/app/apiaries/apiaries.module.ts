@@ -10,6 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { AddComponent } from './add.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { GoogleMapsModule } from '@angular/google-maps';
 
 @NgModule({
     imports: [
@@ -20,7 +21,8 @@ import { ReactiveFormsModule } from '@angular/forms';
         MatTableModule,
         MatInputModule,
         MatFormFieldModule, 
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        GoogleMapsModule
     ],
     declarations: [
         LayoutComponent,

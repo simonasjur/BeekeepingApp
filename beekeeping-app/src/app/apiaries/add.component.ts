@@ -16,6 +16,16 @@ export class AddComponent implements OnInit {
     isAddMode = true;
     submitted = false;
     loading = false;
+    center: google.maps.LatLngLiteral;
+    marker: any = null;
+    options: google.maps.MapOptions = {
+        disableDoubleClickZoom: true,
+        maxZoom: 15,
+        minZoom: 8,
+    }
+    circleCenter: google.maps.LatLngLiteral;
+    radius = 3000;
+    zoom = 12;
 
     constructor(private formBuilder: FormBuilder,
                 private apiaryService: ApiaryService,
@@ -31,6 +41,13 @@ export class AddComponent implements OnInit {
             latitude: ['0'],
             farmId: [this.farmService.farmValue.id]
         });
+
+        navigator.geolocation.getCurrentPosition((position) => {
+            this.center = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            }
+        })
 
         /*this.id = this.route.snapshot.params['id'];
         
@@ -58,10 +75,24 @@ export class AddComponent implements OnInit {
     }
 
     private createApiary() {
-        this.apiaryService.create(this.form.value).pipe(first())
-            .subscribe(() => {
-                this.router.navigate(['../'], { relativeTo: this.route });
-            })
-            .add(() => this.loading = false);
+
+        // this.apiaryService.create(this.form.value).pipe(first())
+        //     .subscribe(() => {
+        //         this.router.navigate(['../'], { relativeTo: this.route });
+        //     })
+        //     .add(() => this.loading = false);
     }
+
+    addMarker(location) {
+        this.marker = {
+          position: location,
+          options: { animation: google.maps.Animation.DROP }
+        };
+        this.circleCenter = location;
+      }
+    
+      click(event: google.maps.MapMouseEvent) {
+        console.log(event.latLng.toJSON().lat)
+        this.addMarker(event.latLng);
+      }
 }
