@@ -42,6 +42,11 @@ export class ListComponent implements OnInit {
         console.log("items per page " + this.itemsPerPage);
     }*/
 
+    loadFarm(id) {       
+        this.farmService.updateLocalStorageFarm(id).subscribe();
+        //this.currentFarm = this.farmService.farmValue;
+    }
+
     deleteFarm(id: number) {
         const farm = this.farms.find(x => x.id === id);
         farm.isDeleting = true;

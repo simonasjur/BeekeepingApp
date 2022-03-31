@@ -22,7 +22,13 @@ export class HomeComponent {
     }
 
     ngOnInit() {
-        this.userService.user.subscribe(user => this.user = user);
+        this.userService.user.subscribe(user => {
+                this.user = user;
+                if (!this.user.defaultFarmId)
+                {
+                    this.router.navigate(['/farms']);
+                }
+        });
         this.farmService.getAll().subscribe(() => {
             this.farmService.farms.subscribe(farms => this.farms = farms);
         });

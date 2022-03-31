@@ -2,7 +2,7 @@
 <button mat-raised-button color="primary" routerLink="add">Pridėti naują ūkį</button>
 <mat-list>
     <mat-list-item *ngFor="let farm of farms">
-        <a mat-line routerLink="/farms/{{farm.id}}">{{farm.name}}</a>
+        <a mat-line (click)="loadFarm(farm.id)" routerLink="/">{{farm.name}}</a>
         <p class="default" *ngIf="farm.id == user.defaultFarmId">Numatytasis</p>
         <p mat-line>{{farm.creationDate}}</p>
         <button mat-icon-button >

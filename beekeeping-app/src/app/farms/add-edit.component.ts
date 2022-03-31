@@ -7,7 +7,8 @@ import { FarmService } from '../_services/farm.service';
 import { AlertService } from '../_services/alert.service';
 import { Farm } from '../_models';
 
-@Component({ templateUrl: 'add-edit.component.html' })
+@Component({ templateUrl: 'add-edit.component.html',
+styleUrls: ['add-edit.component.css'] })
 export class AddEditComponent implements OnInit {
     form: FormGroup;
     id: string;
