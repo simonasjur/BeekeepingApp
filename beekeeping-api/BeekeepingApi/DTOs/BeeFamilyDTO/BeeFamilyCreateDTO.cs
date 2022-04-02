@@ -13,5 +13,17 @@ namespace BeekeepingApi.DTOs.BeeFamilyDTO
         public BeeFamilyOrigins? Origin { get; set; }
 
         public long FarmId { get; set; }
+
+        public long BeehiveId { get; set; }
+
+        public long ApiaryId { get; set; }
+
+        public DateTime ArriveDate { get; set; }
+
+        [Range(1, 20)]
+        public int NestCombs { get; set; }
+
+        [Range(1, 9)]
+        public int SupersCount { get; set; }
     }
 }

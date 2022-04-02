@@ -1,25 +1,64 @@
-<h1 *ngIf="isAddMode">Sukurti Avilį</h1>
-<h1 *ngIf="!isAddMode">Redaguoti Avilį</h1>
+<h1 *ngIf="isAddMode">Pridėti bičių šeimą</h1>
+<h1 *ngIf="!isAddMode">Atnaujinti bičių šeimą</h1>
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <div class="container">
         <mat-form-field>
-            <mat-label>Tipas</mat-label>
-            <mat-select formControlName="type" #typeField>
-                <mat-option *ngFor="let origin of beeFamilyOriginsNames" [value]="origin">
-                    {{beeFamilyOrigin2LabelMapping[origin]}}
+            <mat-label>Šeimos kilmė</mat-label>
+            <mat-select formControlName="origin">
+                <mat-option *ngFor="let familyOrigin of beeFamilyOriginsNames" [value]="familyOrigin">
+                    {{beeFamilyOrigin2LabelMapping[familyOrigin]}}
                 </mat-option>
             </mat-select>
-            <mat-error *ngIf="submitted && f.type.errors">
+            <mat-error *ngIf="submitted && f.origin.errors">
                 Šis laukas yra būtinas
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Bitynas</mat-label>
+            <mat-select formControlName="apiaryId">
+                <mat-option *ngFor="let apiary of apiaries" [value]="apiary.id">
+                    {{apiary.name}}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="submitted && f.apiaryId.errors">
+                Šis laukas yra būtinas
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Apgyvendinimo data</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="arriveDate">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="submitted && f.arriveDate.errors">
+                Neteisingas datos formatas
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field *ngIf="beehive && isTypeDadano()">
+            <mat-label>Lizdinių korių kiekis</mat-label>
+            <input matInput formControlName="nestCombs">
+            <mat-error *ngIf="submitted && f.nestCombs.errors">
+                <p *ngIf="f.nestCombs.errors.required">Šis laukas yra būtinas</p>
+                <p *ngIf="f.nestCombs.errors.pattern">Reikšmė privalo būti teigiamas natūralus skaičius</p>
+                <p *ngIf="f.nestCombs.errors.max">Avilyje telpa tik 16 korių</p>
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field *ngIf="beehive && !isTypeDadano()">
+            <mat-label>Daugiaaukščio aukštų kiekis</mat-label>
+            <input matInput formControlName="supersCount">
+            <mat-error *ngIf="submitted && f.supersCount.errors">
+                <p *ngIf="f.supersCount.errors.required">Šis laukas yra būtinas</p>
+                <p *ngIf="f.supersCount.errors.pattern">Avilys susideda tik iš 9 aukštų</p>
             </mat-error>
         </mat-form-field>
     </div>
     <div class="form-group">
-        <button [disabled]="loading" class="btn btn-primary">
-            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+        <button mat-flat-button color="primary" [disabled]="loading">
             Išsaugoti
+            <mat-icon *ngIf="loading">
+                <mat-spinner diameter="20"></mat-spinner>
+            </mat-icon>
         </button>
-        <a (click)="backToBeeFamiliesList()" class="btn btn-link">Atšaukti</a>
+        <a mat-stroked-button (click)="backToBeeFamiliesList()">Atšaukti</a>
     </div>
 </form>
 

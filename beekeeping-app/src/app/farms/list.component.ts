@@ -52,7 +52,8 @@ export class ListComponent implements OnInit {
         farm.isDeleting = true;
         this.farmService.delete(id)
             .pipe(first())
-            .subscribe(() => { this.farms = this.farms.filter(x => x.id !== id);
+            .subscribe(() => { 
+                this.farms = this.farms.filter(x => x.id !== id);
                 this.alertService.success('Ūkis ' + farm.name + ' ištrintas', { keepAfterRouteChange: true, autoClose: true });
             })
     }

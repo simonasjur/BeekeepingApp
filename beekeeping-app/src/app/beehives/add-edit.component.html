@@ -1,0 +1,67 @@
+<h1 *ngIf="isAddMode">Pridėti avilį</h1>
+<h1 *ngIf="!isAddMode">Atnaujinti avilį</h1>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-fields">
+        <mat-form-field>
+            <mat-label>Tipas</mat-label>
+            <mat-select formControlName="type" [disabled]="!isAddMode" #typeField>
+                <mat-option [value]="0">{{beehiveType2LabelMapping[0]}}</mat-option>
+                <mat-option [value]="1">{{beehiveType2LabelMapping[1]}}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="submitted && f.type.errors">
+                Šis laukas yra būtinas
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Numeris</mat-label>
+            <input matInput formControlName="no">
+            <mat-error *ngIf="submitted && f.no.errors">
+                <p *ngIf="f.no.errors.required">Šis laukas yra būtinas</p>
+                <p *ngIf="f.no.errors.pattern">Numeris privalo būti teigiamas natūralus skaičius</p>
+            </mat-error>      
+        </mat-form-field>
+        <mat-form-field *ngIf="typeField.value === beehiveTypes.Dadano">
+            <mat-label>Spalva</mat-label>
+            <mat-select formControlName="color">
+                <mat-option *ngFor="let beehiveColor of colorsNames" [value]="beehiveColor">
+                    {{color2LabelMapping[beehiveColor]}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill" *ngIf="typeField.value === beehiveTypes.Dadano">
+            <mat-label>Įsigijimo Data</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="acquireDay">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="submitted && f.acquireDay.errors">
+                Neteisingas datos formatas
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field *ngIf="typeField.value === beehiveTypes.Dadano">
+            <mat-label>Maksimalus lizdinių korių skaičius</mat-label>
+            <input matInput formControlName="maxNestCombs">
+            <mat-error *ngIf="submitted && f.maxNestCombs.errors">
+                <p *ngIf="f.maxNestCombs.errors.required">Šis laukas yra būtinas</p>
+                <p *ngIf="f.maxNestCombs.errors.pattern">Reikšmė privalo būti teigiamas natūralus skaičius</p>
+                <p *ngIf="f.maxNestCombs.errors.max">Avilyje telpa tik 16 korių</p>
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field *ngIf="typeField.value === beehiveTypes.Dadano">
+            <mat-label>Maksimalus meduvių skaičius</mat-label>
+            <input matInput formControlName="maxHoneyCombsSupers">
+            <mat-error *ngIf="submitted && f.maxHoneyCombsSupers.errors">
+                <p *ngIf="f.maxHoneyCombsSupers.errors.required">Šis laukas yra būtinas</p>
+                <p *ngIf="f.maxHoneyCombsSupers.errors.pattern">Reikšmė privalo būti teigiamas natūralus skaičius</p>
+                <p *ngIf="f.maxHoneyCombsSupers.errors.max">Avilyje telpa iki 4 meduvių</p>
+            </mat-error>
+        </mat-form-field>
+    </div>
+    <div class="form-group">
+        <button mat-flat-button color="primary" [disabled]="loading">
+            Išsaugoti
+            <mat-icon *ngIf="loading"><mat-spinner diameter="20">
+            </mat-spinner></mat-icon>
+        </button>
+        <a mat-stroked-button (click)="backToBeehivesList()">Atšaukti</a>
+    </div>
+</form>

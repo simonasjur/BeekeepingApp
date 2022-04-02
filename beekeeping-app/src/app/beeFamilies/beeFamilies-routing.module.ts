@@ -3,17 +3,16 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { LayoutComponent } from './layout.component';
 import { ListComponent } from './list.component';
-import { AddEditComponent } from './add-edit.component';
-import { AddBeeFamilyComponent } from '../beeFamilies/add.component';
+import { AddBeeFamilyComponent } from './add.component';
 
 const routes: Routes = [
     {
         path: '', component: LayoutComponent,
         children: [
             { path: '', component: ListComponent },
-            { path: 'add', component: AddEditComponent },
-            { path: 'edit/:id', component: AddEditComponent},
-            { path: ':id/beefamilies', component: AddBeeFamilyComponent}
+            { path: 'add', component: AddBeeFamilyComponent },
+            { path: 'edit/:id', component: AddBeeFamilyComponent}
+            //{ path: 'edit/:id', component: AddEditComponent }
         ]
     }
 ];
@@ -22,4 +21,4 @@ const routes: Routes = [
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule]
 })
-export class BeehivesRoutingModule { }
+export class BeeFamiliesRoutingModule { }

@@ -103,7 +103,7 @@ namespace BeekeepingApi.Controllers
             var farm = await _context.Farms.FindAsync(beeFamilyCreateDTO.FarmId);
             if (farm == null)
             {
-                return BadRequest();
+                return BadRequest("nera farmos");
             }
 
             var currentUserId = long.Parse(User.Identity.Name);
@@ -118,11 +118,70 @@ namespace BeekeepingApi.Controllers
                 return BadRequest("Incorrect Origin");
             }
 
+            var beehive = await _context.Beehives.FindAsync(beeFamilyCreateDTO.BeehiveId);
+            var apiary = await _context.Apiaries.FindAsync(beeFamilyCreateDTO.ApiaryId);
+            if (beehive == null || apiary == null)
+            {
+                return BadRequest("nera avilio arba bityno");
+            }
+
+            if (beehive.Type == BeehiveTypes.Dadano && beeFamilyCreateDTO.NestCombs > beehive.MaxNestCombs)
+            {
+                return BadRequest("Nest combs count is higher than beehive maximum nest combs value");
+            }
+
+            //Creates bee family
             var beeFamily = _mapper.Map<BeeFamily>(beeFamilyCreateDTO);
             beeFamily.IsNucleus = false;
             beeFamily.State = BeeFamilyStates.Gyvena;
             _context.BeeFamilies.Add(beeFamily);
             await _context.SaveChangesAsync();
+
+            //Creates apiary bee family
+            ApiaryBeeFamily apiaryBeeFamily = new ApiaryBeeFamily()
+            {
+                ApiaryId = apiary.Id,
+                BeeFamilyId = beeFamily.Id,
+                ArriveDate = beeFamilyCreateDTO.ArriveDate
+            };
+            _context.ApiaryBeeFamilies.Add(apiaryBeeFamily);
+            await _context.SaveChangesAsync();
+
+            //Creates beehive bee family
+            BeehiveBeeFamily beehiveBeeFamily = new BeehiveBeeFamily()
+            {
+                BeehiveId = beehive.Id,
+                BeeFamilyId = beeFamily.Id,
+                ArriveDate = beeFamilyCreateDTO.ArriveDate
+            };
+            _context.BeehiveBeeFamilies.Add(beehiveBeeFamily);
+            await _context.SaveChangesAsync();
+
+            //Updates beehive
+            beehive.IsEmpty = false;
+            if (beehive.Type == BeehiveTypes.Dadano)
+            {
+                beehive.NestCombs = beeFamilyCreateDTO.NestCombs;
+            }
+            _context.Entry(beehive).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            //Adds supers
+            if (beehive.Type == BeehiveTypes.Daugiaaukštis)
+            {
+                for (int i = 0; i < beeFamilyCreateDTO.SupersCount; i++)
+                {
+                    BeehiveComponent super = new BeehiveComponent()
+                    {
+                        Type = ComponentTypes.Aukštas,
+                        Position = i + 1,
+                        InstallationDate = beeFamilyCreateDTO.ArriveDate,
+                        BeehiveId = beehive.Id
+                    };
+                    _context.BeehiveComponents.Add(super);
+                }
+                await _context.SaveChangesAsync();
+            }
 
             var beeFamilyReadDTO = _mapper.Map<BeeFamilyReadDTO>(beeFamily);
             return CreatedAtAction(nameof(GetBeeFamily), new { id = beeFamily.Id }, beeFamilyReadDTO);

@@ -10,20 +10,19 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatTabsModule } from '@angular/material/tabs';
 
-import { BeehivesRoutingModule } from './beehives-routing.module';
+import { BeeFamiliesRoutingModule } from './beeFamilies-routing.module';
 import { LayoutComponent } from './layout.component';
 import { ListComponent } from './list.component';
-//import { ApiaryBeehiveComponent } from '../apiaryBeehives/apiaryBeehives.component';
-import { AddEditComponent } from './add-edit.component';
-//import { AddApiaryBeehiveDialog } from './add-apiaryBeehive-dialog.component';
+import { ApiaryBeehiveComponent } from '../apiaryBeehives/apiaryBeehives.component';
+import { AddBeeFamilyComponent } from './add.component';
+import { AddApiaryBeehiveDialog } from './add-apiaryBeehive-dialog.component';
 
 @NgModule({
     imports: [
         CommonModule,
         ReactiveFormsModule,
-        BeehivesRoutingModule,
+        BeeFamiliesRoutingModule,
         MatListModule,
         MatIconModule,
         MatFormFieldModule,
@@ -32,15 +31,14 @@ import { AddEditComponent } from './add-edit.component';
         MatDatepickerModule,
         MatTableModule,
         MatButtonModule,
-        MatProgressSpinnerModule,
-        MatTabsModule
+        MatProgressSpinnerModule
     ],
     declarations: [
         LayoutComponent,
         ListComponent,
-//        ApiaryBeehiveComponent,
-        AddEditComponent,
-//        AddApiaryBeehiveDialog
+        ApiaryBeehiveComponent,
+        AddBeeFamilyComponent,
+        AddApiaryBeehiveDialog
     ]
 })
-export class BeehivesModule { }
+export class BeeFamiliesModule { }
