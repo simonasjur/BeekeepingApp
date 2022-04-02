@@ -6,14 +6,14 @@ import { LayoutComponent } from './layout.component';
 import { ListComponent } from './list.component';
 import { AddEditComponent } from './add-edit.component';
 
-const beehivesModule = () => import('../beehives/beehives.module').then(x => x.BeehivesModule);
+const beeFamiliesModule = () => import('../beeFamilies/beeFamilies.module').then(x => x.BeeFamiliesModule);
 
 const routes: Routes = [
     {
         path: '', component: LayoutComponent,
         children: [
             { path: '', component: ListComponent },
-            { path: ':apiaryId/beehives', loadChildren: beehivesModule, canActivate: [AuthGuard] },
+            { path: ':apiaryId/beehives', loadChildren: beeFamiliesModule, canActivate: [AuthGuard] },
             { path: 'add', component: AddEditComponent },
             { path: 'edit/:id', component: AddEditComponent }
         ]

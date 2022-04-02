@@ -38,7 +38,7 @@ import { AddApiaryBeehiveDialog } from './add-apiaryBeehive-dialog.component';
         ListComponent,
         ApiaryBeehiveComponent,
         AddBeeFamilyComponent,
-        AddApiaryBeehiveDialog
+        //AddApiaryBeehiveDialog
     ]
 })
 export class BeeFamiliesModule { }
