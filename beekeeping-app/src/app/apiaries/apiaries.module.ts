@@ -8,9 +8,10 @@ import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { AddComponent } from './add.component';
+import { AddEditComponent } from './add-edit.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { GoogleMapsModule } from '@angular/google-maps';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
     imports: [
@@ -22,12 +23,13 @@ import { GoogleMapsModule } from '@angular/google-maps';
         MatInputModule,
         MatFormFieldModule, 
         ReactiveFormsModule,
-        GoogleMapsModule
+        GoogleMapsModule,
+        MatButtonModule
     ],
     declarations: [
         LayoutComponent,
         ListComponent,
-        AddComponent
+        AddEditComponent
     ]
 })
 export class ApiariesModule { }

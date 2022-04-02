@@ -21,4 +21,13 @@ export class ApiaryService {
     getById(id: number) {
         return this.http.get<Apiary>(`${baseUrl}/apiaries/${id}`);
     }
+
+    update(id, params) {
+        params.id = id;
+        return this.http.put(`${baseUrl}/apiaries/${id}`, params);
+    }
+
+    delete(id) {
+        return this.http.delete<Apiary>(`${environment.apiUrl}/apiaries/${id}`);
+    }
 }

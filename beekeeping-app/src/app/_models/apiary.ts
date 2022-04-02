@@ -3,5 +3,6 @@ export class Apiary {
     name: string;
     longitude: number;
     latitude: number;
+    familiesCount: number;
     farmId: number;
 }

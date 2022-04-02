@@ -4,7 +4,7 @@ import { AuthGuard } from '../_helpers';
 
 import { LayoutComponent } from './layout.component';
 import { ListComponent } from './list.component';
-import { AddComponent } from './add.component';
+import { AddEditComponent } from './add-edit.component';
 
 const beehivesModule = () => import('../beehives/beehives.module').then(x => x.BeehivesModule);
 
@@ -14,7 +14,8 @@ const routes: Routes = [
         children: [
             { path: '', component: ListComponent },
             { path: ':apiaryId/beehives', loadChildren: beehivesModule, canActivate: [AuthGuard] },
-            { path: 'add', component: AddComponent }
+            { path: 'add', component: AddEditComponent },
+            { path: 'edit/:id', component: AddEditComponent }
         ]
     }
 ];

@@ -1,0 +1,45 @@
+<h1 *ngIf="isAddMode">Pridėti bityną</h1>
+<h1 *ngIf="!isAddMode">Atnaujinti bityną</h1>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-fields">
+        <mat-form-field appearance="fill">
+            <mat-label>Pavadinimas</mat-label>
+            <input matInput formControlName="name">
+            <mat-error *ngIf="submitted && f.name.errors && f.name.errors.required">
+                Pavadinimas yra privalomas
+            </mat-error>
+        </mat-form-field>
+        <google-map
+            [center]="center"
+            [options]="options"
+            [zoom]="zoom"
+            height="250px"
+            (mapClick)="click($event)"
+        >
+            <map-marker *ngIf="marker"
+                [position]="marker.position"
+                [label]="marker.label"
+                [title]="marker.title"
+                [options]="marker.options"
+            >
+            </map-marker>
+            <!-- <map-circle 
+                [center]="circleCenter"
+                [radius]="radius"
+            >
+            </map-circle> -->
+        </google-map>
+    </div>
+    <div class="form-group">
+        <button mat-flat-button color="primary" [disabled]="loading">
+            Išsaugoti
+            <mat-icon *ngIf="loading"><mat-spinner diameter="20">
+            </mat-spinner></mat-icon>
+        </button>
+        <a mat-stroked-button routerLink="/apiaries">Atšaukti</a>
+    </div>
+    <mat-error *ngIf="submitted && ((f.latitude.errors && f.latitude.errors.required) || 
+    (f.longitude.errors && f.longitude.errors.required))">
+        Pasirinkite bityno vietą žemėlapyje paspausdami ant jo
+    </mat-error>
+</form>
