@@ -143,6 +143,10 @@ export class AddEditComponent implements OnInit {
         })
     }
 
+    goBack() {
+        this.location.back();
+    }
+
     addMarker(location) {
         this.changed = true;
         this.marker = {

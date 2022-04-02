@@ -36,8 +36,7 @@
             <mat-icon *ngIf="loading"><mat-spinner diameter="20">
             </mat-spinner></mat-icon>
         </button>
-        <a *ngIf="!isAddMode && apiary" mat-stroked-button routerLink="/apiaries/{{apiary.id}}">Atšaukti</a>
-        <a *ngIf="isAddMode" mat-stroked-button routerLink="/apiaries">Atšaukti</a>
+        <a mat-stroked-button (click)="goBack()">Atšaukti</a>
     </div>
     <mat-error *ngIf="submitted && ((f.latitude.errors && f.latitude.errors.required) || 
     (f.longitude.errors && f.longitude.errors.required))">
