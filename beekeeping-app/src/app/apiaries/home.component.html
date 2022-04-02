@@ -1,0 +1,24 @@
+<div *ngIf="apiary">
+    <h1>{{apiary.name}} bitynas</h1>
+    <button mat-raised-button color="primary" routerLink="edit">Redaguoti bityną</button>
+
+    <google-map
+        [center]="center"
+        [options]="options"
+        [zoom]="zoom"
+        height="300px"
+    >
+        <map-marker *ngIf="marker"
+            [position]="marker.position"
+            [label]="marker.label"
+            [title]="marker.title"
+            [options]="marker.options"
+        >
+        </map-marker>
+        <map-circle 
+            [center]="circleCenter"
+            [radius]="radius"
+        >
+        </map-circle>
+    </google-map>
+</div>

@@ -12,6 +12,7 @@ import { AddEditComponent } from './add-edit.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { MatButtonModule } from '@angular/material/button';
+import { HomeComponent } from './home.component';
 
 @NgModule({
     imports: [
@@ -29,7 +30,8 @@ import { MatButtonModule } from '@angular/material/button';
     declarations: [
         LayoutComponent,
         ListComponent,
-        AddEditComponent
+        AddEditComponent,
+        HomeComponent
     ]
 })
 export class ApiariesModule { }

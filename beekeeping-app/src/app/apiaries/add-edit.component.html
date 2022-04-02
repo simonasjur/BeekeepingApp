@@ -1,5 +1,5 @@
 <h1 *ngIf="isAddMode">Pridėti bityną</h1>
-<h1 *ngIf="!isAddMode">Atnaujinti bityną</h1>
+<h1 *ngIf="!isAddMode && apiary">Atnaujinti bityną {{apiary.name}}</h1>
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <div class="form-fields">
         <mat-form-field appearance="fill">
@@ -36,7 +36,8 @@
             <mat-icon *ngIf="loading"><mat-spinner diameter="20">
             </mat-spinner></mat-icon>
         </button>
-        <a mat-stroked-button routerLink="/apiaries">Atšaukti</a>
+        <a *ngIf="!isAddMode && apiary" mat-stroked-button routerLink="/apiaries/{{apiary.id}}">Atšaukti</a>
+        <a *ngIf="isAddMode" mat-stroked-button routerLink="/apiaries">Atšaukti</a>
     </div>
     <mat-error *ngIf="submitted && ((f.latitude.errors && f.latitude.errors.required) || 
     (f.longitude.errors && f.longitude.errors.required))">

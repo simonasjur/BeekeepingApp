@@ -6,6 +6,7 @@ import { Apiary } from '../_models';
 import { AlertService } from '../_services/alert.service';
 import { ApiaryService } from '../_services/apiary.service';
 import { FarmService } from '../_services/farm.service';
+import { Location } from '@angular/common'
 
 @Component({
     selector: 'add-apiary',
@@ -36,7 +37,8 @@ export class AddEditComponent implements OnInit {
                 private farmService: FarmService,
                 private alertService: AlertService,
                 private router: Router,
-                private route: ActivatedRoute) {
+                private route: ActivatedRoute,
+                private location: Location) {
     }
 
     ngOnInit() {
@@ -117,7 +119,7 @@ export class AddEditComponent implements OnInit {
             .subscribe({
                 next: () => {
                     this.alertService.success('Bitynas pridėtas', { keepAfterRouteChange: true, autoClose: true });
-                    this.router.navigate(['../'], { relativeTo: this.route });
+                    this.location.back();
                 },
                 error: error => {
                     this.alertService.error(error);
@@ -131,8 +133,8 @@ export class AddEditComponent implements OnInit {
         .pipe(first())
         .subscribe({
             next: () => {
+                this.location.back();
                 this.alertService.success('Bitynas atnaujintas', { keepAfterRouteChange: true, autoClose: true });
-                this.router.navigate(['../../'], { relativeTo: this.route });
             },
             error: error => {
                 this.alertService.error(error);
