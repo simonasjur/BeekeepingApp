@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { ApiaryBeeFamily } from '../_models';
-import { ApiaryBeeFamilyService } from '../_services/apiaryBeeFamily.service';
+import { ApiaryBeeFamilyService } from '../_services/apiary-beefamily.service';
 
 @Component({
     selector: 'apiaryBeehives',

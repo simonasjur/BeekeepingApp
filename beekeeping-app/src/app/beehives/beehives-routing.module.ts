@@ -4,7 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { LayoutComponent } from './layout.component';
 import { ListComponent } from './list.component';
 import { AddEditComponent } from './add-edit.component';
-import { AddBeeFamilyComponent } from '../beeFamilies/add.component';
+import { AddBeeFamilyComponent } from '../beefamilies/add.component';
 
 const routes: Routes = [
     {

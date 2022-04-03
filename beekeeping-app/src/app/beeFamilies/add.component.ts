@@ -5,12 +5,12 @@ import { first } from 'rxjs/operators';
 import { Apiary, BeeFamilyOrigin2LabelMapping, BeeFamilyOrigins, Beehive, BeehiveTypes } from '../_models';
 import { AlertService } from '../_services/alert.service';
 import { ApiaryService } from '../_services/apiary.service';
-import { BeeFamilyService } from '../_services/beeFamily.service';
+import { BeeFamilyService } from '../_services/beefamily.service';
 import { BeehiveService } from '../_services/beehive.service';
 import { FarmService } from '../_services/farm.service';
 
 @Component({
-    selector: 'add-beeFamily',
+    selector: 'add-beefamily',
     templateUrl: 'add.component.html',
     styleUrls: ['add.component.css']
 })

@@ -4,13 +4,13 @@ import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { ActivatedRoute, Router } from "@angular/router";
 import { concat, merge } from "rxjs";
 //import { ApiaryBeeFamily, BeeFamily, BeehiveTypes, Super } from "../_models";
-import { ApiaryBeeFamilyService } from "../_services/apiaryBeeFamily.service";
-import { BeeFamilyService } from "../_services/beeFamily.service";
+import { ApiaryBeeFamilyService } from "../_services/apiary-beefamily.service";
+import { BeeFamilyService } from "../_services/beefamily.service";
 
 @Component({
-    selector: 'add-apiaryBeehive-dialog',
-    templateUrl: 'add-apiaryBeehive-dialog.component.html',
-    styleUrls: ['add-apiaryBeehive-dialog.component.css']
+    selector: 'add-apiary-beehive-dialog',
+    templateUrl: 'add-apiary-beehive-dialog.component.html',
+    styleUrls: ['add-apiary-beehive-dialog.component.css']
   })
   export class AddApiaryBeehiveDialog {
     form: FormGroup;

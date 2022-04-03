@@ -7,7 +7,7 @@ import { ListComponent } from './list.component';
 import { AddEditComponent } from './add-edit.component';
 import { HomeComponent } from './home.component';
 
-const beeFamiliesModule = () => import('../beeFamilies/beeFamilies.module').then(x => x.BeeFamiliesModule);
+const beeFamiliesModule = () => import('../beefamilies/beefamilies.module').then(x => x.BeeFamiliesModule);
 
 const routes: Routes = [
     {

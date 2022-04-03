@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { BeeFamilyService } from '../_services/beeFamily.service';
+import { BeeFamilyService } from '../_services/beefamily.service';
 import { User, Apiary } from '../_models';
 import { ApiaryService } from '../_services/apiary.service';
 import { FarmService } from '../_services/farm.service';
-import { ApiaryBeeFamilyService } from '../_services/apiaryBeeFamily.service';
+import { ApiaryBeeFamilyService } from '../_services/apiary-beefamily.service';
 import { AlertService } from '../_services/alert.service';
 
 @Component({

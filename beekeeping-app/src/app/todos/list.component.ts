@@ -6,13 +6,13 @@ import { Apiary, BeeFamily, Farm, TodoItem, TodoItemPriority2LabelMapping, User 
 import { FarmService } from '../_services/farm.service';
 import { UserService } from '../_services/user.service';
 import { AlertService } from '../_services/alert.service';
-import { TodoService } from '../_services/todoItem.service';
+import { TodoService } from '../_services/todo-item.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSort } from '@angular/material/sort';
 import { Observable, merge, of as observableOf, of } from 'rxjs';
 import { ApiaryService } from '../_services/apiary.service';
-import { BeeFamilyService } from '../_services/beeFamily.service';
+import { BeeFamilyService } from '../_services/beefamily.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 

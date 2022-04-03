@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { BeeFamilyService } from '../_services/beeFamily.service';
+import { BeeFamilyService } from '../_services/beefamily.service';
 import { BeeFamily, User, ApiaryBeeFamily, Apiary, BeeFamilyState2LabelMapping, BeeFamilyOrigin2LabelMapping } from '../_models';
-import { ApiaryBeeFamilyService } from '../_services/apiaryBeeFamily.service';
+import { ApiaryBeeFamilyService } from '../_services/apiary-beefamily.service';
 import { MatDialog } from '@angular/material/dialog';
-import { AddApiaryBeehiveDialog } from './add-apiaryBeehive-dialog.component';
+import { AddApiaryBeehiveDialog } from './add-apiary-beehive-dialog.component';
 import { FarmService } from '../_services/farm.service';
 import { ApiaryService } from '../_services/apiary.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
-    selector: 'beeFamily-list',
+    selector: 'beefamily-list',
     templateUrl: 'list.component.html',
     styleUrls: ['list.component.css']
 })

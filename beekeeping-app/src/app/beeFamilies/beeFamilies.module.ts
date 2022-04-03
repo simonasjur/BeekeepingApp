@@ -11,12 +11,12 @@ import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
-import { BeeFamiliesRoutingModule } from './beeFamilies-routing.module';
+import { BeeFamiliesRoutingModule } from './beefamilies-routing.module';
 import { LayoutComponent } from './layout.component';
 import { ListComponent } from './list.component';
 import { ApiaryBeehiveComponent } from '../apiaryBeehives/apiaryBeehives.component';
 import { AddBeeFamilyComponent } from './add.component';
-import { AddApiaryBeehiveDialog } from './add-apiaryBeehive-dialog.component';
+import { AddApiaryBeehiveDialog } from './add-apiary-beehive-dialog.component';
 
 @NgModule({
     imports: [

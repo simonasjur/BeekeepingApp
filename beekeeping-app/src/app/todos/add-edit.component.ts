@@ -6,8 +6,8 @@ import { first } from 'rxjs/operators';
 import { FarmService } from '../_services/farm.service';
 import { AlertService } from '../_services/alert.service';
 import { Apiary, BeeFamily, Farm, TodoItem, TodoItemPriorities2, TodoItemPriority2LabelMapping } from '../_models';
-import { TodoService } from '../_services/todoItem.service';
-import { BeeFamilyService } from '../_services/beeFamily.service';
+import { TodoService } from '../_services/todo-item.service';
+import { BeeFamilyService } from '../_services/beefamily.service';
 import { ApiaryService } from '../_services/apiary.service';
 
 @Component({ templateUrl: 'add-edit.component.html',
