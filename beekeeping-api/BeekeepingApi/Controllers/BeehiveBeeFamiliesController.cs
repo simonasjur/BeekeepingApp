@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using BeekeepingApi.DTOs.BeehiveBeeFamilyDTOs;
 using BeekeepingApi.Models;
+using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,6 +43,27 @@ namespace BeekeepingApi.Controllers
             }
 
             return _mapper.Map<BeehiveBeeFamilyReadDTO>(beehiveBeeFamily);
+        }
+
+        // GET: api/beefamilies/{id}/beehiveBeefamilies
+        [HttpGet("/api/beefamilies/{id}/beehiveBeefamilies")]
+        [EnableQuery()]
+        public async Task<ActionResult<IEnumerable<BeehiveBeeFamilyReadDTO>>> GetBeefamilyBeehiveBeefamilies(long id)
+        {
+            var beefamily = await _context.BeeFamilies.FindAsync(id);
+            if (beefamily == null)
+                return NotFound();
+
+            var currentUserId = long.Parse(User.Identity.Name);
+            var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, beefamily.FarmId);
+            if (farmWorker == null)
+            {
+                return Forbid();
+            }
+
+            var beefamilyBeehiveBeefamilies = await _context.BeehiveBeeFamilies.Where(l => l.BeeFamilyId == id).ToListAsync();
+
+            return _mapper.Map<IEnumerable<BeehiveBeeFamilyReadDTO>>(beefamilyBeehiveBeefamilies).ToList();
         }
 
         //POST: api/beehiveBeeFamilies

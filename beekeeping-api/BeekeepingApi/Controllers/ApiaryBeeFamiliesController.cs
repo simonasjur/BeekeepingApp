@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BeekeepingApi.DTOs.ApiaryBeeFamilyDTOs;
 using BeekeepingApi.Models;
+using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -73,6 +74,7 @@ namespace BeekeepingApi.Controllers
 
         //GET: api/beeFamilies/{beeFamilyId}/apiaryBeeFamilies
         [HttpGet("/api/beeFamilies/{beeFamilyId}/apiaryBeeFamilies")]
+        [EnableQuery()]
         public async Task<ActionResult<IEnumerable<ApiaryBeeFamilyReadForBeeFamilyDTO>>> GetAllBeeFamilyApiaries(long beeFamilyId)
         {
             var beeFamily = await _context.BeeFamilies.FindAsync(beeFamilyId);

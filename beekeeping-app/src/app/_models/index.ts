@@ -7,3 +7,4 @@ export * from './todoItem';
 export * from './apiary';
 export * from './harvest';
 export * from './beehive';
+export * from './beehive-beefamily';

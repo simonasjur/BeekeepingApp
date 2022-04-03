@@ -17,6 +17,8 @@ import { ListComponent } from './list.component';
 import { ApiaryBeehiveComponent } from '../apiaryBeehives/apiaryBeehives.component';
 import { AddBeeFamilyComponent } from './add.component';
 import { AddApiaryBeehiveDialog } from './add-apiary-beehive-dialog.component';
+import { HomeComponent } from './home.component';
+import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
     imports: [
@@ -31,13 +33,15 @@ import { AddApiaryBeehiveDialog } from './add-apiary-beehive-dialog.component';
         MatDatepickerModule,
         MatTableModule,
         MatButtonModule,
-        MatProgressSpinnerModule
+        MatProgressSpinnerModule,
+        MatCardModule
     ],
     declarations: [
         LayoutComponent,
         ListComponent,
         ApiaryBeehiveComponent,
         AddBeeFamilyComponent,
+        HomeComponent
         //AddApiaryBeehiveDialog
     ]
 })

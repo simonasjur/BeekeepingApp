@@ -1,3 +1,4 @@
+import { Apiary } from "./apiary";
 import { BeeFamily } from "./beeFamily";
 
 export class ApiaryBeeFamily {
@@ -7,4 +8,5 @@ export class ApiaryBeeFamily {
     apiaryId: number;
     beeFamilyId: number;
     beeFamily?: BeeFamily;
+    apiary?: Apiary;
 }
