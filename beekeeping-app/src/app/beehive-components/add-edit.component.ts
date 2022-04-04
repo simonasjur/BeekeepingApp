@@ -70,7 +70,7 @@ export class AddEditComponent implements OnInit {
     get f() { return this.form.controls; }
 
     isPositionAllowed(type: BeehiveComponentType) {
-        if (type === this.beehiveComponentType.Aukštas ||
+        if (type === this.beehiveComponentType.Aukstas ||
             type === this.beehiveComponentType.SkiriamojiTvorelė ||
             type === this.beehiveComponentType.Išleistuvas) {
                 return true;
@@ -83,28 +83,42 @@ export class AddEditComponent implements OnInit {
     }
 
     isQueenExcluderExist() {
+        if (!this.isAddMode) {
+            return null;
+        }
         return this.existingComponents.find(e => e.type === BeehiveComponentType.SkiriamojiTvorelė);
     }
 
     isBottomGateExist() {
+        if (!this.isAddMode) {
+            return null;
+        }
         return this.existingComponents.find(e => e.type === BeehiveComponentType.DugnoSklendė);
     }
 
     isBeeDecreaserExist() {
+        if (!this.isAddMode) {
+            return null;
+        }
         return this.existingComponents.find(e => e.type === BeehiveComponentType.Išleistuvas);
     }
 
     existingSupersCount() {
-        return this.existingComponents.filter(e => e.type === BeehiveComponentType.Aukštas).length;
+        return this.existingComponents.filter(e => e.type === BeehiveComponentType.Aukstas).length;
     }
 
     isPositionCorrect() {
         const formPosition: number = this.form.controls['position'].value;
         if (formPosition) {
             const supersCount: number = this.existingSupersCount();
-            if (this.form.controls['type'].value === BeehiveComponentType.Aukštas &&
-                formPosition > supersCount + 1) {
-                return false
+            if (this.form.controls['type'].value === BeehiveComponentType.Aukstas) {
+                if (this.isAddMode) {
+                    if (formPosition > supersCount + 1) {
+                        return false;
+                    }
+                } else if (formPosition > supersCount) {
+                    return false;
+                }
             } else if (this.form.controls['type'].value === BeehiveComponentType.SkiriamojiTvorelė &&
                        formPosition >= supersCount) {
                 return false
@@ -114,6 +128,20 @@ export class AddEditComponent implements OnInit {
             }
         }
         return true;
+    }
+
+    isHoneySuperCanBeAdded() {
+        return this.honeySupersFreeSpace() >= 1;
+    }
+
+    isHoneyMiniSuperCanBeAdded() {
+        return this.honeySupersFreeSpace() >= 0.5;
+    }
+
+    honeySupersFreeSpace() {
+        const honeySupers = this.existingComponents.filter(e => e.type === BeehiveComponentType.Meduvė);
+        const honeyMiniSupers = this.existingComponents.filter(e => e.type === BeehiveComponentType.Pusmeduvė);
+        return this.beehive.maxHoneyCombsSupers - honeySupers.length - honeyMiniSupers.length * 0.5;
     }
 
     onSubmit() {
@@ -161,21 +189,24 @@ export class AddEditComponent implements OnInit {
                 this.loading = false;
             }
         });
-        /*this.beehiveComponentService.create(this.form.value).pipe(first())
-        .subscribe(() => {
-            this.alertService.success('Komponentas sėkmingai sukurtas', { keepAfterRouteChange: true, autoClose: true });
-            this.backToList();
-        })
-        .add(() => this.loading = false);*/
     }
 
     private updateBeehiveComponent() {
-        this.beehiveComponentService.update(this.id, this.form.value).pipe(first())
-            .subscribe(() => {
-                this.alertService.success('Komponento informacija sėkmingai pakeista', { keepAfterRouteChange: true, autoClose: true });
+        this.beehiveComponentService.update(this.id, this.form.value).subscribe({
+            next: () => {
+                this.alertService.success('Komponento informacija sėkmingai atnaujinta', { keepAfterRouteChange: true, autoClose: true });
                 this.backToList();
-            })
-            .add(() => this.loading = false);
+            },
+            error: error => {
+                if (this.isPositionCorrect()){
+                    this.alertService.error("Serverio klaida");
+                } else {
+                    this.alertService.error("Bloga pozicijos reikšmė. Dabartinis avilio aukštų kiekis - " + 
+                                            this.existingSupersCount());
+                }
+                this.loading = false;
+            }
+        });
     }
 
     backToList() {

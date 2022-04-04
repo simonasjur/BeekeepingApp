@@ -134,7 +134,7 @@ export class AddEditComponent implements OnInit {
     private updateBeehive() {
         this.beehiveService.update(this.id, this.form.value).pipe(first())
             .subscribe(() => {
-                this.alertService.success('Avilio informacija sėkmingai pakeista', { keepAfterRouteChange: true, autoClose: true });
+                this.alertService.success('Avilio informacija sėkmingai atnaujinta', { keepAfterRouteChange: true, autoClose: true });
                 this.backToBeehivesList();
             })
             .add(() => this.loading = false);

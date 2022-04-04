@@ -11,7 +11,7 @@ const baseUrl = `${environment.apiUrl}`;
 export class BeehiveBeefamilyService {
     constructor(private http: HttpClient) { }
 
-    getAllBeefamiliesActiveBeehivebeefamilies(beefamilyId: number) {
+    getBeefamilyBeehive(beefamilyId: number) {
         return this.http.get<BeehiveBeefamily[]>(`${environment.apiUrl}/beefamilies/${beefamilyId}/beehiveBeefamilies?$filter=departDate eq null`);
     }
 }

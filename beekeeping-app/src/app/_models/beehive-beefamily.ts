@@ -1,8 +1,11 @@
+import { Beehive } from "./beehive";
+
 export class BeehiveBeefamily {
     id: number;
     arriveDate: Date;
     departDate: Date;
     beehiveId: number;
-    beefamilyId: number;
+    beeFamilyId: number;
+    beehive?: Beehive;
     isDeleting: boolean = false;
 }

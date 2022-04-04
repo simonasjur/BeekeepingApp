@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BeekeepingApi.DTOs.BeehiveDTOs;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -17,5 +18,7 @@ namespace BeekeepingApi.DTOs.BeehiveBeeFamilyDTOs
         public long BeehiveId { get; set; }
 
         public long BeeFamilyId { get; set; }
+
+        public BeehiveReadDTO Beehive { get; set; }
     }
 }

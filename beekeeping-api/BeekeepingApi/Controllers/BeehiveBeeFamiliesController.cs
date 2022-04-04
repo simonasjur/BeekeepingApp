@@ -61,9 +61,13 @@ namespace BeekeepingApi.Controllers
                 return Forbid();
             }
 
-            var beefamilyBeehiveBeefamilies = await _context.BeehiveBeeFamilies.Where(l => l.BeeFamilyId == id).ToListAsync();
+            var beefamilyBeehives = await _context.BeehiveBeeFamilies.Where(l => l.BeeFamilyId == id).ToListAsync();
+            foreach (BeehiveBeeFamily beefamilyBeehive in beefamilyBeehives)
+            {
+                await _context.Entry(beefamilyBeehive).Reference(ab => ab.Beehive).LoadAsync();
+            }
 
-            return _mapper.Map<IEnumerable<BeehiveBeeFamilyReadDTO>>(beefamilyBeehiveBeefamilies).ToList();
+            return _mapper.Map<IEnumerable<BeehiveBeeFamilyReadDTO>>(beefamilyBeehives).ToList();
         }
 
         //POST: api/beehiveBeeFamilies

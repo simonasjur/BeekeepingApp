@@ -5,10 +5,11 @@ import { first } from 'rxjs/operators';
 
 import { FarmService } from '../_services/farm.service';
 import { AlertService } from '../_services/alert.service';
-import { Apiary, BeeFamily, Farm, TodoItem, TodoItemPriorities2, TodoItemPriority2LabelMapping } from '../_models';
+import { Apiary, BeeFamily, BeehiveBeefamily, Farm, TodoItem, TodoItemPriorities2, TodoItemPriority2LabelMapping } from '../_models';
 import { TodoService } from '../_services/todo-item.service';
 import { BeeFamilyService } from '../_services/beefamily.service';
 import { ApiaryService } from '../_services/apiary.service';
+import { BeehiveBeefamilyService } from '../_services/beehive-family.service';
 
 @Component({ templateUrl: 'add-edit.component.html',
 styleUrls: ['add-edit.component.css'] })
@@ -21,6 +22,7 @@ export class AddEditComponent implements OnInit {
     todo: TodoItem;
     typesOfCategories: string[] = ['Bendra', 'Bitynas', 'Avilys'];
     beeFamilies: BeeFamily[];
+    beehiveBeefamilies: BeehiveBeefamily[] = [];
     apiaries: Apiary[];
     checked = false;
     selectedCategoryIndex: number = 0;
@@ -33,12 +35,20 @@ export class AddEditComponent implements OnInit {
         private alertService: AlertService,
         private todoService: TodoService,
         private beeFamilyService: BeeFamilyService,
-        private apiaryService: ApiaryService
+        private apiaryService: ApiaryService,
+        private beehiveBeeFamilyService: BeehiveBeefamilyService
     ) {}
 
     ngOnInit() {
         this.beeFamilyService.getFarmAllBeeFamilies(this.farmService.farmValue.id)
-        .subscribe(beeFamilies => this.beeFamilies = beeFamilies);
+        .subscribe({
+            next: beeFamilies => {
+                this.beeFamilies = beeFamilies
+                beeFamilies.forEach(beefamily => this.beehiveBeeFamilyService.getBeefamilyBeehive(beefamily.id)
+                                .subscribe(beehiveBeeFamily => beehiveBeeFamily.forEach(e => this.beehiveBeefamilies.push(e))));
+            }
+        });
+
         this.apiaryService.getFarmApiaries(this.farmService.farmValue.id)
         .subscribe(apiaries => this.apiaries = apiaries);
 

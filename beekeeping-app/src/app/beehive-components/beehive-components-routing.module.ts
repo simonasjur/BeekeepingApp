@@ -11,7 +11,7 @@ const routes: Routes = [
         children: [
             { path: '', component: BeehiveComponentsListComponent },
             { path: 'add', component: AddEditComponent },
-            //{ path: 'edit/:id', component: AddEditComponent}
+            { path: 'edit/:id', component: AddEditComponent}
         ]
     }
 ];

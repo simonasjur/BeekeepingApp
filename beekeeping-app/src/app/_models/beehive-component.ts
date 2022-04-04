@@ -11,7 +11,7 @@ export enum BeehiveComponentType {
     Pusmeduvė = 2,
     Išleistuvas = 4,
     SkiriamojiTvorelė = 8,
-    Aukštas = 16,
+    Aukstas = 16,
     DugnoSklendė = 32,
     Maitintuvė = 64
 }
@@ -21,7 +21,7 @@ export const BeehiveComponentType2LabelMapping: Record<BeehiveComponentType, str
     [BeehiveComponentType.Pusmeduvė]: "Pusmeduvė",
     [BeehiveComponentType.Išleistuvas]: "Išleistuvas",
     [BeehiveComponentType.SkiriamojiTvorelė]: "Skiriamoji tvorelė",
-    [BeehiveComponentType.Aukštas]: "Aukštas",
+    [BeehiveComponentType.Aukstas]: "Aukštas",
     [BeehiveComponentType.DugnoSklendė]: "Dugno sklendė",
     [BeehiveComponentType.Maitintuvė]: "Maitintuvė"
 };
