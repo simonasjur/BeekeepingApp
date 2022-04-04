@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, NavigationEnd, Router, RoutesRecognized } from '@angular/router';
 import { filter, first, pairwise } from 'rxjs/operators';
 
-import { Beehive, BeehiveComponentType, BeehiveComponentType2LabelMapping, BeehiveTypes } from '../_models';
+import { Beehive, BeehiveComponent, BeehiveComponentType, BeehiveComponentType2LabelMapping, BeehiveTypes } from '../_models';
 import { AlertService } from '../_services/alert.service';
 import { BeehiveComponentService } from '../_services/beehive-component.service';
 import { BeehiveService } from '../_services/beehive.service';
@@ -18,6 +18,7 @@ export class AddEditComponent implements OnInit {
     id: number;
     beehiveId: number;
     beehive: Beehive;
+    existingComponents: BeehiveComponent[];
     isAddMode = true;
     submitted = false;
     loading = false;
@@ -50,6 +51,8 @@ export class AddEditComponent implements OnInit {
         this.beehiveId = +url.substring(0, url.indexOf('/'));
 
         this.beehiveService.getById(this.beehiveId).subscribe(beehive => this.beehive = beehive);
+        this.beehiveComponentService.getBeehiveComponents(this.beehiveId)
+            .subscribe(components => this.existingComponents = components);
     }
 
     get beehiveComponentType() {
@@ -77,6 +80,40 @@ export class AddEditComponent implements OnInit {
 
     isDadano() {
         return this.beehive.type === BeehiveTypes.Dadano;
+    }
+
+    isQueenExcluderExist() {
+        return this.existingComponents.find(e => e.type === BeehiveComponentType.SkiriamojiTvorelė);
+    }
+
+    isBottomGateExist() {
+        return this.existingComponents.find(e => e.type === BeehiveComponentType.DugnoSklendė);
+    }
+
+    isBeeDecreaserExist() {
+        return this.existingComponents.find(e => e.type === BeehiveComponentType.Išleistuvas);
+    }
+
+    existingSupersCount() {
+        return this.existingComponents.filter(e => e.type === BeehiveComponentType.Aukštas).length;
+    }
+
+    isPositionCorrect() {
+        const formPosition: number = this.form.controls['position'].value;
+        if (formPosition) {
+            const supersCount: number = this.existingSupersCount();
+            if (this.form.controls['type'].value === BeehiveComponentType.Aukštas &&
+                formPosition > supersCount + 1) {
+                return false
+            } else if (this.form.controls['type'].value === BeehiveComponentType.SkiriamojiTvorelė &&
+                       formPosition >= supersCount) {
+                return false
+            } else if (this.form.controls['type'].value === BeehiveComponentType.Išleistuvas &&
+                       formPosition >= supersCount) {
+                return false;
+            }
+        }
+        return true;
     }
 
     onSubmit() {
@@ -109,12 +146,27 @@ export class AddEditComponent implements OnInit {
     }
 
     private createBeehiveComponent() {
-        this.beehiveComponentService.create(this.form.value).pipe(first())
+        this.beehiveComponentService.create(this.form.value).subscribe({
+            next: () => {
+                this.alertService.success('Komponentas sėkmingai sukurtas', { keepAfterRouteChange: true, autoClose: true });
+                this.backToList();
+            },
+            error: error => {
+                if (this.isPositionCorrect()){
+                    this.alertService.error("Serverio klaida");
+                } else {
+                    this.alertService.error("Bloga pozicijos reikšmė. Dabartinis avilio aukštų kiekis - " + 
+                                            this.existingSupersCount());
+                }
+                this.loading = false;
+            }
+        });
+        /*this.beehiveComponentService.create(this.form.value).pipe(first())
         .subscribe(() => {
             this.alertService.success('Komponentas sėkmingai sukurtas', { keepAfterRouteChange: true, autoClose: true });
             this.backToList();
         })
-        .add(() => this.loading = false);
+        .add(() => this.loading = false);*/
     }
 
     private updateBeehiveComponent() {

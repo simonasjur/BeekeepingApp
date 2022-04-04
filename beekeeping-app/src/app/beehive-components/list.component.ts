@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import {  } from '../_models';
+import { BeehiveComponentType } from '../_models';
 import { BeehiveComponent, BeehiveComponentType2LabelMapping } from '../_models';
 import { AlertService } from '../_services/alert.service';
 import { BeehiveComponentService } from '../_services/beehive-component.service';
@@ -35,6 +35,10 @@ export class BeehiveComponentsListComponent implements OnInit {
 
     get beehiveComponentType2LabelMapping() {
         return BeehiveComponentType2LabelMapping;
+    }
+
+    get beehiveComponentType() {
+        return BeehiveComponentType;
     }
 
     /*deleteBeehive(id: number): void {

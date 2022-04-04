@@ -1,16 +1,16 @@
 <h1 *ngIf="isAddMode">Pridėti komponentą</h1>
 <h1 *ngIf="!isAddMode">Atnaujinti komponentą</h1>
-<form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="beehive">
+<form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="beehive && existingComponents">
     <div class="form-fields">
         <mat-form-field>
             <mat-label>Tipas</mat-label>
             <mat-select formControlName="type">
                 <mat-option [value]="1" *ngIf="isDadano()">{{beehiveComponentType2LabelMapping[1]}}</mat-option>
                 <mat-option [value]="2" *ngIf="isDadano()">{{beehiveComponentType2LabelMapping[2]}}</mat-option>
-                <mat-option [value]="4" *ngIf="!isDadano()">{{beehiveComponentType2LabelMapping[4]}}</mat-option>
-                <mat-option [value]="8" *ngIf="!isDadano()">{{beehiveComponentType2LabelMapping[8]}}</mat-option>
+                <mat-option [value]="4" *ngIf="!isDadano() && !isBeeDecreaserExist()">{{beehiveComponentType2LabelMapping[4]}}</mat-option>
+                <mat-option [value]="8" *ngIf="!isDadano() && !isQueenExcluderExist()">{{beehiveComponentType2LabelMapping[8]}}</mat-option>
                 <mat-option [value]="16" *ngIf="!isDadano()">{{beehiveComponentType2LabelMapping[16]}}</mat-option>
-                <mat-option [value]="32" *ngIf="!isDadano()">{{beehiveComponentType2LabelMapping[32]}}</mat-option>
+                <mat-option [value]="32" *ngIf="!isDadano() && !isBottomGateExist()">{{beehiveComponentType2LabelMapping[32]}}</mat-option>
                 <mat-option [value]="64">{{beehiveComponentType2LabelMapping[64]}}</mat-option>
             </mat-select>
             <mat-error *ngIf="submitted && f.type.errors">
