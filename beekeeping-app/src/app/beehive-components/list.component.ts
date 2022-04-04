@@ -1,45 +1,43 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import {  } from '../_models';
-import { BeehiveComponent } from '../_models/beehive-component';
+import { BeehiveComponent, BeehiveComponentType2LabelMapping } from '../_models';
 import { AlertService } from '../_services/alert.service';
-import { BeehiveService } from '../_services/beehive.service';
-import { FarmService } from '../_services/farm.service';
+import { BeehiveComponentService } from '../_services/beehive-component.service';
 
 @Component({
     selector: 'beehive-components-list',
     templateUrl: 'list.component.html',
     styleUrls: ['list.component.css']
 })
-export class ListComponent implements OnInit {
+export class BeehiveComponentsListComponent implements OnInit {
     beehiveComponents: BeehiveComponent[];
     loading = true;
 
-    displayedColumns = ['no', 'type', 'action'];
+    displayedColumns = ['position', 'type', 'insertDate'];
 
-    constructor(private beehiveService: BeehiveService,
-                private farmService: FarmService,
-                private alertService: AlertService) {
+    constructor(private beehiveComponentService: BeehiveComponentService,
+                private alertService: AlertService,
+                private route: ActivatedRoute) {
     }
 
     ngOnInit() {
-        /*this.beehiveService.getFarmAllBeehives(this.farmService.farmValue.id)
+        //this.route.snapshot.params['beehiveId']
+        this.beehiveComponentService.getBeehiveComponents(this.route.snapshot.params['beehiveId'])
             .subscribe({
-                next: beehives => {
-                    this.beehiveComponents = beehives.filter(b => b.isEmpty === false);
-                    this.emptyBeehives = beehives.filter(b => b.isEmpty === true);
+                next: beehiveComponents => {
+                    this.beehiveComponents = beehiveComponents;
                     this.loading = false;
-                }});*/
+                }});
+    }
+    
+
+    get beehiveComponentType2LabelMapping() {
+        return BeehiveComponentType2LabelMapping;
     }
 
-    /*ngAfterViewInit() {
-    }
-
-    get beehiveType2LabelMapping() {
-        return BeehiveType2LabelMapping;
-    }
-
-    deleteBeehive(id: number): void {
+    /*deleteBeehive(id: number): void {
         this.beehiveService.delete(id).subscribe({
             next: () => {
                 this.emptyBeehives = this.emptyBeehives.filter(x => x.id !== id);

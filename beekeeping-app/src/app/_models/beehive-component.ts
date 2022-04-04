@@ -2,7 +2,7 @@ export class BeehiveComponent {
     id: number;
     type: BeehiveComponentType;
     position?: number;
-    insertDate: Date;
+    installationDate: Date;
     beehiveId: number;
 }
 
