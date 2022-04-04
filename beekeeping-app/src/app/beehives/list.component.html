@@ -4,7 +4,7 @@
     <mat-tab label="Tušti">
         <div>
             <div class="example-loading-shade" *ngIf="loading">
-                <mat-spinner *ngIf="loading"></mat-spinner>
+                <mat-spinner *ngIf="loading" color="accent"></mat-spinner>
             </div>
             <table mat-table [dataSource]="emptyBeehives" width="100%">
                 <ng-container matColumnDef="no">
@@ -37,7 +37,7 @@
     <mat-tab label="Apgyvendinti">
         <div>
             <div class="example-loading-shade" *ngIf="loading">
-                <mat-spinner *ngIf="loading"></mat-spinner>
+                <mat-spinner *ngIf="loading" color="accent"></mat-spinner>
             </div>
             <table mat-table [dataSource]="beehives" width="100%">
                 <ng-container matColumnDef="no">

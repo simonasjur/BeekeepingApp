@@ -31,7 +31,7 @@
        
         <div class="example-container mat-elevation-z8">
             <div class="example-loading-shade" *ngIf="loading">
-                <mat-spinner *ngIf="loading"></mat-spinner>
+                <mat-spinner *ngIf="loading" color="accent"></mat-spinner>
             </div>
             <table mat-table #firstSort="matSort" [dataSource]="filteredAndPagedTodos" matSort
             matSortActive="dueDate" matSortDisableClear matSortDirection="asc"
@@ -141,7 +141,7 @@
         </form>
         <div class="example-container mat-elevation-z8">
             <div class="example-loading-shade" *ngIf="loading">
-                <mat-spinner *ngIf="loading"></mat-spinner>
+                <mat-spinner *ngIf="loading" color="accent"></mat-spinner>
             </div>
             <table mat-table #secondSort="matSort" [dataSource]="filteredAndPagedTodosCompleted" matSort
             matSortActive="dueDate" matSortDisableClear matSortDirection="desc"
