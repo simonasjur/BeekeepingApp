@@ -1,5 +1,13 @@
 <div *ngIf="beehive">
     <h1>Bičių šeima nr. {{beehive.no}}</h1>
+    <mat-chip-list>
+        <mat-chip routerLink="/apiaries/{{apiaryBeefamily.apiary.id}}/beefamilies/{{beefamily.id}}" 
+        routerLinkActive="active">Pagrindinis</mat-chip>
+        <mat-chip>Plėtimas</mat-chip>
+        <mat-chip>Siaurinimas</mat-chip>
+        <mat-chip>Maitinimas</mat-chip>
+        <mat-chip>Motinėlės</mat-chip>
+    </mat-chip-list>
     <mat-card class="bee-card">
         <mat-card-title>
             Šeima

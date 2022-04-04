@@ -13,6 +13,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { MatButtonModule } from '@angular/material/button';
 import { HomeComponent } from './home.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
     imports: [
@@ -25,7 +26,8 @@ import { HomeComponent } from './home.component';
         MatFormFieldModule, 
         ReactiveFormsModule,
         GoogleMapsModule,
-        MatButtonModule
+        MatButtonModule,
+        MatProgressSpinnerModule
     ],
     declarations: [
         LayoutComponent,

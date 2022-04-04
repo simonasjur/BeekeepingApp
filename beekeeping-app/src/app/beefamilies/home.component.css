@@ -24,3 +24,8 @@ img {
 .family-table {
     width: 100%;
 }
+
+.mat-chip.active {
+    background: #673AB7;
+    color: white;
+  }

@@ -6,11 +6,9 @@
 </div>-->
 
 <div *ngIf="user && user.defaultFarmId">
-  <mat-toolbar color="accent">
+  <mat-toolbar color="primary">
     <mat-toolbar-row>
-      <button mat-icon-button>
-        <mat-icon (click)="sidenav.toggle()">menu</mat-icon>
-      </button>
+      <img src="assets/bee.png" class="header-icon">
       <h1 *ngIf="currentFarm">{{currentFarm.name}} ūkis</h1>
       <span class="menu-spacer"></span>
       <div>
@@ -123,28 +121,28 @@
           Namai 
         </a>
         <mat-divider></mat-divider>
-        <a mat-list-item [routerLink]='"/apiaries"'>
+        <a mat-list-item [routerLink]='"/apiaries"' routerLinkActive="active">
           <img src="assets/beehives.svg" alt="apiary icon" class="menu-icon">
           <div class="menu-icon-title-gap"></div>
           Bitynai
         </a>
-        <a mat-list-item [routerLink]='"/beehives"'>
+        <a mat-list-item [routerLink]='"/beehives"' routerLinkActive="active">
           <img src="assets/beehive.svg" alt="beehive icon" class="menu-icon">
           <div class="menu-icon-title-gap"></div>
           Aviliai 
         </a>
-        <a mat-list-item [routerLink]='"/harvests"'>
+        <a mat-list-item [routerLink]='"/harvests"' routerLinkActive="active">
           <img src="assets/harvest.svg" alt="harvest icon" class="menu-icon">
           <div class="menu-icon-title-gap"></div>
           Kopimai
         </a>
-        <a mat-list-item [routerLink]='"/todos"'>
+        <a mat-list-item [routerLink]='"/todos"' routerLinkActive="active">
           <mat-icon>task</mat-icon>
           <div class="menu-icon-title-gap"></div>
           Užduotys
         </a>
         <mat-divider></mat-divider>
-        <a mat-list-item [routerLink]='"/farms"'>
+        <a mat-list-item [routerLink]='"/farms"' routerLinkActive="active">
           <img src="assets/beekeeper.svg" alt="beekeeper icon" class="menu-icon">
           <div class="menu-icon-title-gap"></div>
           Ūkiai

@@ -19,6 +19,7 @@ import { AddBeeFamilyComponent } from './add.component';
 import { AddApiaryBeehiveDialog } from './add-apiary-beehive-dialog.component';
 import { HomeComponent } from './home.component';
 import { MatCardModule } from '@angular/material/card';
+import {MatChipsModule} from '@angular/material/chips';
 
 @NgModule({
     imports: [
@@ -34,7 +35,8 @@ import { MatCardModule } from '@angular/material/card';
         MatTableModule,
         MatButtonModule,
         MatProgressSpinnerModule,
-        MatCardModule
+        MatCardModule,
+        MatChipsModule
     ],
     declarations: [
         LayoutComponent,
