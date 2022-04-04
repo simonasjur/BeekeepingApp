@@ -8,3 +8,4 @@ export * from './apiary';
 export * from './harvest';
 export * from './beehive';
 export * from './beehive-beefamily';
+export * from './beehive-component';

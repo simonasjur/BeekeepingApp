@@ -10,12 +10,12 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatTabsModule } from '@angular/material/tabs';
 
 
 import { LayoutComponent } from './layout.component';
 import { BeehiveComponentsRoutingModule } from './beehive-components-routing.module';
-import { ListComponent } from './list.component';
+import { BeehiveComponentsListComponent } from './list.component';
+import { AddEditComponent } from './add-edit.component';
 
 
 @NgModule({
@@ -31,13 +31,12 @@ import { ListComponent } from './list.component';
         MatDatepickerModule,
         MatTableModule,
         MatButtonModule,
-        MatProgressSpinnerModule,
-        MatTabsModule
+        MatProgressSpinnerModule
     ],
     declarations: [
         LayoutComponent,
-        ListComponent,
-//        AddEditComponent
+        BeehiveComponentsListComponent,
+        AddEditComponent
     ]
 })
 export class BeehiveComponentsModule { }

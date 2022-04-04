@@ -38,9 +38,8 @@ export class HomeComponent implements OnInit {
                 this.beehiveBeefamily = beehiveBeefamilies[0];
                 this.apiaryFamilyService.getBeefamilyApiaries(beefamily.id).subscribe(apiaryFamilies => {
                     this.apiaryBeefamily = apiaryFamilies[0];
-                    this.beehiveService.getById(this.beehiveBeefamily.id).subscribe(beehive => {
+                    this.beehiveService.getById(this.beehiveBeefamily.beehiveId).subscribe(beehive => {
                         this.beehive = beehive;
-                        console.log(JSON.stringify(this.beehive))
                         if (this.beehive.nestCombs != null) {
                             this.expandPercent = Math.round((this.beehive.nestCombs / this.beehive.maxNestCombs) * 100);
                         }
