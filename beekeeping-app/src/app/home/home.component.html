@@ -6,7 +6,7 @@
 </div>-->
 
 <div *ngIf="user && user.defaultFarmId">
-  <mat-toolbar color="primary">
+  <mat-toolbar color="accent">
     <mat-toolbar-row>
       <button mat-icon-button>
         <mat-icon (click)="sidenav.toggle()">menu</mat-icon>
@@ -77,7 +77,7 @@
 </div>
   <!-- nav if no farms -->
 <div *ngIf="user && !user.defaultFarmId">
-  <mat-toolbar color="primary">
+  <mat-toolbar color="accent">
     <mat-toolbar-row>
       <button mat-icon-button>
         <mat-icon (click)="sidenav.toggle()">menu</mat-icon>
