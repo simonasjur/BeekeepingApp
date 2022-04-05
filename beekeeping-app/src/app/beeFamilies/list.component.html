@@ -9,14 +9,14 @@
     </mat-form-field>
 </form>-->
 
-<h1 *ngIf="currentApiary">{{currentApiary.name}} Aviliai</h1>
-<div class="buttons-container">
-    <a routerLink="add">Naujas Avilys</a>
-</div>
+<h1 *ngIf="currentApiary">{{currentApiary.name}} bičių šeimos</h1>
+<button mat-raised-button color="accent" routerLink="/beehives/add">Pridėti avilį</button>
 <table mat-table [dataSource]="apiaryBeeFamilies">
     <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef>Id</th>
-        <td mat-cell *matCellDef="let element">{{element.beeFamily.id}}</td>
+        <td mat-cell *matCellDef="let element">
+            <a routerLink="{{element.beeFamily.id}}">{{element.beeFamily.id}}</a>
+        </td>
     </ng-container>
     <ng-container matColumnDef="state">
         <th mat-header-cell *matHeaderCellDef>Būsena</th>

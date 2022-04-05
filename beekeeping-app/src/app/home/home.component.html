@@ -75,11 +75,9 @@
 </div>
   <!-- nav if no farms -->
 <div *ngIf="user && !user.defaultFarmId">
-  <mat-toolbar color="accent">
+  <mat-toolbar color="primary">
     <mat-toolbar-row>
-      <button mat-icon-button>
-        <mat-icon (click)="sidenav.toggle()">menu</mat-icon>
-      </button>
+      <img src="assets/bee.png" class="header-icon">
       <span class="menu-spacer"></span>
       <div>
         <button mat-icon-button [matMenuTriggerFor]="profile" class="menu-button">

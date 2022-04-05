@@ -91,12 +91,18 @@ export class AddBeeFamilyComponent implements OnInit {
         this.beeFamilyService.create(this.form.value).pipe(first())
             .subscribe(() => {
                 this.alertService.success('Avilys sėkmingai apgyvendintas', { keepAfterRouteChange: true, autoClose: true });
-                this.backToBeeFamiliesList();
+                this.goToApiaryFamilies();
             })
             .add(() => this.loading = false);
     }
 
     backToBeeFamiliesList() {
         this.router.navigate(['../../'], { relativeTo: this.route });
+    }
+
+    goToApiaryFamilies() {
+        const apiaryId = this.form.controls['apiaryId'].value;
+        const url = '/apiaries/' + apiaryId + '/beefamilies';
+        this.router.navigate([url], { relativeTo: this.route });
     }
 }

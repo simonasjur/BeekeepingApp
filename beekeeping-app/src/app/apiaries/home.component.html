@@ -1,4 +1,13 @@
 <div *ngIf="apiary">
+    <mat-chip-list>
+        <mat-chip routerLink="/apiaries/{{apiary.id}}" 
+        routerLinkActive="active">Informacija</mat-chip>
+        <mat-chip routerLink="/apiaries/{{apiary.id}}/beefamilies">Bityno šeimos</mat-chip>
+    </mat-chip-list>
+    <br>
+</div>
+
+<div *ngIf="apiary">
     <h1>{{apiary.name}} bitynas</h1>
     <button mat-raised-button color="accent" routerLink="edit">Redaguoti bityną</button>
 
