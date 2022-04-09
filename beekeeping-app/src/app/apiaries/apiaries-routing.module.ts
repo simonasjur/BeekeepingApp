@@ -15,10 +15,9 @@ const routes: Routes = [
         children: [
             { path: '', component: ListComponent },
             { path: 'add', component: AddEditComponent },
-            { path: ':id', component: HomeComponent },
-            { path: ':id/beefamilies', loadChildren: beeFamiliesModule, canActivate: [AuthGuard] },
-            
-            { path: ':id/edit', component: AddEditComponent }
+            { path: ':id', component: HomeComponent }, 
+            { path: ':id/edit', component: AddEditComponent },
+            { path: ':id/beefamilies', loadChildren: beeFamiliesModule, canActivate: [AuthGuard] }
         ]
     }
 ];

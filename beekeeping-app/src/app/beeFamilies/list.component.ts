@@ -29,7 +29,7 @@ export class ListComponent implements OnInit {
     constructor(//private beehiveService: BeeFamilyService,
                 private apiaryBeehiveService: ApiaryBeeFamilyService,
                 //private farmService: FarmService,
-                //private apiaryService: ApiaryService,
+                private apiaryService: ApiaryService,
                 //private formBuilder: FormBuilder,
                 //private router: Router,
                 private route: ActivatedRoute,
@@ -38,7 +38,7 @@ export class ListComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.apiaryId = this.route.snapshot.params['apiaryId'];
+        this.apiaryId = this.route.snapshot.params['id'];
         /*this.apiarySelectForm = this.formBuilder.group({
             apiary: []
         });
@@ -52,7 +52,9 @@ export class ListComponent implements OnInit {
                 console.log(this.apiarySelectForm.get('apiary').value);
             });*/
         this.apiaryBeehiveService.getOneApiaryBeeFamilies(this.apiaryId)
-            .subscribe(apiaryBeehives => this.apiaryBeeFamilies = apiaryBeehives);       
+            .subscribe(apiaryBeehives => this.apiaryBeeFamilies = apiaryBeehives);
+        this.apiaryService.getById(this.apiaryId)
+            .subscribe(apiary => this.currentApiary = apiary);
     }
 
     /*get BeehiveTypes() {
@@ -79,7 +81,7 @@ export class ListComponent implements OnInit {
         this.showEmptyBeehives = !this.showEmptyBeehives;
     }*/
 
-    openAddApiaryBeehiveDialog(currentBeehiveId: any) {
+    /*openAddApiaryBeehiveDialog(currentBeehiveId: any) {
         const dialogRef = this.dialog.open(AddApiaryBeehiveDialog, {
             data: {
                 apiaryId: this.apiaryId,
@@ -87,5 +89,5 @@ export class ListComponent implements OnInit {
                 beehive: this.beeFamilies.find(b => b.id === currentBeehiveId)
             }
         });
-    }
+    }*/
 }
