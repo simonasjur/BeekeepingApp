@@ -96,13 +96,13 @@ namespace BeekeepingApi.Controllers
             var existingUser = await _context.Users.Where(u => u.Username.Equals(userCreateDTO.Username)).FirstOrDefaultAsync();
             if (existingUser != null)
             {
-                return BadRequest(new { message = "User with username \"" + userCreateDTO.Username + "\" already exist." });
+                return BadRequest(new { message = "Naudotojas su slapyvardžiu \"" + userCreateDTO.Username + "\" jau egzistuoja." });
             }
 
             var existingEmail = await _context.Users.Where(u => u.Email.Equals(userCreateDTO.Email)).FirstOrDefaultAsync();
             if (existingEmail != null)
             {
-                return BadRequest(new { message = "User with email \"" + userCreateDTO.Email + "\" already exist." });
+                return BadRequest(new { message = "Naudotojas su el. paštu \"" + userCreateDTO.Email + "\" jau egzistuoja." });
             }
 
             var user = _mapper.Map<User>(userCreateDTO);
@@ -153,11 +153,11 @@ namespace BeekeepingApi.Controllers
             var user = await _context.Users.SingleOrDefaultAsync(u => u.Username.Equals(userAuthenticate.Username));
             if (user == null)
             {
-                return BadRequest(new { message = "Username is incorrect" });
+                return BadRequest(new { message = "Neteisingas slapyvardis arba slaptažodis" });
             }
             if (!_userService.VerifyPassword(user, userAuthenticate.Password))
             {
-                return BadRequest(new { message = "Password is incorrect" });
+                return BadRequest(new { message = "Neteisingas slapyvardis arba slaptažodis" });
             }
 
             UserWithTokenDTO userWithToken = _mapper.Map<UserWithTokenDTO>(user);
@@ -183,7 +183,7 @@ namespace BeekeepingApi.Controllers
 
             if (!_userService.VerifyPassword(user, changePasswordModel.Password))
             {
-                return BadRequest(new { message = "Password is incorrect" });
+                return BadRequest(new { message = "Neteisingas slaptažodis" });
             }
 
             if (!string.IsNullOrWhiteSpace(changePasswordModel.NewPassword))
@@ -212,7 +212,7 @@ namespace BeekeepingApi.Controllers
 
             if (!_userService.VerifyPassword(user, changeUserEmailModel.Password))
             {
-                return BadRequest(new { message = "Password is incorrect" });
+                return BadRequest(new { message = "Neteisingas slaptažodis" });
             }
             _mapper.Map(changeUserEmailModel, user);
             await _context.SaveChangesAsync();
