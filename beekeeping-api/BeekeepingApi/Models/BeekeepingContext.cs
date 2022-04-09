@@ -41,6 +41,12 @@ namespace BeekeepingApi.Models
                 .WithOne(bbf => bbf.Beehive)
                 .HasForeignKey(bbf => bbf.BeehiveId)
                 .OnDelete(DeleteBehavior.ClientCascade);
+
+            modelBuilder.Entity<Queen>()
+                .HasMany<BeefamilyQueen>(q => q.BeeFamilyQueens)
+                .WithOne(bq => bq.Queen)
+                .HasForeignKey(bq => bq.QueenId)
+                .OnDelete(DeleteBehavior.ClientCascade);
         }
 
         public DbSet<User> Users { get; set; }
@@ -72,5 +78,9 @@ namespace BeekeepingApi.Models
         public DbSet<Food> Foods { get; set; }
 
         public DbSet<Feeding> Feedings { get; set; }
+
+        public DbSet<Queen> Queens { get; set; }
+
+        public DbSet<BeefamilyQueen> BeeFamilyQueens { get; set; }
     }
 }
