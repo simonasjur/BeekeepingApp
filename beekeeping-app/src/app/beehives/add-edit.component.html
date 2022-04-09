@@ -17,7 +17,7 @@
             <input matInput formControlName="no">
             <mat-error *ngIf="submitted && f.no.errors">
                 <p *ngIf="f.no.errors.required">Šis laukas yra būtinas</p>
-                <p *ngIf="f.no.errors.pattern">Numeris privalo būti teigiamas natūralus skaičius</p>
+                <p *ngIf="f.no.errors.pattern">Numeris privalo būti natūralus skaičius</p>
             </mat-error>      
         </mat-form-field>
         <mat-form-field *ngIf="typeField.value === beehiveTypes.Dadano">
@@ -42,7 +42,7 @@
             <input matInput formControlName="maxNestCombs">
             <mat-error *ngIf="submitted && f.maxNestCombs.errors">
                 <p *ngIf="f.maxNestCombs.errors.required">Šis laukas yra būtinas</p>
-                <p *ngIf="f.maxNestCombs.errors.pattern">Reikšmė privalo būti teigiamas natūralus skaičius</p>
+                <p *ngIf="f.maxNestCombs.errors.pattern">Reikšmė privalo būti natūralus skaičius</p>
                 <p *ngIf="f.maxNestCombs.errors.max">Avilyje telpa tik 16 korių</p>
             </mat-error>
         </mat-form-field>
@@ -51,7 +51,7 @@
             <input matInput formControlName="maxHoneyCombsSupers">
             <mat-error *ngIf="submitted && f.maxHoneyCombsSupers.errors">
                 <p *ngIf="f.maxHoneyCombsSupers.errors.required">Šis laukas yra būtinas</p>
-                <p *ngIf="f.maxHoneyCombsSupers.errors.pattern">Reikšmė privalo būti teigiamas natūralus skaičius</p>
+                <p *ngIf="f.maxHoneyCombsSupers.errors.pattern">Reikšmė privalo būti natūralus skaičius</p>
                 <p *ngIf="f.maxHoneyCombsSupers.errors.max">Avilyje telpa iki 4 meduvių</p>
             </mat-error>
         </mat-form-field>

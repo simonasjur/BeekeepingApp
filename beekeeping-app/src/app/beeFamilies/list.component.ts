@@ -21,7 +21,7 @@ export class ListComponent implements OnInit {
     apiaries: Apiary[];
     user: User;
     apiaryId: number;
-    currentApiary: Apiary;
+    apiary: Apiary;
     apiarySelectForm: FormGroup;
     //showEmptyBeehives: boolean;
     firstTableDisplayedColumns: string[] = ['id', 'state', 'origin', 'arriveDate', 'action'];
@@ -54,7 +54,7 @@ export class ListComponent implements OnInit {
         this.apiaryBeehiveService.getOneApiaryBeeFamilies(this.apiaryId)
             .subscribe(apiaryBeehives => this.apiaryBeeFamilies = apiaryBeehives);
         this.apiaryService.getById(this.apiaryId)
-            .subscribe(apiary => this.currentApiary = apiary);
+            .subscribe(apiary => this.apiary = apiary);
     }
 
     /*get BeehiveTypes() {

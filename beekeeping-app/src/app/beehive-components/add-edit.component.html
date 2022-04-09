@@ -22,7 +22,7 @@
             <input matInput formControlName="position">
             <mat-error *ngIf="submitted && f.position.errors">
                 <p *ngIf="f.position.errors.required">Šis laukas yra būtinas</p>
-                <p *ngIf="f.position.errors.pattern">Numeris privalo būti teigiamas natūralus skaičius</p>
+                <p *ngIf="f.position.errors.pattern">Numeris privalo būti natūralus skaičius</p>
             </mat-error>      
         </mat-form-field>
         <mat-form-field appearance="fill">
