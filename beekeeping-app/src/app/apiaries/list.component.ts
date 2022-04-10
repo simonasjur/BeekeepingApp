@@ -34,6 +34,7 @@ export class ListComponent implements OnInit {
                         apiary.familiesCount = families.length
                 ));
             });
+        this.apiaryService.clearApiary();
     }
 
     deleteApiary(id: number): void {

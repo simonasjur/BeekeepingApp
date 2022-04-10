@@ -1,16 +1,4 @@
 <div *ngIf="apiary">
-    <div class="header">
-        <h1>{{apiary.name}} bitynas</h1>
-        <button mat-icon-button>
-            <mat-icon routerLink="../edit/">edit</mat-icon>
-        </button>
-    </div>
-    <div class="sub-menu">
-        <mat-chip-list>
-            <mat-chip routerLink="/apiaries/{{apiary.id}}/home" routerLinkActive="active">Pagrindinis</mat-chip>
-            <mat-chip routerLink="/apiaries/{{apiary.id}}/beefamilies" routerLinkActive="active">Bityno šeimos</mat-chip>
-        </mat-chip-list>
-    </div>
     <google-map
         [center]="center"
         [options]="options"

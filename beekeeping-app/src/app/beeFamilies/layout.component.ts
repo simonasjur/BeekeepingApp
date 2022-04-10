@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ApiaryBeeFamily, BeeFamily, Beehive, BeehiveBeefamily } from '../_models';
+import { Apiary, ApiaryBeeFamily, BeeFamily, Beehive, BeehiveBeefamily } from '../_models';
 import { ApiaryBeeFamilyService } from '../_services/apiary-beefamily.service';
+import { ApiaryService } from '../_services/apiary.service';
 import { BeeFamilyService } from '../_services/beefamily.service';
 import { BeehiveBeefamilyService } from '../_services/beehive-family.service';
 import { BeehiveService } from '../_services/beehive.service';
@@ -14,6 +15,7 @@ export class LayoutComponent {
     apiaryFamily: ApiaryBeeFamily;
     beehiveFamily: BeehiveBeefamily;
     beehive: Beehive;
+    apiary: Apiary;
 
     constructor(private beefamilyService: BeeFamilyService,
         private apiaryFamilyService: ApiaryBeeFamilyService,
@@ -33,6 +35,6 @@ export class LayoutComponent {
                     })
                 })
             })
-        })
+        });
     }
 }

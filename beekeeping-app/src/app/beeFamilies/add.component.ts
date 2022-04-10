@@ -48,6 +48,8 @@ export class AddBeeFamilyComponent implements OnInit {
             .subscribe(beehive => this.beehive = beehive);
         this.apiaryservice.getFarmApiaries(this.farmService.farmValue.id)
             .subscribe(apiaries => this.apiaries = apiaries);
+
+        
     }
 
     get beeFamilyOriginsNames() {

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ApiaryBeeFamily, BeeFamily, BeeFamilyOrigin2LabelMapping, BeeFamilyState2LabelMapping, Beehive, BeehiveBeefamily, BeehiveType2LabelMapping, Color2LabelMapping } from '../_models';
 import { ApiaryBeeFamilyService } from '../_services/apiary-beefamily.service';
+import { ApiaryService } from '../_services/apiary.service';
 import { BeeFamilyService } from '../_services/beefamily.service';
 import { BeehiveBeefamilyService } from '../_services/beehive-family.service';
 import { BeehiveService } from '../_services/beehive.service';
@@ -19,6 +20,7 @@ export class HomeComponent implements OnInit {
     apiaryBeefamily: ApiaryBeeFamily;
     expandPercent: number;
     beefamilies = [];
+    loading = true;
 
     beefamilyTableColumns: string[] = ['apiary', 'origin', 'state', 'food'];
 
@@ -26,7 +28,8 @@ export class HomeComponent implements OnInit {
         private beefamilyService: BeeFamilyService,
         private beehiveService: BeehiveService,
         private beehiveFamilyService: BeehiveBeefamilyService,
-        private apiaryFamilyService: ApiaryBeeFamilyService) {
+        private apiaryFamilyService: ApiaryBeeFamilyService,
+        private apiaryService: ApiaryService) {
     }
 
     ngOnInit() {
@@ -51,10 +54,13 @@ export class HomeComponent implements OnInit {
                                 food: this.beefamily.requiredFoodForWinter
                             }
                         ];
+                        this.loading = false;
                     })
                 })
             });
-        })
+        });
+
+        this.apiaryService.clearApiary();
     }
 
     get beeFamilyState2LabelMapping() {
