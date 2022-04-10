@@ -134,9 +134,10 @@ namespace BeekeepingApi.Controllers
                 return Forbid();
             }
 
-            if (!IsQueenStateValid(queenEditDTO.State) ||
+            var newQueenState = queenEditDTO.State ?? 0;
+            if ((!IsQueenStateValid(newQueenState)) ||
                 (queen.State != QueenState.Lopšys && queenEditDTO.State == QueenState.Lopšys) ||
-                (IsFinalState(queen.State) && !IsFinalState(queenEditDTO.State)))
+                (IsFinalState(queen.State) && !IsFinalState(newQueenState)))
             {
                 return BadRequest("Invalid state");
             }
@@ -155,29 +156,36 @@ namespace BeekeepingApi.Controllers
             return NoContent();
         }
 
-        // DELETE: api/Apiaries/5
-        /*[HttpDelete("{id}")]
-        public async Task<ActionResult<ApiaryReadDTO>> DeleteApiary(long id)
+        // DELETE: api/Queens/5
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<QueenReadDTO>> DeleteQueen(long id)
         {
-            var apiary = await _context.Apiaries.FindAsync(id);
-            if (apiary == null)
+            var queen = await _context.Queens.FindAsync(id);
+            if (queen == null)
+            {
                 return NotFound();
-            var farm = await _context.Farms.FindAsync(apiary.FarmId);
+            }
+                
+            var farm = await _context.Farms.FindAsync(queen.FarmId);
             if (farm == null)
+            {
                 return NotFound();
-
+            }
+                
             var currentUserId = long.Parse(User.Identity.Name);
             var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, farm.Id);
             if (farmWorker == null)
+            {
                 return Forbid();
+            }
+                
+            //await _context.Entry(queen).Collection(q => q.Harvests).LoadAsync();
 
-            await _context.Entry(apiary).Collection(a => a.Harvests).LoadAsync();
-
-            _context.Apiaries.Remove(apiary);
+            _context.Queens.Remove(queen);
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<ApiaryReadDTO>(apiary);
-        }*/
+            return _mapper.Map<QueenReadDTO>(queen);
+        }
 
         private bool IsQueenStateValid(QueenState state)
         {
