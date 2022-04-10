@@ -12,16 +12,19 @@ namespace BeekeepingApi.DTOs.QueenDTOs
         [Key]
         public long Id { get; set; }
 
-        public Breed Breed { get; set; }
+        [Required]
+        public Breed? Breed { get; set; }
 
         public DateTime? HatchingDate { get; set; }
 
         public Colors? MarkingColor { get; set; }
 
-        public bool IsFertilized { get; set; }
+        [Required]
+        public bool? IsFertilized { get; set; }
 
         public DateTime? BroodStartDate { get; set; }
 
-        public QueenState State { get; set; }
+        [Required]
+        public QueenState? State { get; set; }
     }
 }
