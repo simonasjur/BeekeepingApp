@@ -92,10 +92,12 @@ export class AddBeeFamilyComponent implements OnInit {
     private createBeeFamily() {
         this.beeFamilyService.create(this.form.value).pipe(first())
             .subscribe(() => {
-                this.alertService.success('Avilys sėkmingai apgyvendintas', { keepAfterRouteChange: true, autoClose: true });
-                this.goToApiaryFamilies();
+                this.apiaryservice.getById(this.form.get('apiaryId').value).subscribe(() => {
+                    this.alertService.success('Avilys sėkmingai apgyvendintas', { keepAfterRouteChange: true, autoClose: true });
+                    this.goToApiaryFamilies();
+                })
+                .add(() => this.loading = false);
             })
-            .add(() => this.loading = false);
     }
 
     backToBeeFamiliesList() {

@@ -24,6 +24,7 @@ export class LayoutComponent {
     }
 
     ngOnInit() {
+        this.beehiveService.clearBeehive();
         this.beefamilyService.family.subscribe(beefamily => {
             this.beefamily = beefamily;
             this.apiaryFamilyService.apiaryFamily.subscribe(apiaryFamily => {
