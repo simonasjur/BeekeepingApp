@@ -9,6 +9,7 @@ import { AddApiaryBeehiveDialog } from './add-apiary-beehive-dialog.component';
 import { FarmService } from '../_services/farm.service';
 import { ApiaryService } from '../_services/apiary.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { BeehiveService } from '../_services/beehive.service';
 
 @Component({
     selector: 'beefamily-list',
@@ -26,10 +27,11 @@ export class ListComponent implements OnInit {
     //showEmptyBeehives: boolean;
     firstTableDisplayedColumns: string[] = ['id', 'state', 'origin', 'arriveDate', 'action'];
 
-    constructor(//private beehiveService: BeeFamilyService,
+    constructor(private beehiveService: BeehiveService,
                 private apiaryBeehiveService: ApiaryBeeFamilyService,
-                //private farmService: FarmService,
+                private apiaryBeefamilyService: ApiaryBeeFamilyService,
                 private apiaryService: ApiaryService,
+                private beefamilyService: BeeFamilyService,
                 //private formBuilder: FormBuilder,
                 //private router: Router,
                 private route: ActivatedRoute,
@@ -38,6 +40,11 @@ export class ListComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.beefamilyService.clearFamily();
+        this.apiaryBeehiveService.clearApiaryFamily();
+        this.beehiveService.clearBeehive();
+        this.apiaryBeefamilyService.clearApiaryFamily();
+
         this.apiaryId = this.route.snapshot.params['id'];
         /*this.apiarySelectForm = this.formBuilder.group({
             apiary: []

@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { Beehive, BeehiveComponentType, BeehiveTypes } from '../_models';
+import { ApiaryBeeFamily, BeeFamily, Beehive, BeehiveBeefamily, BeehiveComponentType, BeehiveTypes } from '../_models';
 import { BeehiveComponent, BeehiveComponentType2LabelMapping } from '../_models';
 import { AlertService } from '../_services/alert.service';
+import { ApiaryBeeFamilyService } from '../_services/apiary-beefamily.service';
+import { BeeFamilyService } from '../_services/beefamily.service';
 import { BeehiveComponentService } from '../_services/beehive-component.service';
+import { BeehiveBeefamilyService } from '../_services/beehive-family.service';
 import { BeehiveService } from '../_services/beehive.service';
 
 @Component({
@@ -15,26 +18,42 @@ import { BeehiveService } from '../_services/beehive.service';
 export class BeehiveComponentsListComponent implements OnInit {
     beehiveComponents: BeehiveComponent[];
     beehive: Beehive;
+    beefamily: BeeFamily;
+    beehiveBeefamily: BeehiveBeefamily;
+    apiaryBeefamily: ApiaryBeeFamily;
     loading = true;
 
     displayedColumns = ['position', 'type', 'insertDate', 'action'];
 
     constructor(private beehiveComponentService: BeehiveComponentService,
                 private beehiveService: BeehiveService,
+                private beefamilyService: BeeFamilyService,
+                private beehiveFamilyService: BeehiveBeefamilyService,
+                private apiaryFamilyService: ApiaryBeeFamilyService,
                 private alertService: AlertService,
                 private route: ActivatedRoute) {
     }
 
     ngOnInit() {
-        //this.route.snapshot.params['beehiveId']
-        this.beehiveComponentService.getBeehiveComponents(this.route.snapshot.params['beehiveId'])
-            .subscribe({
-                next: beehiveComponents => {
-                    this.beehiveComponents = beehiveComponents;
-                    this.loading = false;
-                }});
-        this.beehiveService.getById(this.route.snapshot.params['beehiveId'])
-            .subscribe(beehive => this.beehive = beehive);
+        const id = this.route.snapshot.params['id'];
+        
+        this.beefamilyService.getById(id).subscribe(beefamily => {
+            this.beefamily = beefamily;
+            this.beehiveFamilyService.getBeefamilyBeehive(beefamily.id).subscribe(beehiveBeefamilies => {
+                this.beehiveBeefamily = beehiveBeefamilies[0];
+                this.beehiveService.getById(this.beehiveBeefamily.beehiveId).subscribe(beehive => {
+                    this.beehive = beehive;
+                    this.apiaryFamilyService.getBeefamilyApiaries(this.beefamily.id).subscribe(apiaryFamily => {
+                        this.apiaryBeefamily = apiaryFamily[0];
+                        this.beehiveComponentService.getBeehiveComponents(this.beehive.id).subscribe({
+                            next: beehiveComponents => {
+                                this.beehiveComponents = beehiveComponents;
+                                this.loading = false;
+                        }});
+                    });
+                });
+            });
+        })
     }
     
     get beehiveComponentType2LabelMapping() {

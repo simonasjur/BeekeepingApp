@@ -4,12 +4,23 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Beehive, BeehiveTypes } from '../_models'
 import { map } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 const baseUrl = `${environment.apiUrl}`;
 
 @Injectable({ providedIn: 'root' })
 export class BeehiveService {
-    constructor(private http: HttpClient) { }
+    private beehiveSubject: BehaviorSubject<Beehive>;
+    public beehive: Observable<Beehive>;
+
+    constructor(private http: HttpClient) { 
+        this.beehiveSubject = new BehaviorSubject<Beehive>(null);
+        this.beehive = this.beehiveSubject.asObservable();
+    }
+
+    clearBeehive() {
+        this.beehiveSubject.next(null);
+    }
 
     getFarmAllBeehives(farmId: number) {
         return this.http.get<Beehive[]>(`${baseUrl}/farms/${farmId}/beehives`).pipe (
@@ -22,7 +33,11 @@ export class BeehiveService {
     }*/
 
     getById(id: number) {
-        return this.http.get<Beehive>(`${baseUrl}/beehives/${id}`);
+        return this.http.get<Beehive>(`${baseUrl}/beehives/${id}`)
+        .pipe(map(beehive => {
+            this.beehiveSubject.next(beehive);
+            return beehive;
+        }));
     }
 
     create(params: any) {

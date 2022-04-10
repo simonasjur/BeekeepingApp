@@ -4,12 +4,27 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { BeeFamily } from '../_models'
 import { map } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 const baseUrl = `${environment.apiUrl}`;
 
 @Injectable({ providedIn: 'root' })
 export class BeeFamilyService {
-    constructor(private http: HttpClient) { }
+    private familySubject: BehaviorSubject<BeeFamily>;
+    public family: Observable<BeeFamily>;
+
+    constructor(private http: HttpClient) {
+        this.familySubject = new BehaviorSubject<BeeFamily>(null);
+        this.family = this.familySubject.asObservable();
+    }
+
+    public get familyValue(): BeeFamily {
+        return this.familySubject.value;
+    }
+
+    clearFamily() {
+        this.familySubject.next(null);
+    }
 
     getFarmAllBeeFamilies(farmId: number) {
         return this.http.get<BeeFamily[]>(`${baseUrl}/farms/${farmId}/beeFamilies`);
@@ -21,7 +36,11 @@ export class BeeFamilyService {
     }*/
 
     getById(id: number) {
-        return this.http.get<BeeFamily>(`${baseUrl}/beeFamilies/${id}`);
+        return this.http.get<BeeFamily>(`${baseUrl}/beeFamilies/${id}`)
+        .pipe(map(family => {
+            this.familySubject.next(family);
+            return family;
+        }));
     }
 
     create(params: any) {

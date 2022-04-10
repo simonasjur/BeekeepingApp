@@ -10,7 +10,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-
+import {MatChipsModule} from '@angular/material/chips';
 
 import { LayoutComponent } from './layout.component';
 import { BeehiveComponentsRoutingModule } from './beehive-components-routing.module';
@@ -31,7 +31,8 @@ import { AddEditComponent } from './add-edit.component';
         MatDatepickerModule,
         MatTableModule,
         MatButtonModule,
-        MatProgressSpinnerModule
+        MatProgressSpinnerModule,
+        MatChipsModule
     ],
     declarations: [
         LayoutComponent,
