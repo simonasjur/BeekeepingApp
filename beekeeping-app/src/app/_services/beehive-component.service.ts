@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { environment } from '../../environments/environment';
-import {  } from '../_models'
 import { map } from 'rxjs/operators';
 import { BeehiveComponent } from '../_models/beehive-component';
 

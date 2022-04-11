@@ -9,6 +9,7 @@ const apiariesModule = () => import('../apiaries/apiaries.module').then(x => x.A
 const todosModule = () => import('../todos/todo.module').then(x => x.TodoModule);
 const harvestsModule = () => import('../harvests/harvests.module').then(x => x.HarvestsModule);
 const beehivesModule = () => import('../beehives/beehives.module').then(x => x.BeehivesModule);
+const queensModule = () => import('../queens/queens.module').then(x => x.QueensModule);
 
 const routes: Routes = [
     {
@@ -19,7 +20,8 @@ const routes: Routes = [
             { path: 'apiaries', loadChildren: apiariesModule, canActivate: [AuthGuard] },
             { path: 'todos', loadChildren: todosModule, canActivate: [AuthGuard] },
             { path: 'harvests', loadChildren: harvestsModule, canActivate: [AuthGuard] },
-            { path: 'beehives', loadChildren: beehivesModule, canActivate: [AuthGuard] }
+            { path: 'beehives', loadChildren: beehivesModule, canActivate: [AuthGuard] },
+            { path: 'queens', loadChildren: queensModule, canActivate: [AuthGuard] }
         ]
     }
     

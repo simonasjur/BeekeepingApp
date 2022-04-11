@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ApiaryBeeFamily, BeeFamily, BeeFamilyOrigin2LabelMapping, BeeFamilyState2LabelMapping, Beehive, BeehiveBeefamily, BeehiveType2LabelMapping, Color2LabelMapping } from '../_models';
+import { ApiaryBeeFamily, BeeFamily, BeeFamilyOrigin2LabelMapping, BeefamilyQueen, BeeFamilyState2LabelMapping, Beehive, BeehiveBeefamily, BeehiveType2LabelMapping, Breed, Breed2LabelMapping, Color2LabelMapping } from '../_models';
 import { ApiaryBeeFamilyService } from '../_services/apiary-beefamily.service';
 import { ApiaryService } from '../_services/apiary.service';
+import { BeefamilyQueenService } from '../_services/beefamily-queen.service';
 import { BeeFamilyService } from '../_services/beefamily.service';
 import { BeehiveBeefamilyService } from '../_services/beehive-family.service';
 import { BeehiveService } from '../_services/beehive.service';
@@ -18,18 +19,21 @@ export class HomeComponent implements OnInit {
     beehive: Beehive;
     beehiveBeefamily: BeehiveBeefamily;
     apiaryBeefamily: ApiaryBeeFamily;
+    beefamilyQueen: BeefamilyQueen;
+    queenBreed: Breed;
     expandPercent: number;
     beefamilies = [];
     loading = true;
 
-    beefamilyTableColumns: string[] = ['apiary', 'origin', 'state', 'food'];
+    beefamilyTableColumns: string[] = ['apiary', 'origin', 'state', 'queen'];
 
     constructor(private route: ActivatedRoute,
         private beefamilyService: BeeFamilyService,
         private beehiveService: BeehiveService,
         private beehiveFamilyService: BeehiveBeefamilyService,
         private apiaryFamilyService: ApiaryBeeFamilyService,
-        private apiaryService: ApiaryService) {
+        private apiaryService: ApiaryService,
+        private beefamilyQueenService: BeefamilyQueenService) {
     }
 
     ngOnInit() {
@@ -41,20 +45,28 @@ export class HomeComponent implements OnInit {
                 this.beehiveBeefamily = beehiveBeefamilies[0];
                 this.apiaryFamilyService.getBeefamilyApiaries(beefamily.id).subscribe(apiaryFamilies => {
                     this.apiaryBeefamily = apiaryFamilies[0];
-                    this.beehiveService.getById(this.beehiveBeefamily.beehiveId).subscribe(beehive => {
-                        this.beehive = beehive;
-                        if (this.beehive.nestCombs != null) {
-                            this.expandPercent = Math.round((this.beehive.nestCombs / this.beehive.maxNestCombs) * 100);
+                    this.beefamilyQueenService.getLivingBeefamilyQueen(this.id).subscribe(beefamilyQueen => {
+                        if (beefamilyQueen.length > 0)
+                        {
+                            this.beefamilyQueen = beefamilyQueen[0];
+                            this.queenBreed = beefamilyQueen[0].queen.breed;
                         }
-                        this.beefamilies = [
-                            {
-                                apiary: this.apiaryBeefamily.apiary,
-                                origin: this.beefamily.origin,
-                                state: this.beefamily.state,
-                                food: this.beefamily.requiredFoodForWinter
+                        this.beehiveService.getById(this.beehiveBeefamily.beehiveId).subscribe(beehive => {
+                            this.beehive = beehive;
+                            if (this.beehive.nestCombs != null) {
+                                this.expandPercent = Math.round((this.beehive.nestCombs / this.beehive.maxNestCombs) * 100);
                             }
-                        ];
-                        this.loading = false;
+                            this.beefamilies = [
+                                {
+                                    apiary: this.apiaryBeefamily.apiary,
+                                    origin: this.beefamily.origin,
+                                    state: this.beefamily.state,
+                                    food: this.beefamily.requiredFoodForWinter,
+                                    breed: this.queenBreed
+                                }
+                            ];
+                            this.loading = false;
+                        })
                     })
                 })
             });
@@ -77,5 +89,9 @@ export class HomeComponent implements OnInit {
 
     get color2LabelMapping() {
         return Color2LabelMapping;
+    }
+
+    get breed2LabelMapping() {
+        return Breed2LabelMapping;
     }
 }
