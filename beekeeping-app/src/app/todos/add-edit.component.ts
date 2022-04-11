@@ -45,7 +45,7 @@ export class AddEditComponent implements OnInit {
             next: beeFamilies => {
                 this.beeFamilies = beeFamilies
                 beeFamilies.forEach(beefamily => this.beehiveBeeFamilyService.getBeefamilyBeehive(beefamily.id)
-                                .subscribe(beehiveBeeFamily => beehiveBeeFamily.forEach(e => this.beehiveBeefamilies.push(e))));
+                    .subscribe(beehiveBeeFamily => this.beehiveBeefamilies = [...this.beehiveBeefamilies, ...beehiveBeeFamily]));
             }
         });
 

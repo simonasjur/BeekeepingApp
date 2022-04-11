@@ -1,0 +1,90 @@
+<h1 *ngIf="isAddMode">Pridėti naują kopimą</h1>
+<h1 *ngIf="!isAddMode && harvest">Atnaujinti kopimą</h1>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <div class="form-fields">
+        <!-- <mat-form-field appearance="fill">
+            <mat-label>Pavadinimas</mat-label>
+            <input matInput formControlName="title">
+            <mat-error *ngIf="submitted && f.title.errors && f.title.errors.required">
+                Pavadinimas yra privalomas
+            </mat-error>
+        </mat-form-field> -->
+
+        <!-- <div class="category">
+            <h3 class="category-title">Kategorija</h3>
+            <mat-selection-list #categories [multiple]="false">
+                <div class="category-selection-list">
+                    <mat-list-option *ngFor="let category of typesOfCategories, let i = index" 
+                    [selected]="category && i == selectedCategoryIndex" [value]="category">
+                        {{category}}
+                    </mat-list-option>
+                </div>
+            </mat-selection-list>
+            <div *ngIf="beehiveBeefamilies && categories.selectedOptions.selected[0]?.value === 'Avilys'">
+                <mat-form-field *ngIf="beehiveBeefamilies.length != 0" appearance="fill">
+                    <mat-label>Pasirinkite šeimą</mat-label>
+                    <mat-select formControlName="beeFamilyId">
+                    <mat-option *ngFor="let beehiveBeeFamily of beehiveBeefamilies" [value]="beehiveBeeFamily.beeFamilyId">
+                        {{beehiveBeeFamily.beehive.no}}
+                    </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <div *ngIf="beehiveBeefamilies.length == 0">Jūs neturite šeimų</div>
+            </div>
+            <div *ngIf="apiaries && categories.selectedOptions.selected[0]?.value === 'Bitynas'">
+                <mat-form-field *ngIf="apiaries.length != 0" appearance="fill">
+                    <mat-label>Pasirinkite bityną</mat-label>
+                    <mat-select formControlName="apiaryId">
+                    <mat-option *ngFor="let apiary of apiaries" [value]="apiary.id">
+                        {{apiary.name}}
+                    </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <div *ngIf="apiaries.length == 0">Jūs neturite bitynų</div>
+            </div>
+        </div> -->
+
+        <!-- <mat-checkbox [(ngModel)]="checked" formControlName="isComplete">Ar atlikta?</mat-checkbox>
+
+        <div class="date-field">
+            <mat-form-field appearance="fill">
+                <mat-label>Iki kada?</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="dueDate">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                <mat-error *ngIf="submitted && f.dueDate.errors">
+                    Neteisingas datos formatas
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="priority-field">
+            <mat-form-field appearance="fill">
+                <mat-label>Prioritetas</mat-label>
+                <mat-select formControlName="priority">
+                    <mat-option [value]="priority" *ngFor="let priority of todoPriorities">
+                        {{ todoItemPriority2LabelMapping[priority] }}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="submitted && f.priority.errors">
+                    Šis laukas yra būtinas
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="fill">
+            <mat-label>Aprašymas</mat-label>
+            <textarea matInput formControlName="description"></textarea>
+        </mat-form-field> -->
+
+    </div>
+    <div class="form-group">
+        <button mat-flat-button color="accent" [disabled]="loading">
+            Išsaugoti
+            <mat-icon *ngIf="loading"><mat-spinner diameter="20" color="accent">
+            </mat-spinner></mat-icon>
+        </button>
+        <a routerLink="/todos" class="btn btn-link">Atšaukti</a>
+    </div>
+</form>

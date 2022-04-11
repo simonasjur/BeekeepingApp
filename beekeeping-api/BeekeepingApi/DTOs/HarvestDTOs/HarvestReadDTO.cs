@@ -15,5 +15,6 @@ namespace BeekeepingApi.DTOs.HarvestDTOs
         public double Quantity { get; set; }
         public long FarmId { get; set; }
         public long ApiaryId { get; set; }
+        public long BeeFamilyId { get; set; }
     }
 }

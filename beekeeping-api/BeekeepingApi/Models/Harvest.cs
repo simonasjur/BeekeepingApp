@@ -40,5 +40,10 @@ namespace BeekeepingApi.Models
 
         [ForeignKey("ApiaryId")]
         public Apiary Apiary { get; set; }
+
+        public long? BeeFamilyId { get; set; }
+
+        [ForeignKey("BeeFamilyId")]
+        public BeeFamily BeeFamily { get; set; }
     }
 }

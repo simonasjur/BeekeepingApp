@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { catchError, first, map, startWith, switchMap } from 'rxjs/operators';
-import { Apiary, BeeFamily, Farm, TodoItem, TodoItemPriority2LabelMapping, User } from '../_models';
+import { Apiary, BeeFamily, Farm, Harvest, TodoItem, TodoItemPriority2LabelMapping, User } from '../_models';
 
 import { FarmService } from '../_services/farm.service';
 import { UserService } from '../_services/user.service';
@@ -13,31 +13,17 @@ import { Observable, merge, of as observableOf } from 'rxjs';
 import { ApiaryService } from '../_services/apiary.service';
 import { BeeFamilyService } from '../_services/beefamily.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { HarvestService } from '../_services/harvest.service';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({ templateUrl: 'list.component.html'})
 export class ListComponent {
-    user: User;
-    farm: Farm;
-    itemsPerPage: number;
-    pageNumber:number;
-    totalItems:number;
-    loading: boolean = true;
-    resultsLength = 0;
-    resultsLengthCompleted = 0;
-    filteredAndPagedTodos: Observable<TodoItem[]>;
-    filteredAndPagedTodosCompleted: Observable<TodoItem[]>;
-    beeFamilies: BeeFamily[];
-    apiaries: Apiary[];
-    expandedElement: TodoItem | null;
+    dataSource: MatTableDataSource<Harvest>;
+    harvests: Harvest[];
 
-    public displayedColumns = ['priority', 'title', 'dueDate', 'category', 'action'];
+    public displayedColumns = ['id', 'product', 'startDate', 'endDate'];
 
-    @ViewChild('firstSort') firstSort: MatSort;
-    @ViewChild('secondSort') secondSort: MatSort;
-    @ViewChild('firstPaginator') firstPaginator: MatPaginator;
-    @ViewChild('secondPaginator') secondPaginator: MatPaginator;
-
-    constructor(private todoService: TodoService,
+    constructor(private harvestService: HarvestService,
                 private farmService: FarmService,
                 private userService: UserService,
                 private apiaryService: ApiaryService,
@@ -45,6 +31,12 @@ export class ListComponent {
                 private alertService: AlertService,
                 private router: Router,
                 private route: ActivatedRoute) {
-                    
                 }
+    
+    ngOnInit() {
+        this.harvestService.getFarmAllHarvests(this.farmService.farmValue.id).subscribe(harvests => {
+            this.harvests = harvests;
+            this.dataSource = new MatTableDataSource(harvests);
+        });
+    }
 }
