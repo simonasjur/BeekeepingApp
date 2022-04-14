@@ -2,6 +2,19 @@
 <h1 *ngIf="!isAddMode">Atnaujinti motinėlę</h1>
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <div class="form-fields">
+        <mat-form-field *ngIf="beehiveBeefamily">
+            <mat-label>Avilio nr.</mat-label>
+            <input matInput formControlName="beehiveNo">   
+        </mat-form-field>
+        <mat-form-field appearance="fill" *ngIf="beehiveBeefamily">
+            <mat-label>Įdėjimo į avilį data</mat-label>
+            <input matInput [matDatepicker]="insertPicker" formControlName="insertDate">
+            <mat-datepicker-toggle matSuffix [for]="insertPicker"></mat-datepicker-toggle>
+            <mat-datepicker #insertPicker></mat-datepicker>
+            <mat-error *ngIf="submitted && f.insertDate.errors">
+                Neteisingas datos formatas
+            </mat-error>
+        </mat-form-field>
         <mat-form-field>
             <mat-label>Veislė</mat-label>
             <mat-select formControlName="breed">
@@ -15,10 +28,13 @@
         </mat-form-field>
         <mat-form-field>
             <mat-label>Būsena</mat-label>
-            <mat-select formControlName="state" #stateField>
-                <mat-option *ngFor="let state of queenStateNames" [value]="state">
-                    {{queenState2LabelMapping[state]}}
-                </mat-option>
+            <mat-select formControlName="state" #stateField [disabled]="isStateDisabled()">
+                <mat-option [value]="1" *ngIf="isCellStatePosible()">{{queenState2LabelMapping[1]}}</mat-option>
+                <mat-option [value]="2" *ngIf="isLvingInBeehiveStatePosible()">{{queenState2LabelMapping[2]}}</mat-option>
+                <mat-option [value]="8" *ngIf="isIsolatedStatePosible()">{{queenState2LabelMapping[8]}}</mat-option>
+                <mat-option [value]="16" *ngIf="isSelledDeadStatesPosible()">{{queenState2LabelMapping[16]}}</mat-option>
+                <mat-option [value]="32" *ngIf="isSwarmedStatePosible()">{{queenState2LabelMapping[32]}}</mat-option>
+                <mat-option [value]="64" *ngIf="isSelledDeadStatesPosible()">{{queenState2LabelMapping[64]}}</mat-option>
             </mat-select>
             <mat-error *ngIf="submitted && f.state.errors">
                 <p *ngIf="f.state.errors.required">Šis laukas yra būtinas</p>

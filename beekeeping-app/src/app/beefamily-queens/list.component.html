@@ -1,0 +1,83 @@
+<mat-tab-group>
+    <mat-tab label="Esama motinėlė">
+        <div>
+            <div class="example-loading-shade" *ngIf="loading">
+                <mat-spinner *ngIf="loading" color="accent"></mat-spinner>
+            </div>
+            <mat-card *ngIf="familyQueen">
+                <mat-card-title>
+                    Šeimos motinėlė
+                    <button mat-icon-button>
+                        <mat-icon routerLink="/apiaries/{{apiaryId}}/beefamilies/{{beefamilyId}}/queens/edit/{{familyQueen.queenId}}">edit</mat-icon>
+                    </button>
+                </mat-card-title>
+                <mat-card-content>
+                    <div class="beehive-info">
+                        <div class="info-section">
+                            <p *ngIf="familyQueen.queen.isFertilized" [ngStyle]="{'color': 'green'}">Apsivaisinusi</p>
+                            <p *ngIf="!familyQueen.queen.isFertilized" [ngStyle]="{'color': 'red'}">Neapsivaisinusi</p>
+                            <p>Veislė: {{breed2LabelMapping[familyQueen.queen.breed]}}</p>
+                            <p>Būsena: {{queenState2LabelMapping[familyQueen.queen.state]}}</p>
+                            <p>Išsiritimo data: 
+                                <span *ngIf="familyQueen.queen.hatchingDate">{{familyQueen.queen.hatchingDate | date:'yyyy-MM-dd'}}</span>
+                                <span *ngIf="!familyQueen.queen.hatchingDate">-</span>
+                            </p>
+                            <p>Pažymėjimo spalva:
+                                <span *ngIf="familyQueen.queen.markingColor">{{color2LabelMapping[familyQueen.queen.markingColor]}}</span>
+                                <span *ngIf="!familyQueen.queen.markingColor">-</span>
+                            </p>
+                            <p>Pradėjo dėti kiaušinius: 
+                                <span *ngIf="familyQueen.queen.broodStartDate">{{familyQueen.queen.broodStartDate | date:'yyyy-MM-dd'}}</span>
+                                <span *ngIf="!familyQueen.queen.broodStartDate">-</span>
+                            </p>
+                            <p>Šeimoje nuo: {{familyQueen.insertDate | date:'yyyy-MM-dd'}}</p>
+                            <button mat-raised-button color="accent" routerLink="">Išimti motinėlę</button>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </mat-tab>
+
+    <mat-tab label="Šeimos motinėlių istorija">
+        <table mat-table [dataSource]="beefamilyQueens" width="100%">
+            <ng-container matColumnDef="breed">
+                <th mat-header-cell *matHeaderCellDef>Veislė</th>
+                <td mat-cell *matCellDef="let element">{{breed2LabelMapping[element.queen.breed]}}</td>
+            </ng-container>
+            <ng-container matColumnDef="hatchingDate">
+                <th mat-header-cell *matHeaderCellDef>Išsiritimo data</th>
+                <td mat-cell *matCellDef="let element">{{element.queen.hatchingDate | date:'yyyy-MM-dd'}}</td>
+            </ng-container>
+            <ng-container matColumnDef="markingColor">
+                <th mat-header-cell *matHeaderCellDef>Spalva</th>
+                <td mat-cell *matCellDef="let element">{{color2LabelMapping[element.queen.markingColor]}}</td>
+            </ng-container>
+            <ng-container matColumnDef="insertDate">
+                <th mat-header-cell *matHeaderCellDef>Įdėjimo data</th>
+                <td mat-cell *matCellDef="let element">{{element.insertDate | date:'yyyy-MM-dd'}}</td>
+            </ng-container>
+            <ng-container matColumnDef="takeOutDate">
+                <th mat-header-cell *matHeaderCellDef>Išėmimo data</th>
+                <td mat-cell *matCellDef="let element">{{element.takeOutDate | date:'yyyy-MM-dd'}}</td>
+            </ng-container>
+            <ng-container matColumnDef="state">
+                <th mat-header-cell *matHeaderCellDef>Būsena</th>
+                <td mat-cell *matCellDef="let element">{{queenState2LabelMapping[element.queen.state]}}</td>
+            </ng-container>
+            <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef>Veiksmas</th>
+                <td mat-cell *matCellDef="let element">
+                    <button mat-icon-button >
+                        <mat-icon routerLink="edit/{{element.id}}">edit</mat-icon>
+                    </button>
+                    <button mat-icon-button (click)="deleteBeehive(element.id)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </mat-tab>   
+</mat-tab-group>

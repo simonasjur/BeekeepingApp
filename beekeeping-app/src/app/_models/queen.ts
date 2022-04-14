@@ -13,22 +13,22 @@ export class Queen {
 
 export enum QueenState {
     Cell = 1,
-    GyvenaAvilyje = 2,
-    PriduodamaŠeimai = 4,
-    IzoliuotaNarvelyje = 8,
-    Parduota = 16,
-    Išsispietusi = 32,
-    Numirusi = 64
+    LvingInBeehive = 2,
+   // PriduodamaŠeimai = 4, //kol kas nenaudojama
+    Isolated = 8,
+    Selled = 16,
+    Swarmed = 32,
+    Dead = 64
 }
 
 export const QueenState2LabelMapping: Record<QueenState, string> = {
     [QueenState.Cell]: "Lopšys",
-    [QueenState.GyvenaAvilyje]: "Gyvena avilyje",
-    [QueenState.PriduodamaŠeimai]: "Priduodama šeimai",
-    [QueenState.IzoliuotaNarvelyje]: "Izoliuota narvelyje",
-    [QueenState.Parduota]: "Parduota",
-    [QueenState.Išsispietusi]: "Išsispietusi",
-    [QueenState.Numirusi]: "Numirusi"
+    [QueenState.LvingInBeehive]: "Gyvena avilyje",
+//    [QueenState.PriduodamaŠeimai]: "Priduodama šeimai",
+    [QueenState.Isolated]: "Izoliuota narvelyje",
+    [QueenState.Selled]: "Parduota",
+    [QueenState.Swarmed]: "Išsispietusi",
+    [QueenState.Dead]: "Numirusi"
 };
 
 export enum Breed {

@@ -20,7 +20,7 @@ export class QueenService {
     }
 
     create(params: any) {
-        return this.http.post(`${baseUrl}/queens`, params);
+        return this.http.post<Queen>(`${baseUrl}/queens`, params);
     }
 
     update(id: number, params: any) {

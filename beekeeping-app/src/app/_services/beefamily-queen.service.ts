@@ -27,6 +27,10 @@ export class BeefamilyQueenService {
         return this.http.get<BeefamilyQueen[]>(`${baseUrl}/beefamilies/${beefamilyId}/beefamilyQueens?$filter=takeOutDate eq null`);
     }
 
+    getBeefamilyQueens(beefamilyId: number) {
+        return this.http.get<BeefamilyQueen[]>(`${baseUrl}/beefamilies/${beefamilyId}/beefamilyQueens`);
+    }
+
     /*getBeefamilyApiaries(beefamilyId: number) {
         return this.http.get<ApiaryBeeFamily[]>(`${baseUrl}/beeFamilies/${beefamilyId}/apiaryBeeFamilies?$filter=departDate eq null`)
         .pipe(map(apiaryFamilies => {
@@ -37,5 +41,9 @@ export class BeefamilyQueenService {
 
     create(params: any) {
         return this.http.post(`${baseUrl}/beefamilyQueens`, params);
+    }
+
+    update(id: number, params: any) {
+        return this.http.put(`${baseUrl}/beefamilyQueens/${id}`, params);
     }
 }
