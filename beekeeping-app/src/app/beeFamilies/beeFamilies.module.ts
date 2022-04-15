@@ -10,6 +10,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatMenuModule } from '@angular/material/menu'; 
 
 import { BeeFamiliesRoutingModule } from './beefamilies-routing.module';
 import { LayoutComponent } from './layout.component';
@@ -36,7 +37,8 @@ import {MatChipsModule} from '@angular/material/chips';
         MatButtonModule,
         MatProgressSpinnerModule,
         MatCardModule,
-        MatChipsModule
+        MatChipsModule,
+        MatMenuModule
     ],
     declarations: [
         LayoutComponent,

@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { BeefamilyQueen, Breed2LabelMapping, Color2LabelMapping, Queen, QueenState2LabelMapping } from '../_models';
+import { BeefamilyQueen, Breed2LabelMapping, Color2LabelMapping, Queen, QueenState, QueenState2LabelMapping } from '../_models';
 import { AlertService } from '../_services/alert.service';
 import { BeefamilyQueenService } from '../_services/beefamily-queen.service';
+import { FarmService } from '../_services/farm.service';
+import { QueenService } from '../_services/queen.service';
 
 @Component({
     selector: 'beefamily-queens-list',
@@ -14,12 +16,15 @@ export class ListComponent implements OnInit {
     beefamilyQueens: BeefamilyQueen[];
     familyQueen: BeefamilyQueen;
     beefamilyId: number;
+    isolatedFarmQueens: Queen[];
     loading = true;
     apiaryId: number;
 
     displayedColumns = ['breed', 'hatchingDate', 'markingColor', 'insertDate', 'takeOutDate', 'state', 'action'];
 
     constructor(private beefamilyQueenService: BeefamilyQueenService,
+                private queenService: QueenService,
+                private farmService: FarmService,
                 private alertService: AlertService,
                 private router: Router) {
     }
@@ -29,9 +34,12 @@ export class ListComponent implements OnInit {
         this.beefamilyQueenService.getBeefamilyQueens(this.beefamilyId)
             .subscribe({
                 next: beefamilyQueens => {
-                    this.beefamilyQueens = beefamilyQueens;
+                    this.beefamilyQueens = beefamilyQueens.sort((a, b) => a.insertDate > b.insertDate ? -1 : a.insertDate < b.insertDate ? 1 : 0);
                     this.familyQueen = beefamilyQueens.find(bq => !bq.takeOutDate);
-                    this.loading = false;
+                    this.queenService.getFarmQueens(this.farmService.farmValue.id).subscribe(queens => {
+                        this.isolatedFarmQueens = queens.filter(q => q.state === QueenState.Isolated);
+                        this.loading = false;
+                    });
                 },
                 error: () => {
                     this.backToHomeWithError();
@@ -63,21 +71,15 @@ export class ListComponent implements OnInit {
         return Color2LabelMapping;
     }
 
-    /*get beehiveType2LabelMapping() {
-        return BeehiveType2LabelMapping;
-    }*/
-
-    /*deleteBeehive(id: number): void {
-        this.beehiveService.delete(id).subscribe({
+    deleteBeefamilyQueen(id: number): void {
+        this.beefamilyQueenService.delete(id).subscribe({
             next: () => {
-                this.emptyBeehives = this.emptyBeehives.filter(x => x.id !== id);
-                this.alertService.success('Avilys sėkmingai ištrintas', { keepAfterRouteChange: true, autoClose: true });
+                this.beefamilyQueens = this.beefamilyQueens.filter(x => x.id !== id);
+                this.alertService.success('Šeimos motinėlės įrašas sėkmingai ištrintas', { keepAfterRouteChange: true, autoClose: true });
             },
             error: error => {
-                this.alertService.error(error);
+                this.alertService.error('Nepavyko ištrinti. Serverio klaida');
             }
         });
-    }*/
+    }
 }
-//Isemimas: nurodoma nauja busena motinos, data. Queen, beefamilyQueen
-//Idejimas turimos: nurodomas avilio numeris, pasirenkama motina is saraso, data

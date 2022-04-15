@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ApiaryBeeFamily, BeeFamily, BeeFamilyOrigin2LabelMapping, BeefamilyQueen, BeeFamilyState2LabelMapping, Beehive, BeehiveBeefamily, BeehiveType2LabelMapping, Breed, Breed2LabelMapping, Color2LabelMapping } from '../_models';
+import { ApiaryBeeFamily, BeeFamily, BeeFamilyOrigin2LabelMapping, BeefamilyQueen, BeeFamilyState2LabelMapping, Beehive, BeehiveBeefamily, BeehiveType2LabelMapping, Breed, Breed2LabelMapping, Color2LabelMapping, Queen, QueenState } from '../_models';
 import { ApiaryBeeFamilyService } from '../_services/apiary-beefamily.service';
 import { ApiaryService } from '../_services/apiary.service';
 import { BeefamilyQueenService } from '../_services/beefamily-queen.service';
 import { BeeFamilyService } from '../_services/beefamily.service';
 import { BeehiveBeefamilyService } from '../_services/beehive-family.service';
 import { BeehiveService } from '../_services/beehive.service';
+import { FarmService } from '../_services/farm.service';
+import { QueenService } from '../_services/queen.service';
 
 @Component({
     selector: 'beefamily-home',
@@ -23,6 +25,7 @@ export class HomeComponent implements OnInit {
     queenBreed: Breed;
     expandPercent: number;
     beefamilies = [];
+    isolatedFarmQueens: Queen[];
     loading = true;
 
     beefamilyTableColumns: string[] = ['apiary', 'origin', 'state', 'queen'];
@@ -33,7 +36,9 @@ export class HomeComponent implements OnInit {
         private beehiveFamilyService: BeehiveBeefamilyService,
         private apiaryFamilyService: ApiaryBeeFamilyService,
         private apiaryService: ApiaryService,
-        private beefamilyQueenService: BeefamilyQueenService) {
+        private beefamilyQueenService: BeefamilyQueenService,
+        private queenService: QueenService,
+        private farmService: FarmService) {
     }
 
     ngOnInit() {
@@ -65,7 +70,11 @@ export class HomeComponent implements OnInit {
                                     breed: this.queenBreed
                                 }
                             ];
-                            this.loading = false;
+                            
+                            this.queenService.getFarmQueens(this.farmService.farmValue.id).subscribe(queens => {
+                                this.isolatedFarmQueens = queens.filter(q => q.state === QueenState.Isolated);
+                                this.loading = false;
+                            });
                         })
                     })
                 })

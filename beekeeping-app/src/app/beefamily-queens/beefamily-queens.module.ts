@@ -14,12 +14,12 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatCardModule } from '@angular/material/card';
+import { MatMenuModule } from '@angular/material/menu'; 
 
 import { LayoutComponent } from './layout.component';
 import { BeefamilyQueensRoutingModule } from './beefamily-queens-routing.module';
 import { ListComponent } from './list.component';
-//import { AddEditComponent } from './add-edit.component';
-//import { BeehiveComponentsListComponent } from './list.component';
+import { AddEditComponent } from './add-edit.component';
 
 
 
@@ -40,12 +40,13 @@ import { ListComponent } from './list.component';
         MatChipsModule,
         MatCheckboxModule,
         MatTabsModule,
-        MatCardModule
+        MatCardModule,
+        MatMenuModule
     ],
     declarations: [
         LayoutComponent,
-        ListComponent
-//        AddEditComponent
+        ListComponent,
+        AddEditComponent
     ]
 })
 export class BeefamilyQueensModule { }

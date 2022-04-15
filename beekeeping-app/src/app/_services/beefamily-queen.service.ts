@@ -23,6 +23,10 @@ export class BeefamilyQueenService {
         this.apiaryFamilySubject.next(null);
     }*/
 
+    getById(id: number) {
+        return this.http.get<BeefamilyQueen>(`${baseUrl}/beefamilyQueens/${id}`);
+    }
+
     getLivingBeefamilyQueen(beefamilyId: number) {
         return this.http.get<BeefamilyQueen[]>(`${baseUrl}/beefamilies/${beefamilyId}/beefamilyQueens?$filter=takeOutDate eq null`);
     }
@@ -45,5 +49,9 @@ export class BeefamilyQueenService {
 
     update(id: number, params: any) {
         return this.http.put(`${baseUrl}/beefamilyQueens/${id}`, params);
+    }
+
+    delete(id: number) {
+        return this.http.delete(`${baseUrl}/beefamilyQueens/${id}`);
     }
 }

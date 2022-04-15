@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { environment } from '../../environments/environment';
-import { Queen } from '../_models'
+import { Queen, QueenState } from '../_models'
 import { map } from 'rxjs/operators';
 
 const baseUrl = `${environment.apiUrl}`;

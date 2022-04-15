@@ -44,6 +44,7 @@ namespace BeekeepingApi.Controllers
                 return Forbid();
             }
 
+            await _context.Entry(beefamilyQueen).Reference(fq => fq.Queen).LoadAsync();
             return _mapper.Map<BeeFamilyQueenReadDTO>(beefamilyQueen);
         }
 
