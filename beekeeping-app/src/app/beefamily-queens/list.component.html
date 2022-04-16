@@ -9,7 +9,7 @@
                 <h2>Motinėlės <span [ngStyle]="{'color': 'red'}">nėra</span></h2>
                 <button mat-raised-button color="accent" [matMenuTriggerFor]="menu" #menuTrigger>Įdėti motinėlę</button>
                 <mat-menu #menu="matMenu">
-                    <button mat-menu-item routerLink="add" [disabled]="!isolatedFarmQueens">Įdėti turimą</button>
+                    <button mat-menu-item routerLink="add" [disabled]="!havingIsolatedQueens()">Įdėti turimą</button>
                     <button mat-menu-item routerLink="../queens/add">Kurti naują</button>
                 </mat-menu>
 

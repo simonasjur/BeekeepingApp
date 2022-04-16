@@ -103,4 +103,8 @@ export class HomeComponent implements OnInit {
     get breed2LabelMapping() {
         return Breed2LabelMapping;
     }
+
+    havingIsolatedQueens() {
+        return !(!this.isolatedFarmQueens || this.isolatedFarmQueens.length === 0);
+    }
 }

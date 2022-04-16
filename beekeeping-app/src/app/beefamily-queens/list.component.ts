@@ -60,6 +60,10 @@ export class ListComponent implements OnInit {
         this.router.navigate(['/']);
     }
 
+    havingIsolatedQueens() {
+        return !(!this.isolatedFarmQueens || this.isolatedFarmQueens.length === 0);
+    }
+
     get breed2LabelMapping() {
         return Breed2LabelMapping;
     }
