@@ -23,6 +23,8 @@ export class AddEditComponent implements OnInit {
     isAddMode = true;
     submitted = false;
     loading = false;
+    addFormLoading = true;
+    editFormLoading = true;
 
     constructor(private beefamilyQueenService: BeefamilyQueenService,
                 private queenService: QueenService,
@@ -50,6 +52,7 @@ export class AddEditComponent implements OnInit {
                 next: beefamilyQueen => {
                     this.beefamilyQueen = beefamilyQueen;
                     this.form.patchValue(beefamilyQueen);
+                    this.editFormLoading = false;
                 },
                 error: () => {
                     this.alertService.error('Operacija negalima');
@@ -57,16 +60,19 @@ export class AddEditComponent implements OnInit {
                 }
             });
             this.form.controls['insertDate'].disable();
+            this.addFormLoading = false;
         } else {
             this.queenService.getFarmQueens(this.farmService.farmValue.id).subscribe({
                 next: queens => {
                     this.isolatedQueens = queens.filter(q => q.state === QueenState.Isolated);
+                    this.addFormLoading = false;
                 },
                 error: () => {
                     this.alertService.error('Operacija nesėkminga');
                     this.goBack();
                 }
             });
+            this.editFormLoading = false;
         }
     }
 

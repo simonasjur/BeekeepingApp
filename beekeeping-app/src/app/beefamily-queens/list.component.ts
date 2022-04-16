@@ -34,7 +34,8 @@ export class ListComponent implements OnInit {
         this.beefamilyQueenService.getBeefamilyQueens(this.beefamilyId)
             .subscribe({
                 next: beefamilyQueens => {
-                    this.beefamilyQueens = beefamilyQueens.sort((a, b) => a.insertDate > b.insertDate ? -1 : a.insertDate < b.insertDate ? 1 : 0);
+                    this.beefamilyQueens = beefamilyQueens.sort((a, b) => a.insertDate > b.insertDate ? -1 : a.insertDate < b.insertDate ? 1 : 0 ||
+                                                                          a.takeOutDate > b.takeOutDate ? -1 : a.takeOutDate < b.takeOutDate ? 1 : 0);
                     this.familyQueen = beefamilyQueens.find(bq => !bq.takeOutDate);
                     this.queenService.getFarmQueens(this.farmService.farmValue.id).subscribe(queens => {
                         this.isolatedFarmQueens = queens.filter(q => q.state === QueenState.Isolated);

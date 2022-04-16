@@ -18,7 +18,7 @@
                 <mat-card-title>
                     Šeimos motinėlė
                     <button mat-icon-button>
-                        <mat-icon routerLink="/apiaries/{{apiaryId}}/beefamilies/{{beefamilyId}}/queens/edit/{{familyQueen.queenId}}">edit</mat-icon>
+                        <mat-icon routerLink="/apiaries/{{apiaryId}}/beefamilies/{{beefamilyId}}/queens/edit/{{familyQueen.id}}">edit</mat-icon>
                     </button>
                 </mat-card-title>
                 <mat-card-content>
@@ -79,7 +79,7 @@
                 <th mat-header-cell *matHeaderCellDef>Veiksmas</th>
                 <td mat-cell *matCellDef="let element">
                     <button mat-icon-button >
-                        <mat-icon routerLink="/apiaries/{{apiaryId}}/beefamilies/{{beefamilyId}}/queens/edit/{{element.queenId}}">edit</mat-icon>
+                        <mat-icon routerLink="/apiaries/{{apiaryId}}/beefamilies/{{beefamilyId}}/queens/edit/{{element.id}}">edit</mat-icon>
                     </button>
                     <button mat-icon-button (click)="deleteBeefamilyQueen(element.id)" *ngIf="element.takeOutDate">
                         <mat-icon>delete</mat-icon>

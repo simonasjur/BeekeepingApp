@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControlOptions, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { DatesValidator } from '../_helpers/dates.validator';
 
 import { BeeFamily, BeefamilyQueen, BeehiveBeefamily, Breed, Breed2LabelMapping, Color2LabelMapping, Colors, Queen, QueenState, QueenState2LabelMapping } from '../_models';
 import { AlertService } from '../_services/alert.service';
@@ -25,6 +26,8 @@ export class AddEditComponent implements OnInit {
     submitted = false;
     loading = false;
     checked = false;
+    beehiveBeefamilyLoading = true;
+    beefamilyQueenLoading = true;
 
     constructor(private queenService: QueenService,
                 private farmService: FarmService,
@@ -37,9 +40,11 @@ export class AddEditComponent implements OnInit {
     }
 
     ngOnInit() {
+        const formOptions: AbstractControlOptions = { validators: DatesValidator('insertDate', 'takeOutDate') };
         this.form = this.formBuilder.group({
             beehiveNo: [''],
             insertDate: ['', Validators.required],
+            takeOutDate: ['', Validators.required],
             breed: ['', Validators.required],
             hatchingDate: [''],
             markingColor: [''],
@@ -47,8 +52,12 @@ export class AddEditComponent implements OnInit {
             broodStartDate: [''],
             state: ['', Validators.required],
             farmId: ['', Validators.required]
-        });
+        }, formOptions);
 
+        //this.id becomes:
+        // queen.id - if router.url started from queens
+        // beefamilyQueen.id - if router.url started from apiaries
+        //At the end this.id becomes queen.id
         this.id = this.route.snapshot.params['id'];
         const urlEntry = this.router.url.substring(1, 9);
 
@@ -67,6 +76,7 @@ export class AddEditComponent implements OnInit {
                         if (this.beehiveBeefamily) {
                             this.form.patchValue({beehiveNo: beehiveBeeFamily[0].beehive.no});
                             this.form.controls['beehiveNo'].disable();
+                            this.beehiveBeefamilyLoading = false;
                         } else {
                             this.backToHomeWithError();
                         } 
@@ -75,30 +85,34 @@ export class AddEditComponent implements OnInit {
                         this.backToHomeWithError();
                     }
                 });
+        } else {
+            this.beehiveBeefamilyLoading = false;
         }
 
         if (this.id !== undefined) {
             this.isAddMode = false;
             if (this.beefamilyId) {
-                this.beefamilyQueenService.getLivingBeefamilyQueen(this.beefamilyId)
-                    .subscribe({
-                        next: beefamilyQueens => {
-                            this.beefamilyQueen = beefamilyQueens[0];
-                            if (this.beefamilyQueen){
-                                this.id = this.beefamilyQueen.queenId;
-                                this.form.patchValue({insertDate: this.beefamilyQueen.insertDate});
-                                this.loadQueenData();
-                            } else {
-                                this.backToHomeWithError();
-                            }
-                        },
-                        error: () => {
+                this.beefamilyQueenService.getById(this.id).subscribe({
+                    next: beefamilyQueen => {
+                        this.beefamilyQueen = beefamilyQueen;
+                        if (this.beefamilyQueen){
+                            this.id = this.beefamilyQueen.queenId;
+                            this.form.patchValue({insertDate: this.beefamilyQueen.insertDate});
+                            this.form.patchValue({takeOutDate: this.beefamilyQueen.takeOutDate});
+                            this.loadQueenData();
+                        } else {
                             this.backToHomeWithError();
                         }
-                    });
+                    },
+                    error: () => {
+                        this.backToHomeWithError();
+                    }
+                });
             } else {
                 this.loadQueenData();
             }
+        } else {
+            this.beefamilyQueenLoading = false;
         }
     }
 
@@ -108,6 +122,7 @@ export class AddEditComponent implements OnInit {
             next: queen => {
                 this.form.patchValue(queen);
                 this.queen = queen;
+                this.beefamilyQueenLoading = false;
             },
             error: () => {
                 this.backToHomeWithError();
@@ -192,10 +207,19 @@ export class AddEditComponent implements OnInit {
             if (this.form.controls['isFertilized'].value === false) {
                 this.form.patchValue({broodStartDate: ''});
             }
+            //queens/edit add insert/takeOut
             if (!this.beehiveBeefamily) {
                 this.form.patchValue({insertDate: '2000-01-01'});
+                this.form.patchValue({takeOutDate: '2000-01-01'});
+            }
+            //beefamilies/add add takeOut
+            //beefamilies/edit add takeOut, if there is no takeOut
+            if (!this.beefamilyQueen || !this.beefamilyQueen.takeOutDate) {
+                this.form.patchValue({takeOutDate: this.form.controls['insertDate'].value});
             }
         }
+        
+        
    
         this.submitted = true;
         
@@ -204,6 +228,10 @@ export class AddEditComponent implements OnInit {
         }
       
         this.loading = true;
+
+        if (!this.beefamilyQueen || !this.beefamilyQueen.takeOutDate) {
+            this.form.patchValue({takeOutDate: null});
+        }
        
         if (this.isAddMode) {
             this.createQueen();
@@ -249,7 +277,8 @@ export class AddEditComponent implements OnInit {
                 if (this.beefamilyQueen) {
                     const familyQueen = {
                         id: this.beefamilyQueen.id,
-                        insertDate: this.form.controls['insertDate'].value
+                        insertDate: this.form.controls['insertDate'].value,
+                        takeOutDate: this.form.controls['takeOutDate'].value
                     }
                     this.beefamilyQueenService.update(this.beefamilyQueen.id, familyQueen).subscribe({
                         next: () => {

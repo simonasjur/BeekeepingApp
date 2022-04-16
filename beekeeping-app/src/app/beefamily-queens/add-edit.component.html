@@ -1,55 +1,60 @@
 <h1 *ngIf="isAddMode">Įdėti motinėlę</h1>
 <h1 *ngIf="!isAddMode">Išimti motinėlę</h1>
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <div class="form-fields">
-        <mat-form-field *ngIf="isAddMode">
-            <mat-label>Motinėlė</mat-label>
-            <mat-select formControlName="queen">
-                <mat-option *ngFor="let queen of isolatedQueens" [value]="queen">
-                    {{breed2LabelMapping[queen.breed]}} {{queen.hatchingDate | date:'yyyy-MM-dd'}}
-                </mat-option>
-            </mat-select>
-            <mat-error *ngIf="submitted && f.queen.errors">
-                Šis laukas yra būtinas
-            </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-            <mat-label>Įdėjimo data</mat-label>
-            <input matInput [matDatepicker]="insertDatePicker" formControlName="insertDate">
-            <mat-datepicker-toggle matSuffix [for]="insertDatePicker"></mat-datepicker-toggle>
-            <mat-datepicker #insertDatePicker></mat-datepicker>
-            <mat-error *ngIf="submitted && f.insertDate.errors">
-                Neteisingas datos formatas
-            </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="fill" *ngIf="!isAddMode">
-            <mat-label>Išėmimo data</mat-label>
-            <input matInput [matDatepicker]="takeOutDatePicker" formControlName="takeOutDate">
-            <mat-datepicker-toggle matSuffix [for]="takeOutDatePicker"></mat-datepicker-toggle>
-            <mat-datepicker #takeOutDatePicker></mat-datepicker>
-            <mat-error *ngIf="submitted && f.takeOutDate.errors">
-                Neteisinga data
-            </mat-error>
-        </mat-form-field>
-        <mat-form-field *ngIf="!isAddMode">
-            <mat-label>Nauja motinėlės būsena</mat-label>
-            <mat-select formControlName="state">
-                <mat-option [value]="8">{{queenState2LabelMapping[8]}}</mat-option>
-                <mat-option [value]="16">{{queenState2LabelMapping[16]}}</mat-option>
-                <mat-option [value]="32">{{queenState2LabelMapping[32]}}</mat-option>
-                <mat-option [value]="64">{{queenState2LabelMapping[64]}}</mat-option>
-            </mat-select>
-            <mat-error *ngIf="submitted && f.state.errors">
-                Šis laukas yra būtinas
-            </mat-error>
-        </mat-form-field>
-    </div>
-    <div class="form-group">
-        <button mat-flat-button color="accent" [disabled]="loading">
-            Išsaugoti
-            <mat-icon *ngIf="loading"><mat-spinner color="accent" diameter="20">
-            </mat-spinner></mat-icon>
-        </button>
-        <a mat-stroked-button (click)="goBack()">Atšaukti</a>
-    </div>
-</form>
+<div class="example-loading-shade" *ngIf="addFormLoading || editFormLoading">
+    <mat-spinner *ngIf="addFormLoading || editFormLoading" color="accent"></mat-spinner>
+</div>
+<div *ngIf="!addFormLoading && !editFormLoading">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="form-fields">
+            <mat-form-field *ngIf="isAddMode">
+                <mat-label>Motinėlė</mat-label>
+                <mat-select formControlName="queen">
+                    <mat-option *ngFor="let queen of isolatedQueens" [value]="queen">
+                        {{breed2LabelMapping[queen.breed]}} {{queen.hatchingDate | date:'yyyy-MM-dd'}}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="submitted && f.queen.errors">
+                    Šis laukas yra būtinas
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>Įdėjimo data</mat-label>
+                <input matInput [matDatepicker]="insertDatePicker" formControlName="insertDate">
+                <mat-datepicker-toggle matSuffix [for]="insertDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #insertDatePicker></mat-datepicker>
+                <mat-error *ngIf="submitted && f.insertDate.errors">
+                    Neteisingas datos formatas
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="fill" *ngIf="!isAddMode">
+                <mat-label>Išėmimo data</mat-label>
+                <input matInput [matDatepicker]="takeOutDatePicker" formControlName="takeOutDate">
+                <mat-datepicker-toggle matSuffix [for]="takeOutDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #takeOutDatePicker></mat-datepicker>
+                <mat-error *ngIf="submitted && f.takeOutDate.errors">
+                    Neteisinga data
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field *ngIf="!isAddMode">
+                <mat-label>Nauja motinėlės būsena</mat-label>
+                <mat-select formControlName="state">
+                    <mat-option [value]="8">{{queenState2LabelMapping[8]}}</mat-option>
+                    <mat-option [value]="16">{{queenState2LabelMapping[16]}}</mat-option>
+                    <mat-option [value]="32">{{queenState2LabelMapping[32]}}</mat-option>
+                    <mat-option [value]="64">{{queenState2LabelMapping[64]}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="submitted && f.state.errors">
+                    Šis laukas yra būtinas
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="form-group">
+            <button mat-flat-button color="accent" [disabled]="loading">
+                Išsaugoti
+                <mat-icon *ngIf="loading"><mat-spinner color="accent" diameter="20">
+                </mat-spinner></mat-icon>
+            </button>
+            <a mat-stroked-button (click)="goBack()">Atšaukti</a>
+        </div>
+    </form>
+</div>

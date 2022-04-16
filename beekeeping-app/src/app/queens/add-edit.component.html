@@ -1,82 +1,96 @@
 <h1 *ngIf="isAddMode">Pridėti motinėlę</h1>
 <h1 *ngIf="!isAddMode">Atnaujinti motinėlę</h1>
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <div class="form-fields">
-        <mat-form-field *ngIf="beehiveBeefamily">
-            <mat-label>Avilio nr.</mat-label>
-            <input matInput formControlName="beehiveNo">   
-        </mat-form-field>
-        <mat-form-field appearance="fill" *ngIf="beehiveBeefamily">
-            <mat-label>Įdėjimo į avilį data</mat-label>
-            <input matInput [matDatepicker]="insertPicker" formControlName="insertDate">
-            <mat-datepicker-toggle matSuffix [for]="insertPicker"></mat-datepicker-toggle>
-            <mat-datepicker #insertPicker></mat-datepicker>
-            <mat-error *ngIf="submitted && f.insertDate.errors">
-                Neteisingas datos formatas
-            </mat-error>
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>Veislė</mat-label>
-            <mat-select formControlName="breed">
-                <mat-option *ngFor="let breed of breedNames" [value]="breed">
-                    {{breed2LabelMapping[breed]}}
-                </mat-option>
-            </mat-select>
-            <mat-error *ngIf="submitted && f.breed.errors">
-                <p *ngIf="f.breed.errors.required">Šis laukas yra būtinas</p>
-            </mat-error>
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>Būsena</mat-label>
-            <mat-select formControlName="state" #stateField [disabled]="isStateDisabled()">
-                <mat-option [value]="1" *ngIf="isCellStatePosible()">{{queenState2LabelMapping[1]}}</mat-option>
-                <mat-option [value]="2" *ngIf="isLvingInBeehiveStatePosible()">{{queenState2LabelMapping[2]}}</mat-option>
-                <mat-option [value]="8" *ngIf="isIsolatedStatePosible()">{{queenState2LabelMapping[8]}}</mat-option>
-                <mat-option [value]="16" *ngIf="isSelledDeadStatesPosible()">{{queenState2LabelMapping[16]}}</mat-option>
-                <mat-option [value]="32" *ngIf="isSwarmedStatePosible()">{{queenState2LabelMapping[32]}}</mat-option>
-                <mat-option [value]="64" *ngIf="isSelledDeadStatesPosible()">{{queenState2LabelMapping[64]}}</mat-option>
-            </mat-select>
-            <mat-error *ngIf="submitted && f.state.errors">
-                <p *ngIf="f.state.errors.required">Šis laukas yra būtinas</p>
-            </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="fill" *ngIf="stateField.value !== queenState.Cell">
-            <mat-label>Išsiritimo data</mat-label>
-            <input matInput [matDatepicker]="hatchingPicker" formControlName="hatchingDate">
-            <mat-datepicker-toggle matSuffix [for]="hatchingPicker"></mat-datepicker-toggle>
-            <mat-datepicker #hatchingPicker></mat-datepicker>
-            <mat-error *ngIf="submitted && f.hatchingDate.errors">
-                Neteisingas datos formatas
-            </mat-error>
-        </mat-form-field>
-        <mat-checkbox formControlName="isFertilized" [(ngModel)]="checked" *ngIf="stateField.value !== queenState.Cell">
-            Ar apsivaisinusi?
-        </mat-checkbox>
-        <mat-form-field appearance="fill" *ngIf="checked && stateField.value !== queenState.Cell">
-            <mat-label>Kiaušinių dėjimo pradėjimo data</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="broodStartDate">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-            <mat-error *ngIf="submitted && f.broodStartDate.errors">
-                Neteisingas datos formatas
-            </mat-error>
-        </mat-form-field>
-        <mat-form-field *ngIf="stateField.value !== queenState.Cell">
-            <mat-label>Paženklinimo spalva</mat-label>
-            <mat-select formControlName="markingColor">
-                <mat-option [value]=""></mat-option>
-                <mat-option *ngFor="let color of colorNames" [value]="color">
-                    {{color2LabelMapping[color]}}
-                </mat-option>  
-            </mat-select>
-        </mat-form-field>  
-    </div>
-    <div class="form-group">
-        <button mat-flat-button color="accent" [disabled]="loading">
-            Išsaugoti
-            <mat-icon *ngIf="loading"><mat-spinner color="accent" diameter="20">
-            </mat-spinner></mat-icon>
-        </button>
-        <a mat-stroked-button (click)="backToList()">Atšaukti</a>
-    </div>
-</form>
+<div class="example-loading-shade" *ngIf="beehiveBeefamilyLoading || beefamilyQueenLoading">
+    <mat-spinner *ngIf="beehiveBeefamilyLoading || beefamilyQueenLoading" color="accent"></mat-spinner>
+</div>
+<div *ngIf="!beehiveBeefamilyLoading && !beefamilyQueenLoading">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="form-fields">
+            <mat-form-field *ngIf="beehiveBeefamily">
+                <mat-label>Avilio nr.</mat-label>
+                <input matInput formControlName="beehiveNo">   
+            </mat-form-field>
+            <mat-form-field appearance="fill" *ngIf="beehiveBeefamily">
+                <mat-label>Įdėjimo į avilį data</mat-label>
+                <input matInput [matDatepicker]="insertPicker" formControlName="insertDate">
+                <mat-datepicker-toggle matSuffix [for]="insertPicker"></mat-datepicker-toggle>
+                <mat-datepicker #insertPicker></mat-datepicker>
+                <mat-error *ngIf="submitted && f.insertDate.errors">
+                    Neteisingas datos formatas
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="fill" *ngIf="beehiveBeefamily && beefamilyQueen && beefamilyQueen.takeOutDate">
+                <mat-label>Išėmimo iš avilio data</mat-label>
+                <input matInput [matDatepicker]="takeOutPicker" formControlName="takeOutDate">
+                <mat-datepicker-toggle matSuffix [for]="takeOutPicker"></mat-datepicker-toggle>
+                <mat-datepicker #takeOutPicker></mat-datepicker>
+                <mat-error *ngIf="submitted && f.takeOutDate.errors">
+                    Neteisingas datos formatas
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Veislė</mat-label>
+                <mat-select formControlName="breed">
+                    <mat-option *ngFor="let breed of breedNames" [value]="breed">
+                        {{breed2LabelMapping[breed]}}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="submitted && f.breed.errors">
+                    <p *ngIf="f.breed.errors.required">Šis laukas yra būtinas</p>
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Būsena</mat-label>
+                <mat-select formControlName="state" #stateField [disabled]="isStateDisabled()">
+                    <mat-option [value]="1" *ngIf="isCellStatePosible()">{{queenState2LabelMapping[1]}}</mat-option>
+                    <mat-option [value]="2" *ngIf="isLvingInBeehiveStatePosible()">{{queenState2LabelMapping[2]}}</mat-option>
+                    <mat-option [value]="8" *ngIf="isIsolatedStatePosible()">{{queenState2LabelMapping[8]}}</mat-option>
+                    <mat-option [value]="16" *ngIf="isSelledDeadStatesPosible()">{{queenState2LabelMapping[16]}}</mat-option>
+                    <mat-option [value]="32" *ngIf="isSwarmedStatePosible()">{{queenState2LabelMapping[32]}}</mat-option>
+                    <mat-option [value]="64" *ngIf="isSelledDeadStatesPosible()">{{queenState2LabelMapping[64]}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="submitted && f.state.errors">
+                    <p *ngIf="f.state.errors.required">Šis laukas yra būtinas</p>
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="fill" *ngIf="stateField.value !== queenState.Cell">
+                <mat-label>Išsiritimo data</mat-label>
+                <input matInput [matDatepicker]="hatchingPicker" formControlName="hatchingDate">
+                <mat-datepicker-toggle matSuffix [for]="hatchingPicker"></mat-datepicker-toggle>
+                <mat-datepicker #hatchingPicker></mat-datepicker>
+                <mat-error *ngIf="submitted && f.hatchingDate.errors">
+                    Neteisingas datos formatas
+                </mat-error>
+            </mat-form-field>
+            <mat-checkbox formControlName="isFertilized" [(ngModel)]="checked" *ngIf="stateField.value !== queenState.Cell">
+                Ar apsivaisinusi?
+            </mat-checkbox>
+            <mat-form-field appearance="fill" *ngIf="checked && stateField.value !== queenState.Cell">
+                <mat-label>Kiaušinių dėjimo pradėjimo data</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="broodStartDate">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                <mat-error *ngIf="submitted && f.broodStartDate.errors">
+                    Neteisingas datos formatas
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field *ngIf="stateField.value !== queenState.Cell">
+                <mat-label>Paženklinimo spalva</mat-label>
+                <mat-select formControlName="markingColor">
+                    <mat-option [value]=""></mat-option>
+                    <mat-option *ngFor="let color of colorNames" [value]="color">
+                        {{color2LabelMapping[color]}}
+                    </mat-option>  
+                </mat-select>
+            </mat-form-field>  
+        </div>
+        <div class="form-group">
+            <button mat-flat-button color="accent" [disabled]="loading">
+                Išsaugoti
+                <mat-icon *ngIf="loading"><mat-spinner color="accent" diameter="20">
+                </mat-spinner></mat-icon>
+            </button>
+            <a mat-stroked-button (click)="backToList()">Atšaukti</a>
+        </div>
+    </form>
+</div>
