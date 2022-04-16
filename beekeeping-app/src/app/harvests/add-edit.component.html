@@ -3,15 +3,21 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
 
     <div class="form-fields">
-        <!-- <mat-form-field appearance="fill">
-            <mat-label>Pavadinimas</mat-label>
-            <input matInput formControlName="title">
-            <mat-error *ngIf="submitted && f.title.errors && f.title.errors.required">
-                Pavadinimas yra privalomas
-            </mat-error>
-        </mat-form-field> -->
+        <div class="product-field">
+            <mat-form-field appearance="fill">
+                <mat-label>Produktas</mat-label>
+                <mat-select formControlName="product">
+                    <mat-option [value]="product" *ngFor="let product of harvestProducts">
+                        {{ harvestProduct2LabelMapping[product] }}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="submitted && f.product.errors">
+                    Produktas yra privalomas
+                </mat-error>
+            </mat-form-field>
+        </div>
 
-        <!-- <div class="category">
+        <div class="category">
             <h3 class="category-title">Kategorija</h3>
             <mat-selection-list #categories [multiple]="false">
                 <div class="category-selection-list">
@@ -43,41 +49,42 @@
                 </mat-form-field>
                 <div *ngIf="apiaries.length == 0">Jūs neturite bitynų</div>
             </div>
-        </div> -->
-
-        <!-- <mat-checkbox [(ngModel)]="checked" formControlName="isComplete">Ar atlikta?</mat-checkbox>
+        </div> 
 
         <div class="date-field">
             <mat-form-field appearance="fill">
-                <mat-label>Iki kada?</mat-label>
-                <input matInput [matDatepicker]="picker" formControlName="dueDate">
+                <mat-label>Pradėjimo data</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="startDate">
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
-                <mat-error *ngIf="submitted && f.dueDate.errors">
+                <mat-error *ngIf="submitted && f.startDate.errors">
                     Neteisingas datos formatas
                 </mat-error>
             </mat-form-field>
         </div>
 
-        <div class="priority-field">
+        <div class="date-field">
             <mat-form-field appearance="fill">
-                <mat-label>Prioritetas</mat-label>
-                <mat-select formControlName="priority">
-                    <mat-option [value]="priority" *ngFor="let priority of todoPriorities">
-                        {{ todoItemPriority2LabelMapping[priority] }}
-                    </mat-option>
-                </mat-select>
-                <mat-error *ngIf="submitted && f.priority.errors">
-                    Šis laukas yra būtinas
+                <mat-label>Pabaigos data</mat-label>
+                <input matInput [matDatepicker]="picker2" formControlName="endDate">
+                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
+                <mat-error *ngIf="submitted && f.endDate.errors">
+                    Neteisingas datos formatas
                 </mat-error>
             </mat-form-field>
         </div>
 
-        <mat-form-field appearance="fill">
-            <mat-label>Aprašymas</mat-label>
-            <textarea matInput formControlName="description"></textarea>
-        </mat-form-field> -->
-
+        <div class="quantity-field">
+            <mat-form-field appearance="fill">
+                <mat-label>Kiekis</mat-label>
+                <input matInput formControlName="quantity">
+                <mat-error *ngIf="submitted && f.quantity.errors">
+                    <p *ngIf="f.quantity.errors.required">Kiekis yra privalomas</p>
+                    <p *ngIf="f.quantity.errors.pattern">Kiekis turi būti teigiamas skaičius</p>
+                </mat-error>
+            </mat-form-field>
+        </div>
     </div>
     <div class="form-group">
         <button mat-flat-button color="accent" [disabled]="loading">
@@ -85,6 +92,6 @@
             <mat-icon *ngIf="loading"><mat-spinner diameter="20" color="accent">
             </mat-spinner></mat-icon>
         </button>
-        <a routerLink="/todos" class="btn btn-link">Atšaukti</a>
+        <a mat-stroked-button routerLink="/harvests">Atšaukti</a>
     </div>
 </form>

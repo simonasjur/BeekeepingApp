@@ -1,7 +1,28 @@
 <h1>Kopimai</h1>
 <button mat-raised-button color="accent" routerLink="add">Pridėti naują kopimą</button>
 
-<table mat-table [dataSource]="dataSource" matSort *ngIf="harvests">
+<form [formGroup]="form">
+  <mat-form-field *ngIf="apiaries && apiaries.length != 0" appearance="fill" class="apiary-field">
+      <mat-label>Bitynas</mat-label>
+      <mat-select formControlName="apiaryId">
+          <mat-option [value]="null">Visi</mat-option>
+          <mat-option *ngFor="let apiary of apiaries" [value]="apiary.id">
+              {{apiary.name}}
+          </mat-option>
+      </mat-select>
+  </mat-form-field>
+  <mat-form-field *ngIf="beeFamilies && beeFamilies.length != 0" appearance="fill">
+      <mat-label>Avilys</mat-label>
+      <mat-select formControlName="beeFamilyId">
+          <mat-option [value]="null">Visi</mat-option>
+          <mat-option *ngFor="let beeFamily of beeFamilies" [value]="beeFamily.id">
+              Nr. {{beeFamily.no}}
+          </mat-option>
+      </mat-select>
+  </mat-form-field>
+</form>
+
+<table mat-table [dataSource]="dataSource" [hidden]="!harvests" matSort>
     <ng-container matColumnDef="id">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Nr </th>
       <td mat-cell *matCellDef="let row"> {{row.id}} </td>
@@ -9,7 +30,24 @@
 
     <ng-container matColumnDef="product">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Produktas </th>
-      <td mat-cell *matCellDef="let row"> {{row.product}} </td>
+      <td mat-cell *matCellDef="let row"> {{harvestProduct2LabelMapping[row.product]}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="category">
+      <th mat-header-cell *matHeaderCellDef> Kategorija </th>
+      <td mat-cell *matCellDef="let row">
+          <div *ngIf="row.beeFamilyId">
+              <div *ngFor="let beeFamily of beeFamilies">
+                  <p *ngIf="beeFamily.id == row.beeFamilyId">Avilys nr. {{beeFamily.id}}</p>
+              </div>
+          </div>
+          <div *ngIf="row.apiaryId">
+              <div *ngFor="let apiary of apiaries">
+                  <a *ngIf="apiary.id == row.apiaryId" routerLink="../apiaries/{{row.apiaryId}}/home">{{apiary.name}}</a>
+              </div>
+          </div>
+          <div *ngIf="!row.beeFamilyId && !row.apiaryId">Bendras</div>
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="startDate">
@@ -22,6 +60,18 @@
       <td mat-cell *matCellDef="let row"> {{row.endDate}} </td>
     </ng-container>
 
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef> Veiksmas </th>
+      <td mat-cell *matCellDef="let element">
+          <button mat-icon-button >
+              <mat-icon routerLink="edit/{{element.id}}">edit</mat-icon>
+          </button>
+          <button mat-icon-button (click)="deleteHarvest(element.id)">
+              <mat-icon>delete</mat-icon>
+          </button>
+      </td>
+  </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
+<mat-paginator [hidePageSize]="true" [pageSizeOptions]="[10]"></mat-paginator>
