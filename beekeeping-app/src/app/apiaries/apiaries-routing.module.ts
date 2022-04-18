@@ -8,6 +8,7 @@ import { AddEditComponent } from './add-edit.component';
 import { HomeComponent } from './home.component';
 
 const beeFamiliesModule = () => import('../beefamilies/beefamilies.module').then(x => x.BeeFamiliesModule);
+const harvestsModule = () => import('../harvests/harvests.module').then(x => x.HarvestsModule);
 
 const routes: Routes = [
     {
@@ -17,7 +18,8 @@ const routes: Routes = [
             { path: 'add', component: AddEditComponent },
             { path: ':id/home', component: HomeComponent }, 
             { path: ':id/edit', component: AddEditComponent },
-            { path: ':id/beefamilies', loadChildren: beeFamiliesModule, canActivate: [AuthGuard] }
+            { path: ':id/beefamilies', loadChildren: beeFamiliesModule, canActivate: [AuthGuard] },
+            { path: ':id/harvests', loadChildren: harvestsModule, canActivate: [AuthGuard] }
         ]
     }
 ];
