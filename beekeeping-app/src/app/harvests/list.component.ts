@@ -18,6 +18,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { formatDate } from '@angular/common';
 import { ApiaryBeeFamilyService } from '../_services/apiary-beefamily.service';
+import { DeleteDialog } from '../_components/delete-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({ templateUrl: 'list.component.html',
 styleUrls: ['list.component.css']})
@@ -56,7 +58,8 @@ export class ListComponent {
                 private apiaryFamilyService: ApiaryBeeFamilyService,
                 private router: Router,
                 private route: ActivatedRoute,
-                private formBuilder: FormBuilder) {
+                private formBuilder: FormBuilder,
+                private dialog: MatDialog) {
                 }
     
     ngOnInit() {
@@ -176,18 +179,25 @@ export class ListComponent {
     }
 
     deleteHarvest(id: number): void {
-        this.harvestService.delete(id).subscribe({
-            next: () => {
-                this.dataSource.data = this.dataSource.data.filter(x => x.id !== id);
-                this.harvests = this.harvests.filter(x => x.id !== id);
-                this.oldHarvests = this.oldHarvests.filter(x => x.id !== id);
-                this.calculateOverall(this.dataSource.data);
-                this.alertService.success('Kopimas sėkmingai ištrintas', { keepAfterRouteChange: true, autoClose: true });
-            },
-            error: error => {
-                this.alertService.error(error);
+        const dialogRef = this.dialog.open(DeleteDialog);
+    
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+               this.harvestService.delete(id).subscribe({
+                    next: () => {
+                        this.dataSource.data = this.dataSource.data.filter(x => x.id !== id);
+                        this.harvests = this.harvests.filter(x => x.id !== id);
+                        this.oldHarvests = this.oldHarvests.filter(x => x.id !== id);
+                        this.calculateOverall(this.dataSource.data);
+                        this.alertService.success('Kopimas sėkmingai ištrintas', { keepAfterRouteChange: true, autoClose: true });
+                    },
+                    error: error => {
+                        this.alertService.error(error);
+                    }
+                }); 
             }
         });
+        
     }
 
     calculateOverall(harvests) {

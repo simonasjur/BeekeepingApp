@@ -50,7 +50,8 @@ import {MatFormFieldModule} from '@angular/material/form-field';
         OverlayModule,
         MatSelectModule,
         MatDatepickerModule,
-        MatFormFieldModule
+        MatFormFieldModule,
+        MatDialogModule
     ],
     declarations: [
         SettingsComponent,

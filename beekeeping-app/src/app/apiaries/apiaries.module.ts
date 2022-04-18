@@ -15,6 +15,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { HomeComponent } from './home.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
     imports: [
@@ -29,7 +30,8 @@ import { MatChipsModule } from '@angular/material/chips';
         GoogleMapsModule,
         MatButtonModule,
         MatProgressSpinnerModule,
-        MatChipsModule
+        MatChipsModule,
+        MatDialogModule
     ],
     declarations: [
         LayoutComponent,

@@ -7,6 +7,8 @@ import { ApiaryService } from '../_services/apiary.service';
 import { FarmService } from '../_services/farm.service';
 import { ApiaryBeeFamilyService } from '../_services/apiary-beefamily.service';
 import { AlertService } from '../_services/alert.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DeleteDialog } from '../_components/delete-dialog.component';
 
 @Component({
     selector: 'apiaries-list',
@@ -22,7 +24,8 @@ export class ListComponent implements OnInit {
                 private apiaryFamiliesService: ApiaryBeeFamilyService,
                 private alertService: AlertService,
                 private router: Router,
-                private route: ActivatedRoute) {
+                private route: ActivatedRoute,
+                public dialog: MatDialog) {
     }
 
     ngOnInit() {
@@ -37,14 +40,32 @@ export class ListComponent implements OnInit {
         this.apiaryService.clearApiary();
     }
 
+    // deleteApiary(id: number): void {
+    //     this.apiaryService.delete(id).subscribe({
+    //         next: () => {
+    //             this.apiaries = this.apiaries.filter(x => x.id !== id);
+    //             this.alertService.success('Bitynas sėkmingai ištrintas', { keepAfterRouteChange: true, autoClose: true });
+    //         },
+    //         error: error => {
+    //             this.alertService.error(error);
+    //         }
+    //     });
+    // }
+
     deleteApiary(id: number): void {
-        this.apiaryService.delete(id).subscribe({
-            next: () => {
-                this.apiaries = this.apiaries.filter(x => x.id !== id);
-                this.alertService.success('Bitynas sėkmingai ištrintas', { keepAfterRouteChange: true, autoClose: true });
-            },
-            error: error => {
-                this.alertService.error(error);
+        const dialogRef = this.dialog.open(DeleteDialog);
+    
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                this.apiaryService.delete(id).subscribe({
+                    next: () => {
+                        this.apiaries = this.apiaries.filter(x => x.id !== id);
+                        this.alertService.success('Bitynas sėkmingai ištrintas', { keepAfterRouteChange: true, autoClose: true });
+                    },
+                    error: error => {
+                        this.alertService.error(error);
+                    }
+                });
             }
         });
     }

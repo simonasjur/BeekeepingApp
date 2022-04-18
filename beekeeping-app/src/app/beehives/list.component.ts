@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { DeleteDialog } from '../_components/delete-dialog.component';
 
 import { Beehive, BeehiveType2LabelMapping } from '../_models';
 import { AlertService } from '../_services/alert.service';
@@ -19,7 +21,8 @@ export class ListComponent implements OnInit {
 
     constructor(private beehiveService: BeehiveService,
                 private farmService: FarmService,
-                private alertService: AlertService) {
+                private alertService: AlertService,
+                private dialog: MatDialog) {
     }
 
     ngOnInit() {
@@ -40,14 +43,22 @@ export class ListComponent implements OnInit {
     }
 
     deleteBeehive(id: number): void {
-        this.beehiveService.delete(id).subscribe({
-            next: () => {
-                this.emptyBeehives = this.emptyBeehives.filter(x => x.id !== id);
-                this.alertService.success('Avilys sėkmingai ištrintas', { keepAfterRouteChange: true, autoClose: true });
-            },
-            error: error => {
-                this.alertService.error(error);
+        const dialogRef = this.dialog.open(DeleteDialog);
+    
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                this.beehiveService.delete(id).subscribe({
+                    next: () => {
+                        this.emptyBeehives = this.emptyBeehives.filter(x => x.id !== id);
+                        this.alertService.success('Avilys sėkmingai ištrintas', { keepAfterRouteChange: true, autoClose: true });
+                    },
+                    error: error => {
+                        this.alertService.error(error);
+                    }
+                });
             }
         });
+
+        
     }
 }

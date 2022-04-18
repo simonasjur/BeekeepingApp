@@ -25,6 +25,8 @@ import { HomeRoutingModule } from './home/home-routing.module';
 import { AlertModule } from './_components/alert.module';
 import { MatRippleModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from '@angular/material-moment-adapter';
+import { MatDialogModule } from '@angular/material/dialog';
+import { DeleteDialog } from './_components/delete-dialog.component';
 
 @NgModule({
     imports: [
@@ -47,10 +49,12 @@ import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from '@angular/ma
         HomeRoutingModule,
         AlertModule,
         MatRippleModule,
-        MatMomentDateModule
+        MatMomentDateModule,
+        MatDialogModule
     ],
     declarations: [
-        AppComponent
+        AppComponent,
+        DeleteDialog
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

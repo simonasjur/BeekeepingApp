@@ -15,6 +15,8 @@ import { ApiaryService } from '../_services/apiary.service';
 import { BeeFamilyService } from '../_services/beefamily.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { DeleteDialog } from '../_components/delete-dialog.component';
 
 @Component({ selector: 'todos-list',
     templateUrl: 'list.component.html',
@@ -57,7 +59,8 @@ export class ListComponent {
                 private apiaryService: ApiaryService,
                 private beeFamiliesService: BeeFamilyService,
                 private alertService: AlertService,
-                private formBuilder: FormBuilder) {
+                private formBuilder: FormBuilder,
+                private dialog: MatDialog) {
                     
                 }
 
@@ -294,7 +297,14 @@ export class ListComponent {
     }
 
     deleteTodo(id: number): void {
-        this.todoService.delete(id).subscribe(() => this.ngAfterViewInit());
+        const dialogRef = this.dialog.open(DeleteDialog);
+    
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                this.todoService.delete(id).subscribe(() => this.ngAfterViewInit());
+            }
+        });
+        
     }
 
     doneTodo(id: number): void {

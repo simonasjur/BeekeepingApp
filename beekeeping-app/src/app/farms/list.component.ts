@@ -6,6 +6,8 @@ import { User } from '../_models';
 import { FarmService } from '../_services/farm.service';
 import { UserService } from '../_services/user.service';
 import { AlertService } from '../_services/alert.service';
+import { DeleteDialog } from '../_components/delete-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({ templateUrl: 'list.component.html',
 styleUrls: ['list.component.css'] })
@@ -18,8 +20,9 @@ export class ListComponent implements OnInit {
 
     constructor(private farmService: FarmService,
                 private userService: UserService,
-                private alertService: AlertService) {
-                    
+                private alertService: AlertService,
+                private dialog: MatDialog) {
+                
                 }
 
     ngOnInit() {
@@ -48,13 +51,20 @@ export class ListComponent implements OnInit {
     }
 
     deleteFarm(id: number) {
-        const farm = this.farms.find(x => x.id === id);
-        farm.isDeleting = true;
-        this.farmService.delete(id)
-            .pipe(first())
-            .subscribe(() => { 
-                this.farms = this.farms.filter(x => x.id !== id);
-                this.alertService.success('Ūkis ' + farm.name + ' ištrintas', { keepAfterRouteChange: true, autoClose: true });
-            })
+        const dialogRef = this.dialog.open(DeleteDialog);
+    
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                const farm = this.farms.find(x => x.id === id);
+                farm.isDeleting = true;
+                this.farmService.delete(id)
+                    .pipe(first())
+                    .subscribe(() => { 
+                        this.farms = this.farms.filter(x => x.id !== id);
+                        this.alertService.success('Ūkis ' + farm.name + ' ištrintas', { keepAfterRouteChange: true, autoClose: true });
+                    })
+            }
+        });
+        
     }
 }

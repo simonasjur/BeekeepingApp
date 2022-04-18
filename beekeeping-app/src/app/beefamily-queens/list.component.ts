@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { DeleteDialog } from '../_components/delete-dialog.component';
 
 import { BeefamilyQueen, Breed2LabelMapping, Color2LabelMapping, Queen, QueenState, QueenState2LabelMapping } from '../_models';
 import { AlertService } from '../_services/alert.service';
@@ -26,7 +28,8 @@ export class ListComponent implements OnInit {
                 private queenService: QueenService,
                 private farmService: FarmService,
                 private alertService: AlertService,
-                private router: Router) {
+                private router: Router,
+                public dialog: MatDialog) {
     }
 
     ngOnInit() {
@@ -77,13 +80,19 @@ export class ListComponent implements OnInit {
     }
 
     deleteBeefamilyQueen(id: number): void {
-        this.beefamilyQueenService.delete(id).subscribe({
-            next: () => {
-                this.beefamilyQueens = this.beefamilyQueens.filter(x => x.id !== id);
-                this.alertService.success('Šeimos motinėlės įrašas sėkmingai ištrintas', { keepAfterRouteChange: true, autoClose: true });
-            },
-            error: error => {
-                this.alertService.error('Nepavyko ištrinti. Serverio klaida');
+        const dialogRef = this.dialog.open(DeleteDialog);
+    
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                this.beefamilyQueenService.delete(id).subscribe({
+                    next: () => {
+                        this.beefamilyQueens = this.beefamilyQueens.filter(x => x.id !== id);
+                        this.alertService.success('Šeimos motinėlės įrašas sėkmingai ištrintas', { keepAfterRouteChange: true, autoClose: true });
+                    },
+                    error: error => {
+                        this.alertService.error('Nepavyko ištrinti. Serverio klaida');
+                    }
+                });
             }
         });
     }

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
+import { DeleteDialog } from '../_components/delete-dialog.component';
 
 import { ApiaryBeeFamily, BeeFamily, Beehive, BeehiveBeefamily, BeehiveComponentType, BeehiveTypes } from '../_models';
 import { BeehiveComponent, BeehiveComponentType2LabelMapping } from '../_models';
@@ -31,7 +33,8 @@ export class BeehiveComponentsListComponent implements OnInit {
                 private beehiveFamilyService: BeehiveBeefamilyService,
                 private apiaryFamilyService: ApiaryBeeFamilyService,
                 private alertService: AlertService,
-                private route: ActivatedRoute) {
+                private route: ActivatedRoute,
+                public dialog: MatDialog) {
     }
 
     ngOnInit() {
@@ -69,14 +72,22 @@ export class BeehiveComponentsListComponent implements OnInit {
     }
 
     delete(id: number): void {
-        this.beehiveComponentService.delete(id).subscribe({
-            next: () => {
-                this.beehiveComponents = this.beehiveComponents.filter(x => x.id !== id);
-                this.alertService.success('Komponentas sėkmingai ištrintas', { keepAfterRouteChange: true, autoClose: true });
-            },
-            error: error => {
-                this.alertService.error("Nepavyko ištrinti");
+        const dialogRef = this.dialog.open(DeleteDialog);
+    
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                this.beehiveComponentService.delete(id).subscribe({
+                    next: () => {
+                        this.beehiveComponents = this.beehiveComponents.filter(x => x.id !== id);
+                        this.alertService.success('Komponentas sėkmingai ištrintas', { keepAfterRouteChange: true, autoClose: true });
+                    },
+                    error: error => {
+                        this.alertService.error("Nepavyko ištrinti");
+                    }
+                });
             }
         });
+
+        
     }
 }
