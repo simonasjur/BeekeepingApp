@@ -47,6 +47,12 @@ namespace BeekeepingApi.Models
                 .WithOne(bq => bq.Queen)
                 .HasForeignKey(bq => bq.QueenId)
                 .OnDelete(DeleteBehavior.ClientCascade);
+
+            modelBuilder.Entity<Queen>()
+                .HasMany<QueensRaising>(q => q.QueensRaisings)
+                .WithOne(qr => qr.Mother)
+                .HasForeignKey(qr => qr.MotherId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
 
         public DbSet<User> Users { get; set; }
@@ -82,5 +88,7 @@ namespace BeekeepingApi.Models
         public DbSet<Queen> Queens { get; set; }
 
         public DbSet<BeefamilyQueen> BeeFamilyQueens { get; set; }
+
+        public DbSet<QueensRaising> QueensRaisings { get; set; }
     }
 }

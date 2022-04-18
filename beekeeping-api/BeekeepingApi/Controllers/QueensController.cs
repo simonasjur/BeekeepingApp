@@ -178,8 +178,13 @@ namespace BeekeepingApi.Controllers
             {
                 return Forbid();
             }
-                
-            //await _context.Entry(queen).Collection(q => q.Harvests).LoadAsync();
+
+            var relatedQueensRaisings = await _context.QueensRaisings.Where(qr => qr.MotherId == id).ToListAsync();
+            foreach(var raising in relatedQueensRaisings)
+            {
+                _context.QueensRaisings.Remove(raising);
+            }
+            await _context.SaveChangesAsync();
 
             _context.Queens.Remove(queen);
             await _context.SaveChangesAsync();

@@ -42,5 +42,6 @@ namespace BeekeepingApi.Models
         public virtual ICollection<TodoItem> TodoItems { get; set; }
         public virtual ICollection<NestShortening> NestShortenings { get; set; }
         public virtual ICollection<Feeding> Feedings { get; set; }
+        public virtual ICollection<QueensRaising> QueensRaisings { get; set; }
     }
 }

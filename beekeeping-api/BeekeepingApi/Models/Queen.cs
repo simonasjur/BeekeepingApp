@@ -46,5 +46,6 @@ namespace BeekeepingApi.Models
         public Farm Farm { get; set; }
 
         public virtual ICollection<BeefamilyQueen> BeeFamilyQueens { get; set; }
+        public virtual ICollection<QueensRaising> QueensRaisings { get; set; }
     }
 }
