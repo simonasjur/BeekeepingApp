@@ -1,6 +1,5 @@
 import { AbstractControl, FormGroup } from '@angular/forms';
 
-// custom validator to check that two fields match
 export function DatesValidator(from: string, to: string) {
     return (group: AbstractControl) => {
         const formGroup = <FormGroup>group;

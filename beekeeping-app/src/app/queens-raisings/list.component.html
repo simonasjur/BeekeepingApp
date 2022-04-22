@@ -1,0 +1,66 @@
+<h1>Motinėlių auginimai</h1>
+<button mat-raised-button color="accent" routerLink="add">Naujas auginimas</button>
+<div class="example-loading-shade" *ngIf="isDataLoading()">
+    <mat-spinner *ngIf="loading" color="accent"></mat-spinner>
+</div>
+<div *ngIf="!isDataLoading()">
+    <table mat-table [dataSource]="queensRaisings">
+        <ng-container matColumnDef="no">
+            <th mat-header-cell *matHeaderCellDef>Nr</th>
+            <td mat-cell *matCellDef="let element">
+                {{element.id}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="daysLeft">
+            <th mat-header-cell *matHeaderCellDef>Iki išsiritimo</th>
+            <td mat-cell *matCellDef="let element">
+                <span *ngIf="element.daysLeft > 0">{{element.daysLeft}} d.</span>
+                <span *ngIf="element.daysLeft == 0">Ritasi</span>
+                <span *ngIf="element.daysLeft < 0">Baigta</span>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="breed">
+            <th mat-header-cell *matHeaderCellDef>Veislė</th>
+            <td mat-cell *matCellDef="let element">
+                {{breed2LabelMapping[element.queen.breed]}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="startDate">
+            <th mat-header-cell *matHeaderCellDef>Pradžios data</th>
+            <td mat-cell *matCellDef="let element">
+                {{element.startDate | date:'yyyy-MM-dd'}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="larvaCount">
+            <th mat-header-cell *matHeaderCellDef>Auginamos motinėlės</th>
+            <td mat-cell *matCellDef="let element">
+                {{element.larvaCount}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="queensCount">
+            <th mat-header-cell *matHeaderCellDef>Išsiritusios motinėlės</th>
+            <td mat-cell *matCellDef="let element">
+                {{element.queensCount}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="proc">
+            <th mat-header-cell *matHeaderCellDef>Procentas</th>
+            <td mat-cell *matCellDef="let element">
+                {{element.queensCount/element.larvaCount*100 | number: '1.0-2'}}%
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef> Veiksmas </th>
+            <td mat-cell *matCellDef="let element">
+                <button mat-icon-button >
+                    <mat-icon routerLink="edit/{{element.id}}">edit</mat-icon>
+                </button>
+                <!-- <button mat-icon-button (click)="deleteApiary(element.id)">
+                    <mat-icon>delete</mat-icon>
+                </button> -->
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+</div>
