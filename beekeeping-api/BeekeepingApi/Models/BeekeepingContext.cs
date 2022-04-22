@@ -90,5 +90,7 @@ namespace BeekeepingApi.Models
         public DbSet<BeefamilyQueen> BeeFamilyQueens { get; set; }
 
         public DbSet<QueensRaising> QueensRaisings { get; set; }
+        
+        public DbSet<Invitation> Invitations { get; set; }
     }
 }
