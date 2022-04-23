@@ -7,24 +7,28 @@ using System.Threading.Tasks;
 
 namespace BeekeepingApi.Models
 {
-    public class NestShortening
+    public class NestReduction
     {
         [Key]
         public long Id { get; set; }
 
         public DateTime Date { get; set; }
 
-        public int? CombsBefore { get; set; }
-
+        [Range(0, int.MaxValue)]
         public int StayedCombs{ get; set; }
 
+        [Range(0, int.MaxValue)]
         public double StayedHoney { get; set; }
 
+        [Range(0, int.MaxValue)]
         public int StayedBroodCombs { get; set; }
 
-        public long BeeFamilyId { get; set; }
+        [Range(0, int.MaxValue)]
+        public double RequiredFoodForWinter { get; set; }
 
-        [ForeignKey("BeeFamilyId")]
+        public long BeefamilyId { get; set; }
+
+        [ForeignKey("BeefamilyId")]
         public BeeFamily BeeFamily { get; set; }
     }
 }

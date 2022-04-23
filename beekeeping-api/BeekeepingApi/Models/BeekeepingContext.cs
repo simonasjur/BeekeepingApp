@@ -79,7 +79,9 @@ namespace BeekeepingApi.Models
 
         public DbSet<TodoItem> TodoItems { get; set; }
 
-        public DbSet<NestShortening> NestShortenings { get; set; }
+        public DbSet<NestReduction> NestReductions { get; set; }
+
+        public DbSet<NestExpansion> NestExpansions { get; set; }
 
         public DbSet<Food> Foods { get; set; }
 

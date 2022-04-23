@@ -30,8 +30,6 @@ namespace BeekeepingApi.Models
         [Required]
         public BeeFamilyStates State { get; set; }
 
-        public double? RequiredFoodForWinter { get; set; }
-
         public long FarmId { get; set; }
 
         [ForeignKey("FarmId")]
@@ -40,7 +38,8 @@ namespace BeekeepingApi.Models
         public virtual ICollection<ApiaryBeeFamily> ApiaryBeeFamilies { get; set; }
         public virtual ICollection<BeehiveBeeFamily> BeehiveBeeFamilies { get; set; }
         public virtual ICollection<TodoItem> TodoItems { get; set; }
-        public virtual ICollection<NestShortening> NestShortenings { get; set; }
+        public virtual ICollection<NestReduction> NestReductions { get; set; }
+        public virtual ICollection<NestExpansion> NestExpansions { get; set; }
         public virtual ICollection<Feeding> Feedings { get; set; }
         public virtual ICollection<QueensRaising> QueensRaisings { get; set; }
     }

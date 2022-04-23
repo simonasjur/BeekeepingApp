@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace BeekeepingApi.DTOs.NestShorteningDTOs
 {
-    public class NestShorteningReadDTO
+    public class NestReductionReadDTO
     {
         public long Id { get; set; }
 
@@ -16,6 +16,8 @@ namespace BeekeepingApi.DTOs.NestShorteningDTOs
         public double StayedHoney { get; set; }
 
         public int StayedBroodCombs { get; set; }
+
+        public double RequiredFoodForWinter { get; set; }
 
         public long BeeFamilyId { get; set; }
     }
