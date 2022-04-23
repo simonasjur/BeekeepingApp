@@ -4,7 +4,7 @@
             <div class="header">
                 <h1>{{apiary.name}} bitynas</h1>
                 <button mat-icon-button>
-                    <mat-icon routerLink="/apiaries/{{apiary.id}}/edit/">edit</mat-icon>
+                    <mat-icon *ngIf="worker.role == 0" routerLink="/apiaries/{{apiary.id}}/edit/">edit</mat-icon>
                 </button>
             </div>
             <div class="sub-menu">

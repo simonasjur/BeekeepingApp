@@ -29,6 +29,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { HomepageComponent } from './homepage.component';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatTableModule} from '@angular/material/table';
 
 @NgModule({
     imports: [
@@ -54,7 +55,8 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
         MatDatepickerModule,
         MatFormFieldModule,
         MatDialogModule,
-        MatProgressBarModule
+        MatProgressBarModule,
+        MatTableModule
     ],
     declarations: [
         SettingsComponent,

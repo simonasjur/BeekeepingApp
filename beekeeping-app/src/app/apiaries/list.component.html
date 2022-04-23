@@ -1,33 +1,40 @@
 <h1>Bitynų sąrašas</h1>
-<button mat-raised-button color="accent" routerLink="add">Pridėti naują bityną</button>
-<table mat-table [dataSource]="apiaries">
-    <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef>Pavadinimas</th>
-        <td mat-cell *matCellDef="let element">
-            <a routerLink="{{element.id}}/home">{{element.name}}</a>
-        </td>
-    </ng-container>
-    <ng-container matColumnDef="familiesCount">
-        <th mat-header-cell *matHeaderCellDef>Bičių šeimos</th>
-        <td mat-cell *matCellDef="let element">
-            {{element.familiesCount}}
-        </td>
-    </ng-container>
-    <ng-container matColumnDef="action">
-        <th mat-header-cell *matHeaderCellDef> Veiksmas </th>
-        <td mat-cell *matCellDef="let element">
-            <button mat-icon-button >
-                <mat-icon routerLink="{{element.id}}/edit">edit</mat-icon>
-            </button>
-            <button mat-icon-button (click)="deleteApiary(element.id)">
-                <mat-icon>delete</mat-icon>
-            </button>
-        </td>
-    </ng-container>
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-</table>
-
+<div *ngIf="worker">
+    <button mat-raised-button color="accent" routerLink="add" *ngIf="worker.role == 0">Pridėti naują bityną</button>
+    <table mat-table [dataSource]="apiaries">
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Pavadinimas</th>
+            <td mat-cell *matCellDef="let element">
+                <a routerLink="{{element.id}}/home">{{element.name}}</a>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="familiesCount">
+            <th mat-header-cell *matHeaderCellDef>Bičių šeimos</th>
+            <td mat-cell *matCellDef="let element">
+                {{element.familiesCount}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="action" *ngIf="worker.role == 0">
+            <th mat-header-cell *matHeaderCellDef> Veiksmas </th>
+            <td mat-cell *matCellDef="let element">
+                <button mat-icon-button >
+                    <mat-icon routerLink="{{element.id}}/edit">edit</mat-icon>
+                </button>
+                <button mat-icon-button (click)="deleteApiary(element.id)">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </td>
+        </ng-container>
+        <div *ngIf="worker.role == 0">
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </div>
+        <div *ngIf="worker.role == 1">
+            <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns2;"></tr>
+        </div>
+    </table>
+</div>
 <!--<a routerLink="add" class="btn btn-sm btn-success mb-2">Naujas Bitynas</a>
 <table class="table table-striped">
     <thead>

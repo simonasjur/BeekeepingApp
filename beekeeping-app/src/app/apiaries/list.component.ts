@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { BeeFamilyService } from '../_services/beefamily.service';
-import { User, Apiary } from '../_models';
+import { User, Apiary, Worker } from '../_models';
 import { ApiaryService } from '../_services/apiary.service';
 import { FarmService } from '../_services/farm.service';
 import { ApiaryBeeFamilyService } from '../_services/apiary-beefamily.service';
 import { AlertService } from '../_services/alert.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteDialog } from '../_components/delete-dialog.component';
+import { WorkerService } from '../_services/worker.service';
 
 @Component({
     selector: 'apiaries-list',
@@ -18,10 +19,13 @@ import { DeleteDialog } from '../_components/delete-dialog.component';
 export class ListComponent implements OnInit {
     apiaries: Apiary[];
     displayedColumns: string[] = ['name', 'familiesCount', 'action'];
+    displayedColumns2: string[] = ['name', 'familiesCount'];
+    worker: Worker;
 
     constructor(private apiaryService: ApiaryService,
                 private farmService: FarmService,
                 private apiaryFamiliesService: ApiaryBeeFamilyService,
+                private workerService: WorkerService,
                 private alertService: AlertService,
                 private router: Router,
                 private route: ActivatedRoute,
@@ -32,10 +36,13 @@ export class ListComponent implements OnInit {
         this.apiaryService.getFarmApiaries(this.farmService.farmValue.id)
             .subscribe(apiaries => {
                 this.apiaries = apiaries;
-                apiaries.forEach(apiary => 
-                    this.apiaryFamiliesService.getOneApiaryBeeFamilies(apiary.id).subscribe(families =>
-                        apiary.familiesCount = families.length
-                ));
+                this.workerService.getFarmAndUserWorker(this.farmService.farmValue.id).subscribe(worker => {
+                    this.worker = worker;
+                    apiaries.forEach(apiary => 
+                        this.apiaryFamiliesService.getOneApiaryBeeFamilies(apiary.id).subscribe(families =>
+                            apiary.familiesCount = families.length
+                    ));
+                });
             });
         this.apiaryService.clearApiary();
     }

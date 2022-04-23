@@ -1,8 +1,9 @@
 export class Worker {
-    id: number;
     farmId: number;
     userId: number;
     role: Role;
+    firstName: string;
+    lastName: string
 }
 
 export enum Role {

@@ -1,9 +1,12 @@
 import { Component } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { MatDialog } from "@angular/material/dialog";
 import { ActivatedRoute, Router } from "@angular/router";
 import { interval, Observable, Subject, Subscription, timer } from "rxjs";
 import { startWith, switchMap } from "rxjs/operators";
+import { DeleteDialog } from "../_components/delete-dialog.component";
 import { Invitation, Worker } from "../_models";
+import { AlertService } from "../_services/alert.service";
 import { FarmService } from "../_services/farm.service";
 import { InvitationService } from "../_services/invitation.service";
 import { UserService } from "../_services/user.service";
@@ -30,22 +33,35 @@ export class HomepageComponent {
     errors: boolean = false;
     loading: boolean = false;
     loading2: boolean = false;
+    mainLoading: boolean = false;
     worker: Worker;
     userId: number;
+    workers: Worker[];
+
+    displayedColumns: string[] = ['firstName', 'lastName', 'action'];
 
     constructor(private formBuilder: FormBuilder,
                 private farmService: FarmService,
                 private invitationService: InvitationService,
                 private workerService: WorkerService,
+                private alertService: AlertService,
+                private dialog: MatDialog,
                 private router: Router,
                 private route: ActivatedRoute) {
     }
 
     ngOnInit() {
+        this.mainLoading = true;
         this.farmService.farm.subscribe(farm => {
             if (farm) {
                 this.workerService.getFarmAndUserWorker(farm.id).subscribe(worker => {
                     this.worker = worker;
+                    if (worker.role == 0) {
+                        this.workerService.getFarmAllWorkers(farm.id).subscribe(workers => {
+                            this.workers = workers;
+                        });
+                    };
+                    this.mainLoading = false;
                 });
             }
         });
@@ -84,7 +100,7 @@ export class HomepageComponent {
     getInviteCode() {
         this.loading2 = true;
         this.disabled = true;
-        this.invitationService.getCode(this.farmId).subscribe(invitation => {
+        this.invitationService.getCode(this.farmService.farmValue.id).subscribe(invitation => {
             this.invitation = invitation;
             this.loading2 = false;
             this.remainingSeconds = (invitation.expirationDate.getMinutes() - new Date().getMinutes())
@@ -124,5 +140,23 @@ export class HomepageComponent {
         if (this.subscription) {
             this.subscription.unsubscribe();
         }
+    }
+
+    deleteWorker(id: number): void {
+        const dialogRef = this.dialog.open(DeleteDialog);
+    
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                this.workerService.delete(this.farmService.farmValue.id, id).subscribe({
+                    next: () => {
+                        this.workers = this.workers.filter(x => x.userId !== id && x.farmId !== this.farmService.farmValue.id);
+                        this.alertService.success('Darbuotojas sėkmingai ištrintas', { keepAfterRouteChange: true, autoClose: true });
+                    },
+                    error: error => {
+                        this.alertService.error(error);
+                    }
+                });
+            }
+        });
     }
 }

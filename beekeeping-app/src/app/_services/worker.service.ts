@@ -21,4 +21,12 @@ export class WorkerService {
     getUserWorkers() {
         return this.http.get<Worker[]>(`${baseUrl}/farmworkers`);
     }
+
+    getFarmAllWorkers(farmId: number) {
+        return this.http.get<Worker[]>(`${baseUrl}/farms/${farmId}/farmworkers`);
+    }
+
+    delete(farmId: number, workerId: number) {
+        return this.http.delete(`${baseUrl}/farms/${farmId}/farmworkers/${workerId}`);
+    }
 }

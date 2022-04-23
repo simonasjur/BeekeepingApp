@@ -35,7 +35,7 @@ namespace BeekeepingApi.Controllers
             var currentUserId = long.Parse(User.Identity.Name);
             var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, farmId);
             if (farmWorker == null || farmWorker.Role != WorkerRole.Owner)
-                return Forbid("Neturite teisės atlikti šį veiksmą.");
+                return Forbid();
 
             var invitation = await _context.Invitations.FindAsync(farmId);
 
@@ -72,13 +72,13 @@ namespace BeekeepingApi.Controllers
                 return NotFound("Neteisingas kodas");
 
             if (invitation.ExpirationDate < DateTime.UtcNow)
-                return Forbid("Pakvietimo galiojimo laikas pasibaigė");
+                return Forbid();
 
             var currentUserId = long.Parse(User.Identity.Name);
 
             var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, invitation.FarmId);
             if (farmWorker != null)
-                return Forbid("Jūs jau esate užregistruotas šiame ūkyje");
+                return Forbid();
 
             var user = await _context.Users.FindAsync(currentUserId);
             if (user.DefaultFarmId == null)

@@ -14,6 +14,9 @@ namespace BeekeepingApi.Models
 
     public class FarmWorker
     {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+
         [Required]
         public WorkerRole Role { get; set; }
 

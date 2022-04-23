@@ -10,3 +10,8 @@ mat-form-field {
     margin-top: 20px;
     width: 400px;
 }
+
+.workers-table {
+    width: 100%;
+    max-width: 500px;
+}

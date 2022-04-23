@@ -72,7 +72,7 @@ namespace BeekeepingApi.Controllers
 
             var currentUserId = long.Parse(User.Identity.Name);
             var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, farm.Id);
-            if (farmWorker == null)
+            if (farmWorker == null || farmWorker.Role != WorkerRole.Owner)
                 return Forbid();
 
             var apiary = _mapper.Map<Apiary>(apiaryCreateDTO);
@@ -100,7 +100,7 @@ namespace BeekeepingApi.Controllers
 
             var currentUserId = long.Parse(User.Identity.Name);
             var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, farm.Id);
-            if (farmWorker == null)
+            if (farmWorker == null || farmWorker.Role != WorkerRole.Owner)
                 return Forbid();
 
             _mapper.Map(apiaryEditDTO, apiary);
@@ -122,7 +122,7 @@ namespace BeekeepingApi.Controllers
 
             var currentUserId = long.Parse(User.Identity.Name);
             var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, farm.Id);
-            if (farmWorker == null)
+            if (farmWorker == null || farmWorker.Role != WorkerRole.Owner)
                 return Forbid();
 
             await _context.Entry(apiary).Collection(a => a.Harvests).LoadAsync();
