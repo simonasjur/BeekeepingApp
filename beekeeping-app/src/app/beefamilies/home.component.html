@@ -3,9 +3,6 @@
     <mat-card class="bee-card">
         <mat-card-title>
             Šeima
-            <button mat-icon-button>
-                <mat-icon routerLink="edit/">edit</mat-icon>
-            </button>
         </mat-card-title>
         <mat-card-content>
             <!-- <p>Bitynas: <a routerLink="/apiaries/{{apiaryBeefamily.apiary.id}}">{{apiaryBeefamily.apiary.name}}</a></p>
@@ -50,7 +47,7 @@
         <mat-card-title>
             Avilys
             <button mat-icon-button>
-                <mat-icon routerLink="edit/">edit</mat-icon>
+                <mat-icon routerLink="/apiaries/{{apiaryBeefamily.apiaryId}}/beefamilies/{{id}}/beehives/edit/{{beehive.id}}">edit</mat-icon>
             </button>
         </mat-card-title>
         <mat-card-content>

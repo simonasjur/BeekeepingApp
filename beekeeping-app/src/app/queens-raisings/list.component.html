@@ -1,9 +1,12 @@
 <h1>Motinėlių auginimai</h1>
-<button mat-raised-button color="accent" routerLink="add">Naujas auginimas</button>
+
 <div class="example-loading-shade" *ngIf="isDataLoading()">
     <mat-spinner *ngIf="loading" color="accent"></mat-spinner>
 </div>
 <div *ngIf="!isDataLoading()">
+    <button mat-raised-button color="accent" routerLink="add" [disabled]="!isThereAreLivingQueens()">
+        Naujas auginimas
+    </button>
     <table mat-table [dataSource]="queensRaisings">
         <ng-container matColumnDef="no">
             <th mat-header-cell *matHeaderCellDef>Nr</th>
@@ -55,9 +58,9 @@
                 <button mat-icon-button >
                     <mat-icon routerLink="edit/{{element.id}}">edit</mat-icon>
                 </button>
-                <!-- <button mat-icon-button (click)="deleteApiary(element.id)">
+                <button mat-icon-button (click)="deleteQueensRaising(element.id)">
                     <mat-icon>delete</mat-icon>
-                </button> -->
+                </button>
             </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

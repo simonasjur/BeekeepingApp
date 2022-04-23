@@ -11,6 +11,7 @@ const componentsModule = () => import('../beehive-components/beehive-components.
 const queensModule = () => import('../queens/queens.module').then(x => x.QueensModule);
 const beefamilyQueensModule = () => import('../beefamily-queens/beefamily-queens.module').then(x => x.BeefamilyQueensModule);
 const nestExpansionsModule = () => import('../nest-expansions/nest-expansions.module').then(x => x.NestExpansionsModule);
+const beehivesModule = () => import('../beehives/beehives.module').then(x => x.BeehivesModule);
 
 const routes: Routes = [
     {
@@ -23,7 +24,8 @@ const routes: Routes = [
             { path: ':id/components', loadChildren: componentsModule, canActivate: [AuthGuard] },
             { path: ':id/queens', loadChildren: queensModule, canActivate: [AuthGuard] },
             { path: ':id/beefamilyqueens', loadChildren: beefamilyQueensModule, canActivate: [AuthGuard] },
-            { path: ':id/nestexpansions', loadChildren: nestExpansionsModule, canActivate: [AuthGuard] }
+            { path: ':id/nestexpansions', loadChildren: nestExpansionsModule, canActivate: [AuthGuard] },
+            { path: ':id/beehives', loadChildren: beehivesModule, canActivate: [AuthGuard] }
             //{ path: 'edit/:id', component: AddEditComponent }
         ]
     }

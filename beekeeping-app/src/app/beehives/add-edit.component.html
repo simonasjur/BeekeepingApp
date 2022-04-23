@@ -46,6 +46,15 @@
                 <p *ngIf="f.maxNestCombs.errors.max">Avilyje telpa tik 16 korių</p>
             </mat-error>
         </mat-form-field>
+        <mat-form-field *ngIf="typeField.value === beehiveTypes.Dadano && !isAddMode && !isBeehiveEmpty()">
+            <mat-label>Esamas lizdinių korių skaičius</mat-label>
+            <input matInput formControlName="nestCombs">
+            <mat-error *ngIf="submitted && f.nestCombs.errors">
+                <p *ngIf="f.nestCombs.errors.required">Šis laukas yra būtinas</p>
+                <p *ngIf="f.nestCombs.errors.pattern">Reikšmė privalo būti natūralus skaičius</p>
+                <p *ngIf="f.nestCombs.errors.equalLessthan">Negali būti daugiau nei maksimaliai telpa</p>
+            </mat-error>
+        </mat-form-field>
         <mat-form-field *ngIf="typeField.value === beehiveTypes.Dadano">
             <mat-label>Maksimalus meduvių skaičius</mat-label>
             <input matInput formControlName="maxHoneyCombsSupers">

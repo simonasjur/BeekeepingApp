@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DeleteDialog } from '../_components/delete-dialog.component';
 
 import { Beehive, BeehiveType2LabelMapping } from '../_models';
@@ -22,10 +23,13 @@ export class ListComponent implements OnInit {
     constructor(private beehiveService: BeehiveService,
                 private farmService: FarmService,
                 private alertService: AlertService,
-                private dialog: MatDialog) {
+                private dialog: MatDialog,
+                private router: Router,
+                private route: ActivatedRoute) {
     }
 
     ngOnInit() {
+        this.checkUrl();
         this.beehiveService.getFarmAllBeehives(this.farmService.farmValue.id)
             .subscribe({
                 next: beehives => {
@@ -35,7 +39,15 @@ export class ListComponent implements OnInit {
                 }});
     }
 
-    ngAfterViewInit() {
+    checkUrl() {
+        const urlEntry = this.router.url.substring(1, 10);
+        if (urlEntry !== 'beehives') {
+            if (urlEntry === 'apiaries/') {
+                this.router.navigate(['../home/'], { relativeTo: this.route });
+            } else {
+                this.router.navigate(['/'], { relativeTo: this.route });
+            }
+        }
     }
 
     get beehiveType2LabelMapping() {
@@ -57,8 +69,6 @@ export class ListComponent implements OnInit {
                     }
                 });
             }
-        });
-
-        
+        }); 
     }
 }

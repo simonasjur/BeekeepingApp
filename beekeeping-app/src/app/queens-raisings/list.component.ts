@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Breed2LabelMapping, QueensRaising } from '../_models';
+import { Breed2LabelMapping, Queen, QueensRaising, QueenState } from '../_models';
 import { FarmService } from '../_services/farm.service';
 import { AlertService } from '../_services/alert.service';
 import { MatDialog } from '@angular/material/dialog';
 import { QueensRaisingService } from '../_services/queens-raising.service';
 import { QueenService } from '../_services/queen.service';
+import { DeleteDialog } from '../_components/delete-dialog.component';
 
 @Component({
     selector: 'queens-raisings-list',
@@ -15,6 +16,7 @@ import { QueenService } from '../_services/queen.service';
 })
 export class ListComponent implements OnInit {
     queensRaisings: QueensRaising[];
+    livingFarmQueens: Queen[];
     loadedDataCount = 0;
     displayedColumns: string[] = ['no', 'daysLeft', 'breed', 'startDate', 'larvaCount', 'queensCount', 'proc', 'action'];
 
@@ -28,7 +30,10 @@ export class ListComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.queensRaisingService.getFarmQueensRaisings(this.farmService.farmValue.id)
+        this.queenService.getFarmQueens(this.farmService.farmValue.id).subscribe(queens => {
+            this.livingFarmQueens = queens.filter(q => q.state === QueenState.LvingInBeehive &&
+                                                       q.isFertilized === true);
+            this.queensRaisingService.getFarmQueensRaisings(this.farmService.farmValue.id)
             .subscribe(raisings => {
                 this.queensRaisings = raisings;
                 this.queensRaisings.forEach(raising => {
@@ -39,6 +44,7 @@ export class ListComponent implements OnInit {
                     raising.daysLeft = this.calcDaysLeft(raising.startDate);
                 });
             });
+        }) 
     }
 
     calcDaysLeft(startDate: Date) {
@@ -53,37 +59,30 @@ export class ListComponent implements OnInit {
         return !this.queensRaisings || this.loadedDataCount != this.queensRaisings.length;
     }
 
+    isThereAreLivingQueens() {
+        return this.livingFarmQueens.length != 0;
+    }
+
     get breed2LabelMapping() {
         return Breed2LabelMapping;
     }
 
-    // deleteApiary(id: number): void {
-    //     this.apiaryService.delete(id).subscribe({
-    //         next: () => {
-    //             this.apiaries = this.apiaries.filter(x => x.id !== id);
-    //             this.alertService.success('Bitynas sėkmingai ištrintas', { keepAfterRouteChange: true, autoClose: true });
-    //         },
-    //         error: error => {
-    //             this.alertService.error(error);
-    //         }
-    //     });
-    // }
-
-    // deleteApiary(id: number): void {
-    //     const dialogRef = this.dialog.open(DeleteDialog);
+    deleteQueensRaising(id: number): void {
+        const dialogRef = this.dialog.open(DeleteDialog);
     
-    //     dialogRef.afterClosed().subscribe(result => {
-    //         if (result) {
-    //             this.apiaryService.delete(id).subscribe({
-    //                 next: () => {
-    //                     this.apiaries = this.apiaries.filter(x => x.id !== id);
-    //                     this.alertService.success('Bitynas sėkmingai ištrintas', { keepAfterRouteChange: true, autoClose: true });
-    //                 },
-    //                 error: error => {
-    //                     this.alertService.error(error);
-    //                 }
-    //             });
-    //         }
-    //     });
-    // }
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                this.queensRaisingService.delete(id).subscribe({
+                    next: () => {
+                        this.queensRaisings = this.queensRaisings.filter(x => x.id !== id);
+                        this.loadedDataCount--;
+                        this.alertService.success('Motinėlių auginimas sėkmingai ištrintas', { keepAfterRouteChange: true, autoClose: true });
+                    },
+                    error: () => {
+                        this.alertService.error("Nepavyko ištrinti motinėlių auginimo");
+                    }
+                });
+            }
+        });
+    }
 }

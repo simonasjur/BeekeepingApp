@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControlOptions, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { first } from 'rxjs/operators';
+import { EqualLessthanValidator } from '../_helpers/equal-lessthan.validator';
 
 import { Beehive, BeehiveType2LabelMapping, BeehiveTypes, Color2LabelMapping, Colors } from '../_models';
 import { AlertService } from '../_services/alert.service';
@@ -16,6 +17,7 @@ import { FarmService } from '../_services/farm.service';
 export class AddEditComponent implements OnInit {
     form: FormGroup;
     id: number;
+    beehive: Beehive;
     isAddMode = true;
     submitted = false;
     loading = false;
@@ -29,24 +31,28 @@ export class AddEditComponent implements OnInit {
     }
 
     ngOnInit() {
+        const formOptions: AbstractControlOptions = { validators: EqualLessthanValidator('maxNestCombs', 'nestCombs')};
         this.form = this.formBuilder.group({
             type: ['', Validators.required],
             isEmpty: ['', Validators.required],
             no: ['', [Validators.required, Validators.pattern('^([1-9][0-9]*)$')]],
             maxNestCombs: ['', [Validators.required, Validators.max(16), Validators.pattern('^(0|[1-9][0-9]*)$')]],
             maxHoneyCombsSupers: ['', [Validators.required, Validators.max(4), Validators.pattern('^(0|[1-9][0-9]*)$')]],
-            nestCombs: [''],
+            nestCombs: ['', [Validators.required, Validators.pattern('^(0|[1-9][0-9]*)$')]],
             acquireDay: [''],
             color: [''],
             farmId: ['', Validators.required],
-        });
+        }, formOptions);
 
         this.id = this.route.snapshot.params['id'];
         
         if (this.id !== undefined) {
             this.isAddMode = false;
             this.form.addControl('id', new FormControl('', Validators.required));
-            this.beehiveService.getById(this.id).subscribe(beehive => this.form.patchValue(beehive));
+            this.beehiveService.getById(this.id).subscribe(beehive => {
+                this.form.patchValue(beehive);
+                this.beehive = beehive;
+            });
         }
     }
 
@@ -72,6 +78,10 @@ export class AddEditComponent implements OnInit {
 
     get f() { return this.form.controls; }
 
+    isBeehiveEmpty() {
+        return !this.beehive || this.beehive.isEmpty;
+    }
+
     onSubmit() {
         if (!this.submitted) {
             if (this.isAddMode) {
@@ -82,6 +92,7 @@ export class AddEditComponent implements OnInit {
             if (this.form.controls['type'].value === this.beehiveTypes.Daugiaaukštis) {
                 this.form.patchValue({maxNestCombs: '0'});
                 this.form.patchValue({maxHoneyCombsSupers: '0'});
+                this.form.patchValue({nestCombs: '0'});
             }
         }
    
@@ -96,6 +107,7 @@ export class AddEditComponent implements OnInit {
         if (this.form.controls['type'].value === this.beehiveTypes.Daugiaaukštis) {
             this.form.patchValue({maxNestCombs: ''});
             this.form.patchValue({maxHoneyCombsSupers: ''});
+            this.form.patchValue({nestCombs: ''});
         }
        
         if (this.isAddMode) {
