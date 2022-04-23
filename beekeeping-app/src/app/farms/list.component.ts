@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { first } from 'rxjs/operators';
-import { User, Worker } from '../_models';
+import { Role2LabelMapping, User, Worker } from '../_models';
 
 import { FarmService } from '../_services/farm.service';
 import { UserService } from '../_services/user.service';
@@ -65,6 +65,10 @@ export class ListComponent implements OnInit {
     }
 
     get f() { return this.form.controls; }
+
+    get role2LabelMapping() {
+        return Role2LabelMapping;
+    }
 
     onSubmit() {
         this.submitted = true;

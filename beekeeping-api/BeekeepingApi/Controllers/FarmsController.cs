@@ -59,7 +59,7 @@ namespace BeekeepingApi.Controllers
 
             var currentUserId = long.Parse(User.Identity.Name);
             var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, id);
-            
+
             if (farmWorker == null)
                 return Forbid();
 
@@ -70,7 +70,7 @@ namespace BeekeepingApi.Controllers
         // POST: api/Farms
         [HttpPost]
         public async Task<ActionResult<FarmReadDTO>> CreateFarm(FarmCreateDTO farmCreateDTO)
-        {          
+        {
             var currentUserId = long.Parse(User.Identity.Name);
             var farm = _mapper.Map<Farm>(farmCreateDTO);
 
@@ -85,7 +85,7 @@ namespace BeekeepingApi.Controllers
                 _context.Entry(user).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
             }
-                
+
             var farmWorker = new FarmWorker
             {
                 Role = WorkerRole.Owner,
@@ -105,14 +105,14 @@ namespace BeekeepingApi.Controllers
         public async Task<IActionResult> EditFarm(long id, FarmEditDTO farmEditDTO)
         {
             if (id != farmEditDTO.Id)
-                return BadRequest("suds");
+                return BadRequest();
 
             var farm = await _context.Farms.FindAsync(id);
             if (farm == null)
                 return NotFound();
             var currentUserId = long.Parse(User.Identity.Name);
             var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, id);
-            if (farmWorker == null)
+            if (farmWorker == null || farmWorker.Role != WorkerRole.Owner)
                 return Forbid();
 
             _mapper.Map(farmEditDTO, farm);
@@ -130,7 +130,7 @@ namespace BeekeepingApi.Controllers
                 return NotFound();
             var currentUserId = long.Parse(User.Identity.Name);
             var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, id);
-            if (farmWorker == null)
+            if (farmWorker == null || farmWorker.Role != WorkerRole.Owner)
                 return Forbid();
 
             _context.Farms.Remove(farm);

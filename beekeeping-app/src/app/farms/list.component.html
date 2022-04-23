@@ -30,7 +30,7 @@
         <a mat-line (click)="loadFarm(farm.id)" routerLink="/home">{{farm.name}}</a>
         <p class="default" *ngIf="farm.id == user.defaultFarmId">Numatytasis</p>
         <p mat-line>{{farm.creationDate}}</p>
-        <p mat-line>{{farm.worker.role}}</p>
+        <p mat-line>{{role2LabelMapping[farm.worker.role]}}</p>
         <button mat-icon-button *ngIf="farm.worker.role == 0">
             <mat-icon routerLink="edit/{{farm.id}}">edit</mat-icon>
         </button>
