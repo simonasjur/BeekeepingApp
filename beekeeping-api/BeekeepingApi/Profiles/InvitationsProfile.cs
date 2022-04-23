@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BeekeepingApi.DTOs.InvitationDTOs;
+using BeekeepingApi.Models;
 
 namespace BeekeepingApi.Profiles
 {
@@ -7,7 +8,7 @@ namespace BeekeepingApi.Profiles
     {
         public InvitationsProfile()
         {
-            CreateMap<InvitationsProfile, InvitationReadDTO>();
+            CreateMap<Invitation, InvitationReadDTO>();
         }
     }
 }

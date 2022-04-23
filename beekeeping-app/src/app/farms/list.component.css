@@ -9,3 +9,12 @@ mat-icon {
 .default {
     font-style: italic;
 }
+
+mat-divider {
+    margin-top: 40px;
+}
+
+mat-form-field {
+    margin-top: 20px;
+    width: 400px;
+}

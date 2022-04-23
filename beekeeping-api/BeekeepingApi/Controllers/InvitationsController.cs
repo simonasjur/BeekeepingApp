@@ -34,8 +34,8 @@ namespace BeekeepingApi.Controllers
 
             var currentUserId = long.Parse(User.Identity.Name);
             var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, farmId);
-            if (farmWorker == null)
-                return Forbid();
+            if (farmWorker == null || farmWorker.Role != WorkerRole.Owner)
+                return Forbid("Neturite teisės atlikti šį veiksmą.");
 
             var invitation = await _context.Invitations.FindAsync(farmId);
 
@@ -48,17 +48,16 @@ namespace BeekeepingApi.Controllers
                     FarmId = farmId
                 };
                 await _context.Invitations.AddAsync(invitationToSave);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
                 invitation = await _context.Invitations.FindAsync(farmId);
             }
-
-            if (invitation.ExpirationDate < DateTime.UtcNow)
+            else if (invitation.ExpirationDate < DateTime.UtcNow)
             {
                 //edit old one
                 invitation.Code = Guid.NewGuid();
                 invitation.ExpirationDate = DateTime.UtcNow.AddMinutes(10);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
 
             return _mapper.Map<InvitationReadDTO>(invitation);
@@ -66,7 +65,7 @@ namespace BeekeepingApi.Controllers
 
 
         [HttpGet("/api/Invitation/{code}")]
-        public async Task<IActionResult> ValidateInvitation(string code)
+        public async Task<ActionResult<long>> ValidateInvitation(string code)
         {
             var invitation = await _context.Invitations.Where(l => l.Code.ToString() == code).FirstOrDefaultAsync();
             if (invitation == null)
@@ -81,6 +80,14 @@ namespace BeekeepingApi.Controllers
             if (farmWorker != null)
                 return Forbid("Jūs jau esate užregistruotas šiame ūkyje");
 
+            var user = await _context.Users.FindAsync(currentUserId);
+            if (user.DefaultFarmId == null)
+            {
+                user.DefaultFarmId = invitation.FarmId;
+                _context.Entry(user).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+            }
+            
             farmWorker = new FarmWorker
             {
                 Role = WorkerRole.Assistant,
@@ -90,7 +97,7 @@ namespace BeekeepingApi.Controllers
             _context.FarmWorkers.Add(farmWorker);
             await _context.SaveChangesAsync();
 
-            return Ok();
+            return invitation.FarmId;
         }
     }
 }

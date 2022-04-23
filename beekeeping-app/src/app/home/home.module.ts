@@ -27,6 +27,8 @@ import { AlertComponent } from '../_components';
 import { ChangeEmailComponent } from '../settings/change-email.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import { HomepageComponent } from './homepage.component';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 @NgModule({
     imports: [
@@ -51,13 +53,15 @@ import {MatFormFieldModule} from '@angular/material/form-field';
         MatSelectModule,
         MatDatepickerModule,
         MatFormFieldModule,
-        MatDialogModule
+        MatDialogModule,
+        MatProgressBarModule
     ],
     declarations: [
         SettingsComponent,
         HomeComponent,
         ChangePasswordComponent,
-        ChangeEmailComponent
+        ChangeEmailComponent,
+        HomepageComponent
     ]
 })
 export class HomeModule { }

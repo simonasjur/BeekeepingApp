@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './home.component';
 import { SettingsComponent } from '../settings/settings.component';
 import { AuthGuard } from '../_helpers';
+import { HomepageComponent } from './homepage.component';
 
 const farmsModule = () => import('../farms/farms.module').then(x => x.FarmsModule);
 const apiariesModule = () => import('../apiaries/apiaries.module').then(x => x.ApiariesModule);
@@ -18,6 +19,7 @@ const routes: Routes = [
         children: [
             { path: 'farms', loadChildren: farmsModule, canActivate: [AuthGuard] },
             { path: 'settings', component: SettingsComponent, canActivate: [AuthGuard] },
+            { path: 'home', component: HomepageComponent, canActivate: [AuthGuard] },
             { path: 'apiaries', loadChildren: apiariesModule, canActivate: [AuthGuard] },
             { path: 'todos', loadChildren: todosModule, canActivate: [AuthGuard] },
             { path: 'harvests', loadChildren: harvestsModule, canActivate: [AuthGuard] },

@@ -12,3 +12,5 @@ export * from './beehive-component';
 export * from './queen';
 export * from './beefamily-queen';
 export * from './queens-raising';
+export * from './invitation';
+export * from './worker';

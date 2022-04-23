@@ -13,48 +13,48 @@
                         </mat-error>
                         </mat-form-field>
                         <mat-form-field appearance="outline">
-                        <mat-label>Pavardė</mat-label>
-                        <input matInput formControlName="lastName">
-                        <mat-error *ngIf="submitted && f.lastName.errors">
-                            Pavardė yra privalomas
-                        </mat-error>
-                        </mat-form-field>
-                        <mat-form-field appearance="outline">
                             <mat-label>Slapyvardis</mat-label>
                             <input matInput formControlName="username">
                             <mat-error *ngIf="submitted && f.username.errors">
                             Slapyvardis yra privalomas
                             </mat-error>
                         </mat-form-field>
-                    </div>
-                    <div class="flex-right">
-                        <mat-form-field appearance="outline">
-                            <mat-label>El. paštas</mat-label>
-                            <input matInput formControlName="email">
-                            <mat-error *ngIf="submitted && f.email.errors.required">
-                            El. paštas yra privalomas
-                            </mat-error>
-                            <mat-error *ngIf="submitted && f.email.errors.email">
-                            Neteisingas el. pašto formatas
-                            </mat-error>
-                        </mat-form-field>
                         <mat-form-field appearance="outline">
                             <mat-label>Slaptažodis</mat-label>
                             <input matInput type="password" formControlName="password">
-                            <mat-error *ngIf="submitted && f.password.errors.required">
+                            <mat-error *ngIf="submitted && f.password.errors && f.password.errors.required">
                             Slaptažodis yra privalomas
                             </mat-error>
-                            <mat-error *ngIf="submitted && f.password.errors.minlength">
+                            <mat-error *ngIf="submitted && f.password.errors && f.password.errors.minlength">
                             Slaptažodį turi sudaryti bent 6 simboliai
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="flex-right">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Pavardė</mat-label>
+                            <input matInput formControlName="lastName">
+                            <mat-error *ngIf="submitted && f.lastName.errors">
+                                Pavardė yra privalomas
+                            </mat-error>
+                            </mat-form-field>
+                        <mat-form-field appearance="outline">
+                            <mat-label>El. paštas</mat-label>
+                            <input matInput formControlName="email">
+                            <mat-error *ngIf="submitted && f.email.errors && f.email.errors.required">
+                            El. paštas yra privalomas
+                            </mat-error>
+                            <mat-error *ngIf="submitted && f.email.errors && f.email.errors.email">
+                            Neteisingas el. pašto formatas
                             </mat-error>
                         </mat-form-field>
                         <mat-form-field appearance="outline">
                             <mat-label>Pakartokite slaptažodį</mat-label>
                             <input matInput type="password" formControlName="confirmPassword">
-                            <mat-error *ngIf="submitted && f.confirmPassword.errors.required">
+                            <mat-error *ngIf="submitted &&  f.confirmPassword.errors && f.confirmPassword.errors.required">
                             Slaptažodis yra privalomas
                             </mat-error>
-                            <mat-error *ngIf="submitted && f.confirmPassword.errors.mustMatch">
+                            <mat-error *ngIf="submitted && f.confirmPassword.errors && f.confirmPassword.errors.mustMatch">
                             Slaptažodžiai turi sutapti
                             </mat-error>
                         </mat-form-field>

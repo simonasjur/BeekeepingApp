@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace BeekeepingApi.Controllers
 {
     [Authorize]
-    [Route("api/Farms/{farmId}/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class FarmWorkersController : ControllerBase
     {
@@ -26,22 +26,41 @@ namespace BeekeepingApi.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/Farms/1/FarmWorkers
+        // GET: api/FarmWorkers
         [HttpGet]
         [EnableQuery()]
-        public async Task<ActionResult<IEnumerable<FarmWorkerReadDTO>>> GetFarmWorkers(long id)
+        public async Task<ActionResult<IEnumerable<FarmWorkerReadDTO>>> GetFarmWorkers()
         {
-            var farm = await _context.Farms.FindAsync(id);
+            /*var farm = await _context.Farms.FindAsync(id);
+            if (farm == null)
+                return NotFound();*/
+
+            var currentUserId = long.Parse(User.Identity.Name);
+            var farmWorkersList = await _context.FarmWorkers.Where(l => l.UserId == currentUserId).ToListAsync();
+
+            if (!farmWorkersList.Any())
+                return Ok();
+
+            return _mapper.Map<IEnumerable<FarmWorkerReadDTO>>(farmWorkersList).ToList();
+        }
+
+
+        [HttpGet("/api/Farms/{farmId}/Farmworker")]
+        public async Task<ActionResult<FarmWorkerReadDTO>> GetFarmAndUserWorker(long farmId)
+        {
+            var farm = await _context.Farms.FindAsync(farmId);
             if (farm == null)
                 return NotFound();
 
             var currentUserId = long.Parse(User.Identity.Name);
-            var farmWorkersList = await _context.FarmWorkers.Where(l => l.FarmId == id).ToListAsync();
 
-            if (farmWorkersList.Any() && farmWorkersList.First().UserId != currentUserId)
+            var farmWorkers = await _context.FarmWorkers.Where(l => l.FarmId == farmId && l.UserId == currentUserId).ToListAsync();
+            
+
+            if (farmWorkers.Any() && farmWorkers.First().UserId != currentUserId)
                 return Forbid();
 
-            return _mapper.Map<IEnumerable<FarmWorkerReadDTO>>(farmWorkersList).ToList();
+            return _mapper.Map<FarmWorkerReadDTO>(farmWorkers.First());
         }
 
         // DELETE: api/Farms/1/FarmWorkers/1

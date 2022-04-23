@@ -1,0 +1,45 @@
+<div *ngIf="worker" class="p-4">
+    <div class="container">
+        <mat-tab-group mat-align-tabs="start">
+            <mat-tab label="Ūkis">Sudas blet</mat-tab>
+            <mat-tab *ngIf="worker.role == 0" label="Ūkio darbuotojai">Ūkio darbuotojai</mat-tab>
+            <mat-tab *ngIf="worker.role == 0" label="Pridėti darbuotoją">
+                <h3 class="margin-top">Norint pridėti naują darbuotoją reikia sugeneruoti pakvietimo kodą</h3>
+                <button mat-raised-button color="accent" (click)="getInviteCode()" [disabled]="disabled || loading2">
+                    <mat-icon *ngIf="loading2"><mat-spinner color="accent" diameter="20">
+                    </mat-spinner></mat-icon>
+                    Sukurti pakvietimo kodą</button>
+                <div *ngIf="invitation">
+                    <p class="margin-top">Pakvietimo kodas: <b>{{invitation.code}}</b></p>
+                    <p>Perduokite pakvietimo kodą kitam naudotojui, kuris jį turi įvesti "Namai" -> "Priimti pakvietimą"</p>
+                    <mat-progress-bar mode="determinate" [value]="progressbarValue"></mat-progress-bar>
+                    <p>{{minutes}}:{{secondsString}}</p>
+                </div>
+            </mat-tab>
+            <mat-tab label="Priimti pakvietimą">
+                <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Pakvietimo kodas</mat-label>
+                        <input matInput formControlName="code">
+                        <mat-error >
+                            <p *ngIf="submitted && f.code.errors && f.code.errors.required">
+                                Įveskite pakvietimo kodą
+                            </p>
+                            
+                        </mat-error>
+                    </mat-form-field>
+                    <div class="form-group">
+                        <button mat-flat-button color="accent" [disabled]="loading">
+                            Patvirtinti
+                            <mat-icon *ngIf="loading"><mat-spinner color="accent" diameter="20">
+                            </mat-spinner></mat-icon>
+                        </button>
+                    </div>
+                </form>
+                <mat-error *ngIf="submitted && errors">
+                    Neteisingas kodas
+                </mat-error>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
+</div>
