@@ -4,13 +4,14 @@
         <mat-chip-list>
             <mat-chip routerLink="/apiaries/{{apiaryFamily.apiary.id}}/beefamilies/{{beefamily.id}}/home" 
             routerLinkActive="active">Pagrindinis</mat-chip>
+            <mat-chip routerLink="/apiaries/{{apiaryFamily.apiary.id}}/beefamilies/{{beefamily.id}}/beefamilyqueens"
+            routerLinkActive="active">Motinėlė</mat-chip>
             <mat-chip routerLink="/apiaries/{{apiaryFamily.apiary.id}}/beefamilies/{{beefamily.id}}/components"
             routerLinkActive="active">Avilio sudėtis</mat-chip>
-            <mat-chip>Plėtimas</mat-chip>
-            <mat-chip>Siaurinimas</mat-chip>
-            <mat-chip>Maitinimas</mat-chip>
-            <mat-chip routerLink="/apiaries/{{apiaryFamily.apiary.id}}/beefamilies/{{beefamily.id}}/beefamilyqueens"
-            routerLinkActive="active">Motinėlės</mat-chip>
+            <mat-chip routerLink="/apiaries/{{apiaryFamily.apiary.id}}/beefamilies/{{beefamily.id}}/nestexpansions"
+            routerLinkActive="active">Plėtimai</mat-chip>
+            <mat-chip>Siaurinimai</mat-chip>
+            <mat-chip>Maitinimai</mat-chip>
         </mat-chip-list>
     </div>
 </div>

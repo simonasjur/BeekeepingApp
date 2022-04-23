@@ -10,6 +10,7 @@ import { AuthGuard } from '../_helpers';
 const componentsModule = () => import('../beehive-components/beehive-components.module').then(x => x.BeehiveComponentsModule);
 const queensModule = () => import('../queens/queens.module').then(x => x.QueensModule);
 const beefamilyQueensModule = () => import('../beefamily-queens/beefamily-queens.module').then(x => x.BeefamilyQueensModule);
+const nestExpansionsModule = () => import('../nest-expansions/nest-expansions.module').then(x => x.NestExpansionsModule);
 
 const routes: Routes = [
     {
@@ -21,7 +22,8 @@ const routes: Routes = [
             { path: 'edit/:id', component: AddBeeFamilyComponent},
             { path: ':id/components', loadChildren: componentsModule, canActivate: [AuthGuard] },
             { path: ':id/queens', loadChildren: queensModule, canActivate: [AuthGuard] },
-            { path: ':id/beefamilyqueens', loadChildren: beefamilyQueensModule, canActivate: [AuthGuard] }
+            { path: ':id/beefamilyqueens', loadChildren: beefamilyQueensModule, canActivate: [AuthGuard] },
+            { path: ':id/nestexpansions', loadChildren: nestExpansionsModule, canActivate: [AuthGuard] }
             //{ path: 'edit/:id', component: AddEditComponent }
         ]
     }

@@ -14,3 +14,4 @@ export * from './beefamily-queen';
 export * from './queens-raising';
 export * from './invitation';
 export * from './worker';
+export * from './nest-expansion';

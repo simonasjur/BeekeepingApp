@@ -1,0 +1,46 @@
+<h1>Avilio plėtimai</h1>
+<button mat-raised-button color="accent" routerLink="add">Naujas plėtimas</button>
+<div class="example-loading-shade" *ngIf="loading">
+    <mat-spinner *ngIf="loading" color="accent"></mat-spinner>
+</div>
+<div *ngIf="!loading">
+    <table mat-table [dataSource]="nestExpansions">
+        <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef>Data</th>
+            <td mat-cell *matCellDef="let element">
+                {{element.date | date:'yyyy-MM-dd'}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="frameType">
+            <th mat-header-cell *matHeaderCellDef>Korių tipas</th>
+            <td mat-cell *matCellDef="let element">
+                {{frameType2LabelMapping[element.frameType]}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="combSheets">
+            <th mat-header-cell *matHeaderCellDef>Vaškuolės</th>
+            <td mat-cell *matCellDef="let element">
+                {{element.combSheets}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="combs">
+            <th mat-header-cell *matHeaderCellDef>Pasiūti koriai</th>
+            <td mat-cell *matCellDef="let element">
+                {{element.combs}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef> Veiksmas </th>
+            <td mat-cell *matCellDef="let element">
+                <button mat-icon-button >
+                    <mat-icon routerLink="edit/{{element.id}}">edit</mat-icon>
+                </button>
+                <button mat-icon-button (click)="deleteNestExpansion(element.id)">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+</div>
