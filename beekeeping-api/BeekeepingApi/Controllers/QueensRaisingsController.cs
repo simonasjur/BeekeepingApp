@@ -94,7 +94,7 @@ namespace BeekeepingApi.Controllers
 
             var currentUserId = long.Parse(User.Identity.Name);
             var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, queen.FarmId);
-            if (farmWorker == null)
+            if (farmWorker == null || farmWorker.Permissions[21] != '1')
             {
                 return Forbid();
             }
@@ -143,7 +143,7 @@ namespace BeekeepingApi.Controllers
 
             var currentUserId = long.Parse(User.Identity.Name);
             var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, farm.Id);
-            if (farmWorker == null)
+            if (farmWorker == null || farmWorker.Permissions[22] != '1')
             {
                 return Forbid();
             }
@@ -178,7 +178,7 @@ namespace BeekeepingApi.Controllers
             await _context.Entry(queensRaising).Reference(qr => qr.Mother).LoadAsync();
             var currentUserId = long.Parse(User.Identity.Name);
             var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, queensRaising.Mother.FarmId);
-            if (farmWorker == null)
+            if (farmWorker == null || farmWorker.Permissions[23] != '1')
             {
                 return Forbid();
             }

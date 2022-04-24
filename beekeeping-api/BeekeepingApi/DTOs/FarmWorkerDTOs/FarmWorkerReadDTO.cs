@@ -10,6 +10,7 @@ namespace BeekeepingApi.DTOs.FarmWorkerDTOs
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }  
+        public string Permissions { get; set; }
         public WorkerRole? Role { get; set; }
         public long UserId { get; set; }
         public long FarmId { get; set; }

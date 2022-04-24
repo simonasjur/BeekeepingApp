@@ -21,8 +21,8 @@
                         <ng-container matColumnDef="action" *ngIf="worker.role == 0">
                             <th mat-header-cell *matHeaderCellDef> Veiksmas </th>
                             <td mat-cell *matCellDef="let element">
-                                <button mat-icon-button >
-                                    <mat-icon routerLink="{{element.id}}/edit">edit</mat-icon>
+                                <button mat-icon-button (click)="editWorker(element.userId)">
+                                    <mat-icon>edit</mat-icon>
                                 </button>
                                 <button mat-icon-button (click)="deleteWorker(element.userId)">
                                     <mat-icon>delete</mat-icon>

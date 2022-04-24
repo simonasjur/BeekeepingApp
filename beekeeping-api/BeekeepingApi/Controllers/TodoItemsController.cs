@@ -137,7 +137,7 @@ namespace BeekeepingApi.Controllers
 
             var currentUserId = long.Parse(User.Identity.Name);
             var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, farm.Id);
-            if (farmWorker == null)
+            if (farmWorker == null || farmWorker.Permissions[24] != '1')
                 return Forbid();
 
             var todoItem = _mapper.Map<TodoItem>(todoItemCreateDTO);
@@ -165,7 +165,7 @@ namespace BeekeepingApi.Controllers
 
             var currentUserId = long.Parse(User.Identity.Name);
             var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, farm.Id);
-            if (farmWorker == null)
+            if (farmWorker == null || farmWorker.Permissions[25] != '1')
                 return Forbid();
 
             _mapper.Map(todoItemEditDTO, todoItem);
@@ -187,7 +187,7 @@ namespace BeekeepingApi.Controllers
 
             var currentUserId = long.Parse(User.Identity.Name);
             var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, farm.Id);
-            if (farmWorker == null)
+            if (farmWorker == null || farmWorker.Permissions[26] != '1')
                 return Forbid();
 
             _context.TodoItems.Remove(todoItem);

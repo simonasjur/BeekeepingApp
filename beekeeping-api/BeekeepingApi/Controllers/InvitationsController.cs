@@ -87,12 +87,13 @@ namespace BeekeepingApi.Controllers
                 _context.Entry(user).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
             }
-            
+
             farmWorker = new FarmWorker
             {
                 Role = WorkerRole.Assistant,
                 FarmId = invitation.FarmId,
-                UserId = currentUserId
+                UserId = currentUserId,
+                Permissions = "000000000000000000000000000000"
             };
             _context.FarmWorkers.Add(farmWorker);
             await _context.SaveChangesAsync();

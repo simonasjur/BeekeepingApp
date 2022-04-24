@@ -26,6 +26,14 @@ export class WorkerService {
         return this.http.get<Worker[]>(`${baseUrl}/farms/${farmId}/farmworkers`);
     }
 
+    getFarmWorker(farmId: number, userId: number) {
+        return this.http.get<Worker>(`${baseUrl}/farms/${farmId}/farmworkers/${userId}`);
+    }
+
+    edit(farmId: number, workerId: number, permissions: string) {
+        return this.http.put(`${baseUrl}/farms/${farmId}/farmworkers/${workerId}/${permissions}`, '');
+    }
+
     delete(farmId: number, workerId: number) {
         return this.http.delete(`${baseUrl}/farms/${farmId}/farmworkers/${workerId}`);
     }

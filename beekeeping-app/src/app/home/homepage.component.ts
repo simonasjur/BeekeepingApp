@@ -11,6 +11,7 @@ import { FarmService } from "../_services/farm.service";
 import { InvitationService } from "../_services/invitation.service";
 import { UserService } from "../_services/user.service";
 import { WorkerService } from "../_services/worker.service";
+import { WorkerDialog } from "./worker-dialog.component";
 
 @Component({ selector: 'home',
  templateUrl: 'homepage.component.html',
@@ -147,16 +148,25 @@ export class HomepageComponent {
     
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
+                this.workers = this.workers.filter(x => x.userId !== id);
                 this.workerService.delete(this.farmService.farmValue.id, id).subscribe({
                     next: () => {
-                        this.workers = this.workers.filter(x => x.userId !== id && x.farmId !== this.farmService.farmValue.id);
-                        this.alertService.success('Darbuotojas sėkmingai ištrintas', { keepAfterRouteChange: true, autoClose: true });
+                        this.workers = this.workers.filter(x => x.userId !== id);
+                        this.alertService.success('Darbininkas sėkmingai ištrintas', { keepAfterRouteChange: true, autoClose: true });
                     },
                     error: error => {
                         this.alertService.error(error);
                     }
                 });
             }
+        });
+    }
+
+    editWorker(id: number): void {
+        const dialogRef = this.dialog.open(WorkerDialog, {
+            data: id,
+            width: "500px",
+            height: "600px"
         });
     }
 }

@@ -27,6 +27,9 @@ import { MatRippleModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from '@angular/material-moment-adapter';
 import { MatDialogModule } from '@angular/material/dialog';
 import { DeleteDialog } from './_components/delete-dialog.component';
+import { WorkerDialog } from './home/worker-dialog.component';
+import { MatTableModule } from '@angular/material/table';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 @NgModule({
     imports: [
@@ -50,11 +53,14 @@ import { DeleteDialog } from './_components/delete-dialog.component';
         AlertModule,
         MatRippleModule,
         MatMomentDateModule,
-        MatDialogModule
+        MatDialogModule,
+        MatTableModule,
+        MatCheckboxModule
     ],
     declarations: [
         AppComponent,
-        DeleteDialog
+        DeleteDialog,
+        WorkerDialog
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

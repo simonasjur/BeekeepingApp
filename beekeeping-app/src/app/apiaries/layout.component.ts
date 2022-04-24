@@ -17,11 +17,11 @@ export class LayoutComponent {
     }
 
     ngOnInit() {
-        this.apiaryService.apiary.subscribe(apiary => {
-            this.apiary = apiary;
-            this.workerService.getFarmAndUserWorker(this.farmService.farmValue.id).subscribe(worker => {
-                this.worker = worker;
+        this.workerService.getFarmAndUserWorker(this.farmService.farmValue.id).subscribe(worker => {
+            this.worker = worker;
+            this.apiaryService.apiary.subscribe(apiary => {
+                this.apiary = apiary;
             });
-        })
+        });
     }
 }

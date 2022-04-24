@@ -15,9 +15,7 @@ export class InvitationService {
         return this.http.get<Invitation>(`${baseUrl}/farms/${farmId}/invitation`)
         .pipe(
             map( invitation => {
-              // invitation?.expirationDate = new Date(invitation?.expirationDate);
-              console.log(invitation)
-              console.log(farmId)
+              invitation.expirationDate = new Date(invitation.expirationDate);
               return invitation;
             })
           );

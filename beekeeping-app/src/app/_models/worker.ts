@@ -3,7 +3,8 @@ export class Worker {
     userId: number;
     role: Role;
     firstName: string;
-    lastName: string
+    lastName: string;
+    permissions: string;
 }
 
 export enum Role {
