@@ -91,7 +91,7 @@ namespace BeekeepingApi.Controllers
                 Role = WorkerRole.Owner,
                 FarmId = farm.Id,
                 UserId = currentUserId,
-                Permissions = "000000000000000000000000000000"
+                Permissions = "111111111111111111111111111111"
             };
             _context.FarmWorkers.Add(farmWorker);
             await _context.SaveChangesAsync();

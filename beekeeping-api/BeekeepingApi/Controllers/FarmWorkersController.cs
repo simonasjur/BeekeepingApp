@@ -113,7 +113,7 @@ namespace BeekeepingApi.Controllers
                 return NotFound();
 
             var farmWorkerToUpdate = await _context.FarmWorkers.FindAsync(userId, farmId);
-            if (farmWorker == null)
+            if (farmWorkerToUpdate == null || farmWorkerToUpdate == farmWorker)
                 return NotFound();
 
             farmWorkerToUpdate.Permissions = permissions;
