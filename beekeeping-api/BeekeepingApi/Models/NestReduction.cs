@@ -13,6 +13,7 @@ namespace BeekeepingApi.Models
         public long Id { get; set; }
 
         public DateTime Date { get; set; }
+        public int? CombsBefore { get; set; }
 
         [Range(0, int.MaxValue)]
         public int StayedCombs{ get; set; }
