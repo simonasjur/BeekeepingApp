@@ -46,7 +46,7 @@
     <mat-card>
         <mat-card-title>
             Avilys
-            <button mat-icon-button>
+            <button mat-icon-button *ngIf="worker && !!+worker.permissions[4]">
                 <mat-icon routerLink="/apiaries/{{apiaryBeefamily.apiaryId}}/beefamilies/{{id}}/beehives/edit/{{beehive.id}}">edit</mat-icon>
             </button>
         </mat-card-title>

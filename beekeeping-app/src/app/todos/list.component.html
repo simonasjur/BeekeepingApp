@@ -1,225 +1,227 @@
 <h1>Užduotys</h1>
-<button mat-raised-button color="accent" routerLink="add">Pridėti naują užduotį</button>
-
-<mat-tab-group dynamicHeight animationDuration="0ms">
-    <mat-tab label="Neatliktos">
+<div>
+    <button mat-raised-button color="accent" routerLink="add" *ngIf="worker && !!+worker.permissions[24]">Pridėti naują užduotį</button>
+    <mat-tab-group dynamicHeight animationDuration="0ms">
+        <mat-tab label="Neatliktos">
+            
+            <form [formGroup]="form">
+                <mat-form-field class="filter">
+                    <mat-label>Ieškoti (pavadinimas, aprašymas)</mat-label>
+                    <input matInput formControlName="filter" #input>
+                </mat-form-field>
+                <mat-form-field *ngIf="apiaries && apiaries.length != 0" appearance="fill">
+                    <mat-label>Bitynas</mat-label>
+                    <mat-select formControlName="apiaryId">
+                        <mat-option [value]="null">Visi</mat-option>
+                        <mat-option *ngFor="let apiary of apiaries" [value]="apiary.id">
+                            {{apiary.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field *ngIf="beeFamilies && beeFamilies.length != 0" appearance="fill">
+                    <mat-label>Avilys</mat-label>
+                    <mat-select formControlName="beeFamilyId">
+                        <mat-option [value]="null">Visi</mat-option>
+                        <mat-option *ngFor="let beeFamily of beeFamilies" [value]="beeFamily.id">
+                            Nr. {{beeFamily.no}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </form>
         
-        <form [formGroup]="form">
-            <mat-form-field class="filter">
-                <mat-label>Ieškoti (pavadinimas, aprašymas)</mat-label>
-                <input matInput formControlName="filter" #input>
-            </mat-form-field>
-            <mat-form-field *ngIf="apiaries && apiaries.length != 0" appearance="fill">
-                <mat-label>Bitynas</mat-label>
-                <mat-select formControlName="apiaryId">
-                    <mat-option [value]="null">Visi</mat-option>
-                    <mat-option *ngFor="let apiary of apiaries" [value]="apiary.id">
-                        {{apiary.name}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-            <mat-form-field *ngIf="beeFamilies && beeFamilies.length != 0" appearance="fill">
-                <mat-label>Avilys</mat-label>
-                <mat-select formControlName="beeFamilyId">
-                    <mat-option [value]="null">Visi</mat-option>
-                    <mat-option *ngFor="let beeFamily of beeFamilies" [value]="beeFamily.id">
-                        Nr. {{beeFamily.no}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-        </form>
-       
-        <div class="example-container mat-elevation-z8">
-            <div class="example-loading-shade" *ngIf="loading">
-                <mat-spinner *ngIf="loading" color="accent"></mat-spinner>
-            </div>
-            <table mat-table #firstSort="matSort" [dataSource]="filteredAndPagedTodos" matSort
-            matSortActive="dueDate" matSortDisableClear matSortDirection="asc"
-            (matSortChange)="resetPaging()" multiTemplateDataRows>
-                <ng-container matColumnDef="priority">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Prioritetas </th>
-                    <td mat-cell *matCellDef="let element">
-                        <div class="priority-container">
-                            <div class="low-priority" *ngIf="element.priority == 0"></div>
-                            <div class="normal-priority" *ngIf="element.priority == 1"></div>
-                            <div class="high-priority" *ngIf="element.priority == 2"></div>
-                            <div class="critical-priority" *ngIf="element.priority == 3"></div>
-                            {{todoItemPriority2LabelMapping[element.priority]}}
-                        </div>
-                    </td>
-                </ng-container>
+            <div class="example-container mat-elevation-z8">
+                <div class="example-loading-shade" *ngIf="loading">
+                    <mat-spinner *ngIf="loading" color="accent"></mat-spinner>
+                </div>
+                <table mat-table #firstSort="matSort" [dataSource]="filteredAndPagedTodos" matSort
+                matSortActive="dueDate" matSortDisableClear matSortDirection="asc"
+                (matSortChange)="resetPaging()" multiTemplateDataRows>
+                    <ng-container matColumnDef="priority">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Prioritetas </th>
+                        <td mat-cell *matCellDef="let element">
+                            <div class="priority-container">
+                                <div class="low-priority" *ngIf="element.priority == 0"></div>
+                                <div class="normal-priority" *ngIf="element.priority == 1"></div>
+                                <div class="high-priority" *ngIf="element.priority == 2"></div>
+                                <div class="critical-priority" *ngIf="element.priority == 3"></div>
+                                {{todoItemPriority2LabelMapping[element.priority]}}
+                            </div>
+                        </td>
+                    </ng-container>
 
-                <ng-container matColumnDef="title">
-                    <th mat-header-cell *matHeaderCellDef> Pavadinimas </th>
-                    <td mat-cell *matCellDef="let element"> {{element.title}} </td>
-                </ng-container>
+                    <ng-container matColumnDef="title">
+                        <th mat-header-cell *matHeaderCellDef> Pavadinimas </th>
+                        <td mat-cell *matCellDef="let element"> {{element.title}} </td>
+                    </ng-container>
 
-                <ng-container matColumnDef="dueDate">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Iki kada </th>
-                    <td mat-cell *matCellDef="let element"> {{element.dueDate}} </td>
-                </ng-container>
+                    <ng-container matColumnDef="dueDate">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Iki kada </th>
+                        <td mat-cell *matCellDef="let element"> {{element.dueDate}} </td>
+                    </ng-container>
 
-                <ng-container matColumnDef="category">
-                    <th mat-header-cell *matHeaderCellDef> Kategorija </th>
-                    <td mat-cell *matCellDef="let element">
-                        <div *ngIf="element.hiveId">
-                            <div *ngFor="let beeFamily of beeFamilies">
-                                <a *ngIf="beeFamily.id == element.beeFamilyId">Avilys nr. {{beeFamily.no}}</a>
+                    <ng-container matColumnDef="category">
+                        <th mat-header-cell *matHeaderCellDef> Kategorija </th>
+                        <td mat-cell *matCellDef="let element">
+                            <div *ngIf="element.hiveId">
+                                <div *ngFor="let beeFamily of beeFamilies">
+                                    <a *ngIf="beeFamily.id == element.beeFamilyId">Avilys nr. {{beeFamily.no}}</a>
+                                </div>
+                            </div>
+                            <div *ngIf="element.apiaryId">
+                                <div *ngFor="let apiary of apiaries">
+                                    <a *ngIf="apiary.id == element.apiaryId">{{apiary.name}}</a>
+                                </div>
+                            </div>
+                            <div *ngIf="!element.hiveId && !element.apiaryId">Bendras</div>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef> Veiksmas </th>
+                        <td mat-cell *matCellDef="let element">
+                            <button mat-icon-button (click)="doneTodo(element.id)" *ngIf="worker && !!+worker.permissions[25]">
+                                <mat-icon>done</mat-icon>
+                            </button>
+                            <button mat-icon-button *ngIf="worker && !!+worker.permissions[25]">
+                                <mat-icon routerLink="edit/{{element.id}}">edit</mat-icon>
+                            </button>
+                            <button mat-icon-button (click)="deleteTodo(element.id)" *ngIf="worker && !!+worker.permissions[26]">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
+                    
+                    <ng-container matColumnDef="expandedDetail">
+                        <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+                        <div class="element-detail"
+                            [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                            <div class="element-description">
+                                Aprašymas:
+                                {{element.description}}
                             </div>
                         </div>
-                        <div *ngIf="element.apiaryId">
-                            <div *ngFor="let apiary of apiaries">
-                                <a *ngIf="apiary.id == element.apiaryId">{{apiary.name}}</a>
-                            </div>
-                        </div>
-                        <div *ngIf="!element.hiveId && !element.apiaryId">Bendras</div>
-                    </td>
-                </ng-container>
+                        </td>
+                    </ng-container>
 
-                <ng-container matColumnDef="action">
-                    <th mat-header-cell *matHeaderCellDef> Veiksmas </th>
-                    <td mat-cell *matCellDef="let element">
-                        <button mat-icon-button (click)="doneTodo(element.id)">
-                            <mat-icon>done</mat-icon>
-                        </button>
-                        <button mat-icon-button >
-                            <mat-icon routerLink="edit/{{element.id}}">edit</mat-icon>
-                        </button>
-                        <button mat-icon-button (click)="deleteTodo(element.id)">
-                            <mat-icon>delete</mat-icon>
-                        </button>
-                    </td>
-                </ng-container>
-                
-                <ng-container matColumnDef="expandedDetail">
-                    <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
-                      <div class="element-detail"
-                           [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-                        <div class="element-description">
-                            Aprašymas:
-                            {{element.description}}
-                        </div>
-                      </div>
-                    </td>
-                </ng-container>
-
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let element; columns: displayedColumns;"
-                class="element-row"
-                [class.example-expanded-row]="expandedElement === element"
-                (click)="expandedElement = expandedElement === element ? null : element">
-                </tr>
-                <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
-            </table>
-        <mat-paginator #firstPaginator [length]="resultsLength" [hidePageSize]="true" [pageSizeOptions]="[10]"></mat-paginator>
-    </div>
-    </mat-tab>
-    <mat-tab label="Atliktos">
-        <form [formGroup]="formSecond">
-            <mat-form-field class="filter">
-                <mat-label>Ieškoti (pavadinimas, aprašymas)</mat-label>
-                <input matInput formControlName="filter" #input>
-            </mat-form-field>
-            <mat-form-field *ngIf="apiaries && apiaries.length != 0" appearance="fill">
-                <mat-label>Bitynas</mat-label>
-                <mat-select formControlName="apiaryId">
-                    <mat-option [value]="null">Visi</mat-option>
-                    <mat-option *ngFor="let apiary of apiaries" [value]="apiary.id">
-                        {{apiary.name}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-            <mat-form-field *ngIf="beeFamilies && beeFamilies.length != 0" appearance="fill">
-                <mat-label>Avilys</mat-label>
-                <mat-select formControlName="beeFamilyId">
-                    <mat-option [value]="null">Visi</mat-option>
-                    <mat-option *ngFor="let beeFamily of beeFamilies" [value]="beeFamily.id">
-                        Nr. {{beeFamily.no}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-        </form>
-        <div class="example-container mat-elevation-z8">
-            <div class="example-loading-shade" *ngIf="loading">
-                <mat-spinner *ngIf="loading" color="accent"></mat-spinner>
-            </div>
-            <table mat-table #secondSort="matSort" [dataSource]="filteredAndPagedTodosCompleted" matSort
-            matSortActive="dueDate" matSortDisableClear matSortDirection="desc"
-            (matSortChange)="resetPaging()" multiTemplateDataRows>
-                <ng-container matColumnDef="priority">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Prioritetas </th>
-                    <td mat-cell *matCellDef="let element">
-                        <div class="priority-container">
-                            <div class="low-priority" *ngIf="element.priority == 0"></div>
-                            <div class="normal-priority" *ngIf="element.priority == 1"></div>
-                            <div class="high-priority" *ngIf="element.priority == 2"></div>
-                            <div class="critical-priority" *ngIf="element.priority == 3"></div>
-                            {{todoItemPriority2LabelMapping[element.priority]}}
-                        </div>
-                    </td>
-                </ng-container>
-
-                <ng-container matColumnDef="title">
-                    <th mat-header-cell *matHeaderCellDef> Pavadinimas </th>
-                    <td mat-cell *matCellDef="let element"> {{element.title}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="dueDate">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Iki kada </th>
-                    <td mat-cell *matCellDef="let element"> {{element.dueDate}} </td>
-                </ng-container>
-                
-                <ng-container matColumnDef="category">
-                    <th mat-header-cell *matHeaderCellDef> Kategorija </th>
-                    <td mat-cell *matCellDef="let element">
-                        <div *ngIf="element.hiveId">
-                            <div *ngFor="let beeFamily of beeFamilies">
-                                <a *ngIf="beeFamily.id == element.beeFamilyId">Avilys nr. {{beeFamily.no}}</a>
-                            </div>
-                        </div>
-                        <div *ngIf="element.apiaryId">
-                            <div *ngFor="let apiary of apiaries">
-                                <a *ngIf="apiary.id == element.apiaryId">{{apiary.name}}</a>
-                            </div>
-                        </div>
-                        <div *ngIf="!element.hiveId && !element.apiaryId">Bendras</div>
-                    </td>
-                </ng-container>
-
-                <ng-container matColumnDef="action">
-                    <th mat-header-cell *matHeaderCellDef> Veiksmas </th>
-                    <td mat-cell *matCellDef="let element">
-                        <button mat-icon-button >
-                            <mat-icon routerLink="edit/{{element.id}}">edit</mat-icon>
-                        </button>
-                        <button mat-icon-button (click)="deleteTodo(element.id)">
-                            <mat-icon>delete</mat-icon>
-                        </button>
-                    </td>
-                </ng-container>
-
-                <ng-container matColumnDef="expandedDetail">
-                    <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
-                      <div class="element-detail"
-                           [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-                        <div class="element-description">
-                            Aprašymas:
-                            {{element.description}}
-                        </div>
-                      </div>
-                    </td>
-                </ng-container>
-
-                <tr mat-header-row *matHeaderRowDef="displayedColumns">
-                </tr>
-                <tr mat-row *matRowDef="let element; columns: displayedColumns;"
-                class="element-row"
-                [class.example-expanded-row]="expandedElement === element"
-                (click)="expandedElement = expandedElement === element ? null : element">
-                </tr>
-                <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
-            </table>
-            <mat-paginator #secondPaginator [length]="resultsLengthCompleted" [hidePageSize]="true" [pageSizeOptions]="[10]"></mat-paginator>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let element; columns: displayedColumns;"
+                    class="element-row"
+                    [class.example-expanded-row]="expandedElement === element"
+                    (click)="expandedElement = expandedElement === element ? null : element">
+                    </tr>
+                    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
+                </table>
+            <mat-paginator #firstPaginator [length]="resultsLength" [hidePageSize]="true" [pageSizeOptions]="[10]"></mat-paginator>
         </div>
-    </mat-tab>
-</mat-tab-group>
+        </mat-tab>
+        <mat-tab label="Atliktos">
+            <form [formGroup]="formSecond">
+                <mat-form-field class="filter">
+                    <mat-label>Ieškoti (pavadinimas, aprašymas)</mat-label>
+                    <input matInput formControlName="filter" #input>
+                </mat-form-field>
+                <mat-form-field *ngIf="apiaries && apiaries.length != 0" appearance="fill">
+                    <mat-label>Bitynas</mat-label>
+                    <mat-select formControlName="apiaryId">
+                        <mat-option [value]="null">Visi</mat-option>
+                        <mat-option *ngFor="let apiary of apiaries" [value]="apiary.id">
+                            {{apiary.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field *ngIf="beeFamilies && beeFamilies.length != 0" appearance="fill">
+                    <mat-label>Avilys</mat-label>
+                    <mat-select formControlName="beeFamilyId">
+                        <mat-option [value]="null">Visi</mat-option>
+                        <mat-option *ngFor="let beeFamily of beeFamilies" [value]="beeFamily.id">
+                            Nr. {{beeFamily.no}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </form>
+            <div class="example-container mat-elevation-z8">
+                <div class="example-loading-shade" *ngIf="loading">
+                    <mat-spinner *ngIf="loading" color="accent"></mat-spinner>
+                </div>
+                <table mat-table #secondSort="matSort" [dataSource]="filteredAndPagedTodosCompleted" matSort
+                matSortActive="dueDate" matSortDisableClear matSortDirection="desc"
+                (matSortChange)="resetPaging()" multiTemplateDataRows>
+                    <ng-container matColumnDef="priority">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Prioritetas </th>
+                        <td mat-cell *matCellDef="let element">
+                            <div class="priority-container">
+                                <div class="low-priority" *ngIf="element.priority == 0"></div>
+                                <div class="normal-priority" *ngIf="element.priority == 1"></div>
+                                <div class="high-priority" *ngIf="element.priority == 2"></div>
+                                <div class="critical-priority" *ngIf="element.priority == 3"></div>
+                                {{todoItemPriority2LabelMapping[element.priority]}}
+                            </div>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="title">
+                        <th mat-header-cell *matHeaderCellDef> Pavadinimas </th>
+                        <td mat-cell *matCellDef="let element"> {{element.title}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="dueDate">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Iki kada </th>
+                        <td mat-cell *matCellDef="let element"> {{element.dueDate}} </td>
+                    </ng-container>
+                    
+                    <ng-container matColumnDef="category">
+                        <th mat-header-cell *matHeaderCellDef> Kategorija </th>
+                        <td mat-cell *matCellDef="let element">
+                            <div *ngIf="element.hiveId">
+                                <div *ngFor="let beeFamily of beeFamilies">
+                                    <a *ngIf="beeFamily.id == element.beeFamilyId">Avilys nr. {{beeFamily.no}}</a>
+                                </div>
+                            </div>
+                            <div *ngIf="element.apiaryId">
+                                <div *ngFor="let apiary of apiaries">
+                                    <a *ngIf="apiary.id == element.apiaryId">{{apiary.name}}</a>
+                                </div>
+                            </div>
+                            <div *ngIf="!element.hiveId && !element.apiaryId">Bendras</div>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef> Veiksmas </th>
+                        <td mat-cell *matCellDef="let element">
+                            <button mat-icon-button *ngIf="worker && !!+worker.permissions[25]">
+                                <mat-icon routerLink="edit/{{element.id}}">edit</mat-icon>
+                            </button>
+                            <button mat-icon-button (click)="deleteTodo(element.id)" *ngIf="worker && !!+worker.permissions[26]">
+                                {{worker.permissions[26]}}
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="expandedDetail">
+                        <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+                        <div class="element-detail"
+                            [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                            <div class="element-description">
+                                Aprašymas:
+                                {{element.description}}
+                            </div>
+                        </div>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns">
+                    </tr>
+                    <tr mat-row *matRowDef="let element; columns: displayedColumns;"
+                    class="element-row"
+                    [class.example-expanded-row]="expandedElement === element"
+                    (click)="expandedElement = expandedElement === element ? null : element">
+                    </tr>
+                    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
+                </table>
+                <mat-paginator #secondPaginator [length]="resultsLengthCompleted" [hidePageSize]="true" [pageSizeOptions]="[10]"></mat-paginator>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>

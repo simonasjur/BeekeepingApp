@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { catchError, first, map, startWith, switchMap } from 'rxjs/operators';
-import { Apiary, ApiaryBeeFamily, BeeFamily, Farm, Harvest, HarvestProduct2LabelMapping, HarvestProducts, TodoItem, TodoItemPriority2LabelMapping, User } from '../_models';
+import { Apiary, ApiaryBeeFamily, BeeFamily, Farm, Harvest, HarvestProduct2LabelMapping, HarvestProducts, TodoItem, TodoItemPriority2LabelMapping, User, Worker } from '../_models';
 
 import { FarmService } from '../_services/farm.service';
 import { UserService } from '../_services/user.service';
@@ -20,6 +20,7 @@ import { formatDate } from '@angular/common';
 import { ApiaryBeeFamilyService } from '../_services/apiary-beefamily.service';
 import { DeleteDialog } from '../_components/delete-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { WorkerService } from '../_services/worker.service';
 
 @Component({ templateUrl: 'list.component.html',
 styleUrls: ['list.component.css']})
@@ -40,6 +41,7 @@ export class ListComponent {
     apiaryId: number;
     families: BeeFamily[];
     loading: boolean = true;
+    worker: Worker;
 
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
@@ -56,6 +58,7 @@ export class ListComponent {
                 private alertService: AlertService,
                 private beeFamiliesService: BeeFamilyService,
                 private apiaryFamilyService: ApiaryBeeFamilyService,
+                private workerService: WorkerService,
                 private router: Router,
                 private route: ActivatedRoute,
                 private formBuilder: FormBuilder,
@@ -79,18 +82,57 @@ export class ListComponent {
             this.apiaryId = +url.substring(0, url.indexOf('/'));
         }
 
-        this.harvestService.getFarmAllHarvests(this.farmService.farmValue.id).subscribe(harvests => {
-            this.apiaryService.getFarmApiaries(this.farmService.farmValue.id).subscribe(apiaries => {
-                this.beeFamiliesService.getFarmAllBeeFamilies(this.farmService.farmValue.id).subscribe(beeFamilies => {
-
-                        if (this.fromApiary) {
-                            this.apiaryFamilyService.getOneApiaryBeeFamilies(this.apiaryId).subscribe(apiaryFamilies => {
-                                this.apiaries = apiaries.filter(apiary => apiary.id === this.apiaryId);
-                                apiaryFamilies.forEach(apiaryFamily => this.beeFamilies.push(apiaryFamily.beeFamily));
-                                this.beeFamilies = this.beeFamilies.filter(family => harvests.some(harvest => harvest.beeFamilyId == family.id));
-                                const apiaryHarvests = harvests.filter(harvest => harvest.apiaryId == this.apiaryId);
-                                const familiesHarvests = harvests.filter(harvest => this.beeFamilies.some(family => family.id == harvest.beeFamilyId));
-                                this.harvests = apiaryHarvests.concat(familiesHarvests);
+        this.workerService.getFarmAndUserWorker(this.farmService.farmValue.id).subscribe(worker => {
+            this.worker = worker;
+            this.harvestService.getFarmAllHarvests(this.farmService.farmValue.id).subscribe(harvests => {
+                this.apiaryService.getFarmApiaries(this.farmService.farmValue.id).subscribe(apiaries => {
+                    this.beeFamiliesService.getFarmAllBeeFamilies(this.farmService.farmValue.id).subscribe(beeFamilies => {
+    
+                            if (this.fromApiary) {
+                                this.apiaryFamilyService.getOneApiaryBeeFamilies(this.apiaryId).subscribe(apiaryFamilies => {
+                                    this.apiaries = apiaries.filter(apiary => apiary.id === this.apiaryId);
+                                    apiaryFamilies.forEach(apiaryFamily => this.beeFamilies.push(apiaryFamily.beeFamily));
+                                    this.beeFamilies = this.beeFamilies.filter(family => harvests.some(harvest => harvest.beeFamilyId == family.id));
+                                    const apiaryHarvests = harvests.filter(harvest => harvest.apiaryId == this.apiaryId);
+                                    const familiesHarvests = harvests.filter(harvest => this.beeFamilies.some(family => family.id == harvest.beeFamilyId));
+                                    this.harvests = apiaryHarvests.concat(familiesHarvests);
+                                    this.calculateOverall(this.harvests);
+                                    this.dataSource = new MatTableDataSource(this.harvests);
+                                    this.dataSource.paginator = this.paginator;
+                                    this.dataSource.sort = this.sort;
+                                    this.oldHarvests = this.harvests;
+                                    this.form.valueChanges.subscribe(() => {
+                                        this.harvests = this.oldHarvests;
+                                        if (this.form.get('startDate').value !== null) {
+                                            const startDate = formatDate(this.form.get('startDate').value,'yyyy-MM-dd','en_US');
+                                            this.harvests = this.harvests.filter(x => x.startDate != null && formatDate(x.startDate, 'yyyy-MM-dd','en_US') >= startDate);
+                                        }
+                                        if (this.form.get('endDate').value !== null) {
+                                            const endDate = formatDate(this.form.get('endDate').value,'yyyy-MM-dd','en_US');
+                                            this.harvests = this.harvests.filter(x => x.endDate != null && formatDate(x.endDate, 'yyyy-MM-dd','en_US') >= endDate);
+                                        }
+                                        if (this.form.get('apiaryId').value !== null && this.form.get('beeFamilyId').value !== null) {
+                                            this.harvests = this.harvests.filter(x => x.apiaryId === this.form.get('apiaryId').value || x.beeFamilyId === this.form.get('beeFamilyId').value);
+                                        } else if (this.form.get('apiaryId').value !== null) {
+                                            this.harvests = this.harvests.filter(x => x.apiaryId === this.form.get('apiaryId').value);
+                                        } else if (this.form.get('beeFamilyId').value !== null) {
+                                            this.harvests = this.harvests.filter(x => x.beeFamilyId === this.form.get('beeFamilyId').value);
+                                        }
+            
+                                        if (this.form.get('product').value !== null) {
+                                            this.harvests = this.harvests.filter(x => x.product === this.form.get('product').value);
+                                        }
+            
+                                        this.calculateOverall(this.harvests);
+                                        this.dataSource = new MatTableDataSource(this.harvests);
+                                    
+                                    });
+                                    this.loading = false;
+                                    });
+                            } else {
+                                this.harvests = harvests;
+                                this.apiaries = apiaries.filter(apiary => this.harvests.some(harvest => harvest.apiaryId === apiary.id));
+                                this.beeFamilies = beeFamilies.filter(family => this.harvests.some(harvest => harvest.beeFamilyId === family.id));
                                 this.calculateOverall(this.harvests);
                                 this.dataSource = new MatTableDataSource(this.harvests);
                                 this.dataSource.paginator = this.paginator;
@@ -123,44 +165,8 @@ export class ListComponent {
                                 
                                 });
                                 this.loading = false;
-                                });
-                        } else {
-                            this.harvests = harvests;
-                            this.apiaries = apiaries.filter(apiary => this.harvests.some(harvest => harvest.apiaryId === apiary.id));
-                            this.beeFamilies = beeFamilies.filter(family => this.harvests.some(harvest => harvest.beeFamilyId === family.id));
-                            this.calculateOverall(this.harvests);
-                            this.dataSource = new MatTableDataSource(this.harvests);
-                            this.dataSource.paginator = this.paginator;
-                            this.dataSource.sort = this.sort;
-                            this.oldHarvests = this.harvests;
-                            this.form.valueChanges.subscribe(() => {
-                                this.harvests = this.oldHarvests;
-                                if (this.form.get('startDate').value !== null) {
-                                    const startDate = formatDate(this.form.get('startDate').value,'yyyy-MM-dd','en_US');
-                                    this.harvests = this.harvests.filter(x => x.startDate != null && formatDate(x.startDate, 'yyyy-MM-dd','en_US') >= startDate);
-                                }
-                                if (this.form.get('endDate').value !== null) {
-                                    const endDate = formatDate(this.form.get('endDate').value,'yyyy-MM-dd','en_US');
-                                    this.harvests = this.harvests.filter(x => x.endDate != null && formatDate(x.endDate, 'yyyy-MM-dd','en_US') >= endDate);
-                                }
-                                if (this.form.get('apiaryId').value !== null && this.form.get('beeFamilyId').value !== null) {
-                                    this.harvests = this.harvests.filter(x => x.apiaryId === this.form.get('apiaryId').value || x.beeFamilyId === this.form.get('beeFamilyId').value);
-                                } else if (this.form.get('apiaryId').value !== null) {
-                                    this.harvests = this.harvests.filter(x => x.apiaryId === this.form.get('apiaryId').value);
-                                } else if (this.form.get('beeFamilyId').value !== null) {
-                                    this.harvests = this.harvests.filter(x => x.beeFamilyId === this.form.get('beeFamilyId').value);
-                                }
-    
-                                if (this.form.get('product').value !== null) {
-                                    this.harvests = this.harvests.filter(x => x.product === this.form.get('product').value);
-                                }
-    
-                                this.calculateOverall(this.harvests);
-                                this.dataSource = new MatTableDataSource(this.harvests);
-                            
-                            });
-                            this.loading = false;
-                        }
+                            }
+                    });
                 });
             });
         });

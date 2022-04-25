@@ -3,10 +3,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DeleteDialog } from '../_components/delete-dialog.component';
 
-import { Beehive, BeehiveType2LabelMapping } from '../_models';
+import { Beehive, BeehiveType2LabelMapping, Worker } from '../_models';
 import { AlertService } from '../_services/alert.service';
 import { BeehiveService } from '../_services/beehive.service';
 import { FarmService } from '../_services/farm.service';
+import { WorkerService } from '../_services/worker.service';
 
 @Component({
     selector: 'beehive-list',
@@ -16,6 +17,7 @@ import { FarmService } from '../_services/farm.service';
 export class ListComponent implements OnInit {
     beehives: Beehive[];
     emptyBeehives: Beehive[];
+    worker: Worker;
     loading = true;
 
     displayedColumns = ['no', 'type', 'action'];
@@ -23,6 +25,7 @@ export class ListComponent implements OnInit {
     constructor(private beehiveService: BeehiveService,
                 private farmService: FarmService,
                 private alertService: AlertService,
+                private workerService: WorkerService,
                 private dialog: MatDialog,
                 private router: Router,
                 private route: ActivatedRoute) {
@@ -30,13 +33,17 @@ export class ListComponent implements OnInit {
 
     ngOnInit() {
         this.checkUrl();
-        this.beehiveService.getFarmAllBeehives(this.farmService.farmValue.id)
+        this.workerService.getFarmAndUserWorker(this.farmService.farmValue.id).subscribe(worker => {
+            this.worker = worker;
+            this.beehiveService.getFarmAllBeehives(this.farmService.farmValue.id)
             .subscribe({
                 next: beehives => {
                     this.beehives = beehives.filter(b => b.isEmpty === false);
                     this.emptyBeehives = beehives.filter(b => b.isEmpty === true);
                     this.loading = false;
                 }});
+        });
+        
     }
 
     checkUrl() {

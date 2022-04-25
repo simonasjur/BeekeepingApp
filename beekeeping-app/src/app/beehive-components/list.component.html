@@ -1,7 +1,7 @@
 <mat-spinner *ngIf="loading" color="accent"></mat-spinner>
 <div class="example-loading-shade" *ngIf="beehiveComponents">
     <h1>Avilio komponentai</h1>
-    <button mat-raised-button color="accent" routerLink="add">Naujas komponentas</button>
+    <button mat-raised-button color="accent" routerLink="add" *ngIf="worker && !!+worker.permissions[6]">Naujas komponentas</button>
     <div>
         <table mat-table [dataSource]="beehiveComponents" width="100%" *ngIf="beehiveComponents && beehive">
             <ng-container matColumnDef="position">
@@ -21,10 +21,10 @@
             <ng-container matColumnDef="action">
                 <th mat-header-cell *matHeaderCellDef> Veiksmas </th>
                 <td mat-cell *matCellDef="let element">
-                    <button mat-icon-button >
+                    <button mat-icon-button *ngIf="worker && !!+worker.permissions[7]">
                         <mat-icon routerLink="edit/{{element.id}}">edit</mat-icon>
                     </button>
-                    <button mat-icon-button (click)="delete(element.id)">
+                    <button mat-icon-button (click)="delete(element.id)" *ngIf="worker && !!+worker.permissions[8]">
                         <mat-icon>delete</mat-icon>
                     </button>
                 </td>

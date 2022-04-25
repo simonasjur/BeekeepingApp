@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { catchError, count, debounceTime, delay, distinctUntilChanged, first, map, startWith, switchMap, tap } from 'rxjs/operators';
-import { Apiary, BeeFamily, Farm, TodoItem, TodoItemPriority2LabelMapping, User } from '../_models';
+import { Apiary, BeeFamily, Farm, TodoItem, TodoItemPriority2LabelMapping, User, Worker } from '../_models';
 
 import { FarmService } from '../_services/farm.service';
 import { UserService } from '../_services/user.service';
@@ -17,6 +17,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteDialog } from '../_components/delete-dialog.component';
+import { WorkerService } from '../_services/worker.service';
 
 @Component({ selector: 'todos-list',
     templateUrl: 'list.component.html',
@@ -46,6 +47,7 @@ export class ListComponent {
     apiaries: Apiary[];
     expandedElement: TodoItem | null;
     filter = new FormControl();
+    worker: Worker;
 
     public displayedColumns = ['priority', 'title', 'dueDate', 'category', 'action'];
 
@@ -58,6 +60,7 @@ export class ListComponent {
                 private farmService: FarmService,
                 private apiaryService: ApiaryService,
                 private beeFamiliesService: BeeFamilyService,
+                private workerService: WorkerService,
                 private alertService: AlertService,
                 private formBuilder: FormBuilder,
                 private dialog: MatDialog) {
@@ -83,7 +86,10 @@ export class ListComponent {
             this.apiaries = apiaries;
             this.beeFamiliesService.getFarmAllBeeFamilies(this.farmService.farmValue.id).subscribe(beeFamilies => {
                 this.beeFamilies = beeFamilies;
-                this.filteredAndPagedTodos = merge(this.form.valueChanges, this.firstSort.sortChange, this.firstPaginator.page)
+                this.workerService.getFarmAndUserWorker(this.farmService.farmValue.id).subscribe(worker => {
+                    this.worker = worker;
+                    console.log(this.worker)
+                    this.filteredAndPagedTodos = merge(this.form.valueChanges, this.firstSort.sortChange, this.firstPaginator.page)
                     .pipe(
                         startWith({}),
                         debounceTime(200),
@@ -280,6 +286,7 @@ export class ListComponent {
                         return observableOf([]);
                         })
                     );
+                });
             });
         });
     }

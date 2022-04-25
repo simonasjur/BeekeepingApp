@@ -9,7 +9,7 @@
     </mat-form-field>
 </form>-->
 <div *ngIf="apiary">
-    <button mat-raised-button color="accent" routerLink="/beehives/add">Pridėti avilį</button>
+    <button mat-raised-button color="accent" routerLink="/beehives/add" *ngIf="worker && !!+worker.permissions[3]">Pridėti avilį</button>
     <table mat-table [dataSource]="apiaryBeeFamilies">
         <ng-container matColumnDef="id">
             <th mat-header-cell *matHeaderCellDef>Id</th>
