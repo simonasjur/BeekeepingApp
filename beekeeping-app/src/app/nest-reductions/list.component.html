@@ -1,0 +1,54 @@
+<h1>Avilio lizdo siaurinimai žiemai</h1>
+<button mat-raised-button color="accent" routerLink="add">Naujas siaurinimas</button>
+<div class="example-loading-shade" *ngIf="loading">
+    <mat-spinner *ngIf="loading" color="accent"></mat-spinner>
+</div>
+<div *ngIf="!loading">
+    <table mat-table [dataSource]="nestReductions">
+        <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef>Data</th>
+            <td mat-cell *matCellDef="let element">
+                {{element.date | date:'yyyy-MM-dd'}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="stayedCombs">
+            <th mat-header-cell *matHeaderCellDef>Likę koriai</th>
+            <td mat-cell *matCellDef="let element">
+                {{element.stayedCombs}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="stayedBroodCombs">
+            <th mat-header-cell *matHeaderCellDef>Perų koriai</th>
+            <td mat-cell *matCellDef="let element">
+                {{element.stayedBroodCombs}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="stayedHoney">
+            <th mat-header-cell *matHeaderCellDef>Likęs medus(kg)</th>
+            <td mat-cell *matCellDef="let element">
+                {{element.stayedHoney}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="requiredFoodForWinter">
+            <th mat-header-cell *matHeaderCellDef>Reikia žiemai(kg)</th>
+            <td mat-cell *matCellDef="let element">
+                {{element.requiredFoodForWinter}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef> Veiksmas </th>
+            <td mat-cell *matCellDef="let element">
+                <div *ngIf="isActionsAllowed(element)">
+                    <button mat-icon-button >
+                        <mat-icon routerLink="edit/{{element.id}}">edit</mat-icon>
+                    </button>
+                    <button mat-icon-button (click)="deleteNestReduction(element.id)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+</div>

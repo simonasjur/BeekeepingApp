@@ -68,7 +68,8 @@ namespace BeekeepingApi.Controllers
                 return Forbid();
             }
 
-            var nestReductions = await _context.NestReductions.Where(nr => nr.BeefamilyId == beefamilyId).ToListAsync();
+            var nestReductions = await _context.NestReductions.Where(nr => nr.BeefamilyId == beefamilyId)
+                                                              .OrderByDescending(nr => nr.Date).ToListAsync();
 
             return _mapper.Map<IEnumerable<NestReductionReadDTO>>(nestReductions).ToList();
         }
