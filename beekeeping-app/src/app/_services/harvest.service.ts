@@ -32,4 +32,9 @@ export class HarvestService {
     getFarmAllHarvests(farmId: number) {
         return this.http.get<Harvest[]>(`${environment.apiUrl}/farms/${farmId}/harvests`);
     }
+
+    getFarmThisYearHoneyHarvests(farmId: number) {
+        var currentYear = new Date(new Date().getFullYear(), 0, 1).toISOString();
+        return this.http.get<Harvest[]>(`${environment.apiUrl}/farms/${farmId}/harvests?$filter=startDate ge ${currentYear}`);
+    }
 }

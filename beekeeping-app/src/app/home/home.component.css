@@ -43,6 +43,10 @@
   width: 15px;
 }
 
+.queen-icon-title-gap {
+  width: 25px;
+}
+
 mat-sidenav {
   width: 160px;
 }

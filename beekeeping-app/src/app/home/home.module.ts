@@ -30,6 +30,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import { HomepageComponent } from './homepage.component';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {MatTableModule} from '@angular/material/table';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @NgModule({
     imports: [
@@ -56,7 +57,8 @@ import {MatTableModule} from '@angular/material/table';
         MatFormFieldModule,
         MatDialogModule,
         MatProgressBarModule,
-        MatTableModule
+        MatTableModule,
+        NgxChartsModule
     ],
     declarations: [
         SettingsComponent,

@@ -2,7 +2,25 @@
 <div *ngIf="worker" class="p-4">
     <div class="container">
         <mat-tab-group mat-align-tabs="start">
-            <mat-tab label="Ūkis"></mat-tab>
+            <mat-tab label="Ūkis">
+                <h1 class="header">Šių metų medaus kopimai ({{overall}} kg)</h1>
+                <div class="chart">
+                    <ngx-charts-bar-vertical
+                        [view]="view"
+                        [scheme]="colorScheme"
+                        [results]="chartData"
+                        [gradient]="gradient"
+                        [xAxis]="showXAxis"
+                        [yAxis]="showYAxis"
+                        [legend]="showLegend"
+                        [showXAxisLabel]="showXAxisLabel"
+                        [showYAxisLabel]="showYAxisLabel"
+                        [xAxisLabel]="xAxisLabel"
+                        [yAxisLabel]="yAxisLabel"
+                        [trimXAxisTicks]="trimXAxisTicks">
+                    </ngx-charts-bar-vertical>
+                </div>
+            </mat-tab>
             <mat-tab *ngIf="worker.role == 0" label="Ūkio darbuotojai">
                 <div *ngIf="workers">
                     <table mat-table [dataSource]="workers"  class="workers-table">

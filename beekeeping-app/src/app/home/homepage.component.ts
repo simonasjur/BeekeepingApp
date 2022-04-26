@@ -5,9 +5,10 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { interval, Observable, Subject, Subscription, timer } from "rxjs";
 import { startWith, switchMap } from "rxjs/operators";
 import { DeleteDialog } from "../_components/delete-dialog.component";
-import { Invitation, Worker } from "../_models";
+import { Harvest, Invitation, Worker } from "../_models";
 import { AlertService } from "../_services/alert.service";
 import { FarmService } from "../_services/farm.service";
+import { HarvestService } from "../_services/harvest.service";
 import { InvitationService } from "../_services/invitation.service";
 import { UserService } from "../_services/user.service";
 import { WorkerService } from "../_services/worker.service";
@@ -38,6 +39,26 @@ export class HomepageComponent {
     worker: Worker;
     userId: number;
     workers: Worker[];
+    harvests: Harvest[];
+    chartData = [];
+    overall: number = 0;
+
+    // chart options
+    showXAxis = true;
+    showYAxis = true;
+    gradient = false;
+    showLegend = false;
+    showXAxisLabel = true;
+    xAxisLabel = 'Data';
+    showYAxisLabel = true;
+    yAxisLabel = 'Kiekis (kg)';
+    trimXAxisTicks = true;
+
+    //view: any[] = [1000, 350];
+
+    colorScheme = {
+        domain: ['#FFD700', '#FFD700', '#FFD700', '#FFD700']
+    };
 
     displayedColumns: string[] = ['firstName', 'lastName', 'action'];
 
@@ -45,6 +66,7 @@ export class HomepageComponent {
                 private farmService: FarmService,
                 private invitationService: InvitationService,
                 private workerService: WorkerService,
+                private harvestService: HarvestService,
                 private alertService: AlertService,
                 private dialog: MatDialog,
                 private router: Router,
@@ -55,14 +77,27 @@ export class HomepageComponent {
         this.mainLoading = true;
         this.farmService.farm.subscribe(farm => {
             if (farm) {
-                this.workerService.getFarmAndUserWorker(farm.id).subscribe(worker => {
-                    this.worker = worker;
-                    if (worker.role == 0) {
-                        this.workerService.getFarmAllWorkers(farm.id).subscribe(workers => {
-                            this.workers = workers;
-                        });
-                    };
-                    this.mainLoading = false;
+                this.harvestService.getFarmThisYearHoneyHarvests(farm.id).subscribe(harvests => {
+                    this.harvests = harvests.filter(h => h.product == 3);
+                    for (let i = 0; i < this.harvests.length; i++) {
+                        this.overall += this.harvests[i].quantity;
+                        console.log(new Date(this.harvests[i].startDate))
+                        const date = new Date(this.harvests[i].startDate).toISOString().substring(0,10);
+                        const data = {
+                            name: date,
+                            value: this.harvests[i].quantity
+                        };
+                        this.chartData.push(data);
+                    }
+                    this.workerService.getFarmAndUserWorker(farm.id).subscribe(worker => {
+                        this.worker = worker;
+                        if (worker.role == 0) {
+                            this.workerService.getFarmAllWorkers(farm.id).subscribe(workers => {
+                                this.workers = workers;
+                            });
+                        };
+                        this.mainLoading = false;
+                    });
                 });
             }
         });
@@ -103,9 +138,15 @@ export class HomepageComponent {
         this.disabled = true;
         this.invitationService.getCode(this.farmService.farmValue.id).subscribe(invitation => {
             this.invitation = invitation;
+            console.log(invitation)
             this.loading2 = false;
-            this.remainingSeconds = (invitation.expirationDate.getMinutes() - new Date().getMinutes())
+            let remainingMinutes = invitation.expirationDate.getMinutes() - new Date().getMinutes();
+            if (remainingMinutes < 0) {
+                remainingMinutes = invitation.expirationDate.getMinutes() - new Date().getMinutes() + 60;
+            }
+            this.remainingSeconds = remainingMinutes
             * 60 +  invitation.expirationDate.getSeconds() - new Date().getSeconds();
+            console.log(new Date().getMinutes())
             this.progressbarValue = this.remainingSeconds / 600 * 100;
             
             this.startTimer(this.remainingSeconds * 10);
