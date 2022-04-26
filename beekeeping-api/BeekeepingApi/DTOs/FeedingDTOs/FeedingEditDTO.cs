@@ -16,5 +16,7 @@ namespace BeekeepingApi.DTOs.FeedingDTOs
 
         [Required]
         public double? Quantity { get; set; }
+
+        public long FoodId { get; set; }
     }
 }

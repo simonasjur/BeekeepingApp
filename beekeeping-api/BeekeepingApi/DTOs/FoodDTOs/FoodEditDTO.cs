@@ -12,6 +12,6 @@ namespace BeekeepingApi.DTOs.FoodDTOs
         public long Id { get; set; }
 
         [Required]
-        public string? Name { get; set; }
+        public string Name { get; set; }
     }
 }

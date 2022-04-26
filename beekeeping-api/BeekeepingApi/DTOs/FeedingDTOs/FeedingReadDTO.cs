@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BeekeepingApi.DTOs.FoodDTOs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,5 +17,7 @@ namespace BeekeepingApi.DTOs.FeedingDTOs
         public long FoodId { get; set; }
 
         public long BeeFamilyId { get; set; }
+
+        public FoodReadDTO Food { get; set; }
     }
 }
