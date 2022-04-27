@@ -43,6 +43,10 @@ namespace BeekeepingApi.Controllers
             }
 
             var feedings = await _context.Feedings.Where(f => f.BeeFamilyId == beefamilyId).ToListAsync();
+            foreach (Feeding feeding in feedings)
+            {
+                await _context.Entry(feeding).Reference(f => f.Food).LoadAsync();
+            }
 
             return _mapper.Map<IEnumerable<FeedingReadDTO>>(feedings).ToList();
         }
@@ -116,7 +120,18 @@ namespace BeekeepingApi.Controllers
                 return NotFound();
             }
 
+            var food = await _context.Foods.FindAsync(feedingEditDTO.FoodId);
+            if (food == null)
+            {
+                return BadRequest();
+            }
+
             var beefamily = await _context.BeeFamilies.FindAsync(feeding.BeeFamilyId);
+            if (beefamily == null || food.FarmId != beefamily.FarmId)
+            {
+                return BadRequest();
+            }
+
             var currentUserId = long.Parse(User.Identity.Name);
             var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, beefamily.FarmId);
             if (farmWorker == null)

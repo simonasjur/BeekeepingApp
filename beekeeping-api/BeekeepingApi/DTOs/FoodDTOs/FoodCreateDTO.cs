@@ -9,7 +9,7 @@ namespace BeekeepingApi.DTOs.FoodDTOs
     public class FoodCreateDTO
     {
         [Required]
-        public string? Name { get; set; }
+        public string Name { get; set; }
 
         public long FarmId { get; set; }
     }

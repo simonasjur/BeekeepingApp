@@ -139,6 +139,12 @@ namespace BeekeepingApi.Controllers
                 return Forbid();
             }
 
+            var relatedFeedings = await _context.Feedings.Where(f => f.FoodId == id).ToListAsync();
+            foreach (var feeding in relatedFeedings)
+            {
+                _context.Feedings.Remove(feeding);
+            }
+
             _context.Foods.Remove(food);
             await _context.SaveChangesAsync();
 

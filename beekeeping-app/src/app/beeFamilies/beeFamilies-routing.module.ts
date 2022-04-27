@@ -13,6 +13,7 @@ const beefamilyQueensModule = () => import('../beefamily-queens/beefamily-queens
 const nestExpansionsModule = () => import('../nest-expansions/nest-expansions.module').then(x => x.NestExpansionsModule);
 const nestReductionsModule = () => import('../nest-reductions/nest-reductions.module').then(x => x.NestReductionsModule);
 const beehivesModule = () => import('../beehives/beehives.module').then(x => x.BeehivesModule);
+const feedingsModule = () => import('../feedings/feedings.module').then(x => x.FeedingsModule);
 
 const routes: Routes = [
     {
@@ -27,7 +28,8 @@ const routes: Routes = [
             { path: ':id/beefamilyqueens', loadChildren: beefamilyQueensModule, canActivate: [AuthGuard] },
             { path: ':id/nestexpansions', loadChildren: nestExpansionsModule, canActivate: [AuthGuard] },
             { path: ':id/beehives', loadChildren: beehivesModule, canActivate: [AuthGuard] },
-            { path: ':id/nestreductions', loadChildren: nestReductionsModule, canActivate: [AuthGuard] }
+            { path: ':id/nestreductions', loadChildren: nestReductionsModule, canActivate: [AuthGuard] },
+            { path: ':id/feedings', loadChildren: feedingsModule, canActivate: [AuthGuard] }
             //{ path: 'edit/:id', component: AddEditComponent }
         ]
     }

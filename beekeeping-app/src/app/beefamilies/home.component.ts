@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ApiaryBeeFamily, BeeFamily, BeeFamilyOrigin2LabelMapping, BeefamilyQueen, BeeFamilyState2LabelMapping, Beehive, BeehiveBeefamily, BeehiveType2LabelMapping, Breed, Breed2LabelMapping, Color2LabelMapping, Queen, QueenState, Worker } from '../_models';
+import { ApiaryBeeFamily, BeeFamily, BeeFamilyOrigin2LabelMapping, BeefamilyQueen, BeeFamilyState2LabelMapping, Beehive, BeehiveBeefamily, BeehiveComponent, BeehiveComponentType, BeehiveType2LabelMapping, Breed, Breed2LabelMapping, Color2LabelMapping, Queen, QueenState, Worker } from '../_models';
 import { ApiaryBeeFamilyService } from '../_services/apiary-beefamily.service';
 import { ApiaryService } from '../_services/apiary.service';
 import { BeefamilyQueenService } from '../_services/beefamily-queen.service';
 import { BeeFamilyService } from '../_services/beefamily.service';
+import { BeehiveComponentService } from '../_services/beehive-component.service';
 import { BeehiveBeefamilyService } from '../_services/beehive-family.service';
 import { BeehiveService } from '../_services/beehive.service';
 import { FarmService } from '../_services/farm.service';
@@ -27,6 +28,7 @@ export class HomeComponent implements OnInit {
     expandPercent: number;
     beefamilies = [];
     isolatedFarmQueens: Queen[];
+    beehiveComponents: BeehiveComponent[];
     loading = true;
     worker: Worker;
 
@@ -41,7 +43,8 @@ export class HomeComponent implements OnInit {
         private beefamilyQueenService: BeefamilyQueenService,
         private queenService: QueenService,
         private workerService: WorkerService,
-        private farmService: FarmService) {
+        private farmService: FarmService,
+        private beehiveComponentsService: BeehiveComponentService) {
     }
 
     ngOnInit() {
@@ -75,11 +78,13 @@ export class HomeComponent implements OnInit {
                                         breed: this.queenBreed
                                     }
                                 ];
-                                
-                                this.queenService.getFarmQueens(this.farmService.farmValue.id).subscribe(queens => {
-                                    this.isolatedFarmQueens = queens.filter(q => q.state === QueenState.Isolated);
-                                    this.loading = false;
-                                });
+                                this.beehiveComponentsService.getBeehiveComponents(beehive.id). subscribe(components => {
+                                    this.beehiveComponents = components;
+                                    this.queenService.getFarmQueens(this.farmService.farmValue.id).subscribe(queens => {
+                                        this.isolatedFarmQueens = queens.filter(q => q.state === QueenState.Isolated);
+                                        this.loading = false;
+                                    });
+                                })
                             })
                         })
                     })
@@ -112,5 +117,9 @@ export class HomeComponent implements OnInit {
 
     havingIsolatedQueens() {
         return !(!this.isolatedFarmQueens || this.isolatedFarmQueens.length === 0);
+    }
+
+    honeyStages() {
+        return this.beehiveComponents.filter(bc => bc.type === BeehiveComponentType.Aukstas).length;
     }
 }

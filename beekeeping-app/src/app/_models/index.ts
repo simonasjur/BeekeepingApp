@@ -16,3 +16,5 @@ export * from './invitation';
 export * from './worker';
 export * from './nest-expansion';
 export * from './nest-reduction';
+export * from './food';
+export * from './feeding';

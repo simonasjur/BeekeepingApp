@@ -1,0 +1,47 @@
+<h1 *ngIf="isAddMode">Pridėti naują maitinimą</h1>
+<h1 *ngIf="!isAddMode">Atnaujinti maitinimą</h1>
+<div class="example-loading-shade" *ngIf="formLoading">
+    <mat-spinner *ngIf="formLoading" color="accent"></mat-spinner>
+</div>
+<div *ngIf="!formLoading">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="form-fields">
+            <mat-form-field appearance="fill">
+                <mat-label>Data</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="date" [max]="today">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                <mat-error *ngIf="submitted && f.date.errors">
+                    Neteisingas datos formatas
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Maistas</mat-label>
+                <mat-select formControlName="foodId">
+                    <mat-option *ngFor="let food of foods" [value]="food.id">
+                        {{food.name}}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="submitted && f.foodId.errors">
+                    Šis laukas yra būtinas
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Kiekis</mat-label>
+                <input matInput formControlName="quantity">
+                <mat-error *ngIf="submitted && f.quantity.errors">
+                    <p *ngIf="f.quantity.errors.required">Šis laukas yra būtinas</p>
+                    <p *ngIf="f.quantity.errors.pattern">Skaičius privalo būti teigiamas</p>
+                </mat-error>      
+            </mat-form-field>
+        </div>
+        <div class="form-group">
+            <button mat-flat-button color="accent" [disabled]="loading">
+                Išsaugoti
+                <mat-icon *ngIf="loading" color="accent"><mat-spinner diameter="20">
+                </mat-spinner></mat-icon>
+            </button>
+            <a mat-stroked-button (click)="backToList()">Atšaukti</a>
+        </div>
+    </form>
+</div>
