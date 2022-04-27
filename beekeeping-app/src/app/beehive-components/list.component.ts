@@ -46,6 +46,7 @@ export class BeehiveComponentsListComponent implements OnInit {
         const id = this.route.snapshot.params['id'];
         
         this.workerService.getFarmAndUserWorker(this.farmService.farmValue.id).subscribe(worker => {
+            this.worker = worker;
             this.beefamilyService.getById(id).subscribe(beefamily => {
                 this.beefamily = beefamily;
                 this.beehiveFamilyService.getBeefamilyBeehive(beefamily.id).subscribe(beehiveBeefamilies => {
