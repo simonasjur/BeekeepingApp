@@ -27,6 +27,7 @@ export class AddEditComponent implements OnInit {
     isAddMode = true;
     submitted = false;
     loading = false;
+    formLoading = true;
 
     constructor(private nestReductionService: NestReductionService,
                 private beehiveBeefamilyService: BeehiveBeefamilyService,
@@ -77,13 +78,12 @@ export class AddEditComponent implements OnInit {
                         }
                     }
                 }
-                console.log("daro iki if");
                 //Adds max validator to stayedCombs if this year reduction done in Dadan beehive
                 if (this.beehiveBeefamily && this.beehiveBeefamily.beehive.type === BeehiveTypes.Dadano &&
                     (this.isAddMode || (!this.isAddMode && this.nestReductionId == reductions[0].id))) {
                     this.form.controls['stayedCombs'].addValidators(Validators.max(this.beehiveBeefamily.beehive.maxNestCombs));
-                    console.log("uzdejo");
                 }
+                this.formLoading = false;
             });
         });
     }

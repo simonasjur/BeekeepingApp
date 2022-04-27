@@ -1,46 +1,51 @@
 <h1 *ngIf="isAddMode">Pridėti komponentą</h1>
 <h1 *ngIf="!isAddMode">Atnaujinti komponentą</h1>
-<form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="beehive && existingComponents">
-    <div class="form-fields">
-        <mat-form-field>
-            <mat-label>Tipas</mat-label>
-            <mat-select formControlName="type" [disabled]="!isAddMode">
-                <mat-option [value]="1" *ngIf="isDadano() && isHoneySuperCanBeAdded()">{{beehiveComponentType2LabelMapping[1]}}</mat-option>
-                <mat-option [value]="2" *ngIf="isDadano() && isHoneyMiniSuperCanBeAdded()">{{beehiveComponentType2LabelMapping[2]}}</mat-option>
-                <mat-option [value]="4" *ngIf="!isDadano() && !isBeeDecreaserExist()">{{beehiveComponentType2LabelMapping[4]}}</mat-option>
-                <mat-option [value]="8" *ngIf="!isDadano() && !isQueenExcluderExist()">{{beehiveComponentType2LabelMapping[8]}}</mat-option>
-                <mat-option [value]="16" *ngIf="!isDadano()">{{beehiveComponentType2LabelMapping[16]}}</mat-option>
-                <mat-option [value]="32" *ngIf="!isDadano() && !isBottomGateExist()">{{beehiveComponentType2LabelMapping[32]}}</mat-option>
-                <mat-option [value]="64">{{beehiveComponentType2LabelMapping[64]}}</mat-option>
-            </mat-select>
-            <mat-error *ngIf="submitted && f.type.errors">
-                Šis laukas yra būtinas
-            </mat-error>
-        </mat-form-field>
-        <mat-form-field *ngIf="isPositionAllowed(f.type.value)">
-            <mat-label>Pozicija</mat-label>
-            <input matInput formControlName="position">
-            <mat-error *ngIf="submitted && f.position.errors">
-                <p *ngIf="f.position.errors.required">Šis laukas yra būtinas</p>
-                <p *ngIf="f.position.errors.pattern">Numeris privalo būti natūralus skaičius</p>
-            </mat-error>      
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-            <mat-label>Įdėjimo data</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="installationDate">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-            <mat-error *ngIf="submitted && f.installationDate.errors">
-                Neteisingas datos formatas
-            </mat-error>
-        </mat-form-field>
-    </div>
-    <div class="form-group">
-        <button mat-flat-button color="accent" [disabled]="loading">
-            Išsaugoti
-            <mat-icon *ngIf="loading"><mat-spinner color="accent" diameter="20">
-            </mat-spinner></mat-icon>
-        </button>
-        <a mat-stroked-button (click)="backToList()">Atšaukti</a>
-    </div>
-</form>
+<div class="example-loading-shade" *ngIf="formLoading">
+    <mat-spinner *ngIf="formLoading" color="accent"></mat-spinner>
+</div>
+<div *ngIf="!formLoading">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="beehive && existingComponents">
+        <div class="form-fields">
+            <mat-form-field>
+                <mat-label>Tipas</mat-label>
+                <mat-select formControlName="type" [disabled]="!isAddMode">
+                    <mat-option [value]="1" *ngIf="isDadano() && isHoneySuperCanBeAdded()">{{beehiveComponentType2LabelMapping[1]}}</mat-option>
+                    <mat-option [value]="2" *ngIf="isDadano() && isHoneyMiniSuperCanBeAdded()">{{beehiveComponentType2LabelMapping[2]}}</mat-option>
+                    <mat-option [value]="4" *ngIf="!isDadano() && !isBeeDecreaserExist()">{{beehiveComponentType2LabelMapping[4]}}</mat-option>
+                    <mat-option [value]="8" *ngIf="!isDadano() && !isQueenExcluderExist()">{{beehiveComponentType2LabelMapping[8]}}</mat-option>
+                    <mat-option [value]="16" *ngIf="!isDadano()">{{beehiveComponentType2LabelMapping[16]}}</mat-option>
+                    <mat-option [value]="32" *ngIf="!isDadano() && !isBottomGateExist()">{{beehiveComponentType2LabelMapping[32]}}</mat-option>
+                    <mat-option [value]="64">{{beehiveComponentType2LabelMapping[64]}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="submitted && f.type.errors">
+                    Šis laukas yra būtinas
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field *ngIf="isPositionAllowed(f.type.value)">
+                <mat-label>Pozicija</mat-label>
+                <input matInput formControlName="position">
+                <mat-error *ngIf="submitted && f.position.errors">
+                    <p *ngIf="f.position.errors.required">Šis laukas yra būtinas</p>
+                    <p *ngIf="f.position.errors.pattern">Numeris privalo būti natūralus skaičius</p>
+                </mat-error>      
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>Įdėjimo data</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="installationDate" [max]="today">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                <mat-error *ngIf="submitted && f.installationDate.errors">
+                    Neteisinga data
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="form-group">
+            <button mat-flat-button color="accent" [disabled]="loading">
+                Išsaugoti
+                <mat-icon *ngIf="loading"><mat-spinner color="accent" diameter="20">
+                </mat-spinner></mat-icon>
+            </button>
+            <a mat-stroked-button (click)="backToList()">Atšaukti</a>
+        </div>
+    </form>
+</div>

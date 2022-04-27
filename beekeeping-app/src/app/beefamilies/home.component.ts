@@ -119,7 +119,43 @@ export class HomeComponent implements OnInit {
         return !(!this.isolatedFarmQueens || this.isolatedFarmQueens.length === 0);
     }
 
-    honeyStages() {
+    oneHullBeehiveHoneySupers() {
+        return this.beehiveComponents.filter(bc => bc.type === BeehiveComponentType.Meduvė).length;
+    }
+
+    oneHullBeehiveHoneyMiniSupers() {
+        return this.beehiveComponents.filter(bc => bc.type === BeehiveComponentType.Pusmeduvė).length;
+    }
+
+    multiHullBeehiveHoneySupers() {
+        const queenExcluder = this.beehiveComponents.find(bc => bc.type === BeehiveComponentType.SkiriamojiTvorelė);
+        if (queenExcluder) {
+            return this.beehiveComponents.filter(bc => bc.type === BeehiveComponentType.Aukstas).length - queenExcluder.position;
+        }
+        return 0;
+    }
+
+    multiHullBeehiveNestSupers() {
+        const queenExcluder = this.beehiveComponents.find(bc => bc.type === BeehiveComponentType.SkiriamojiTvorelė);
+        if (queenExcluder) {
+            return queenExcluder.position;
+        }
         return this.beehiveComponents.filter(bc => bc.type === BeehiveComponentType.Aukstas).length;
+    }
+
+    isQueenExcluderExist() {
+        return this.beehiveComponents.find(bc => bc.type === BeehiveComponentType.SkiriamojiTvorelė);
+    }
+
+    isBottomGateExist() {
+        return this.beehiveComponents.find(bc => bc.type === BeehiveComponentType.DugnoSklendė);
+    }
+
+    isBeeDecreaserExist() {
+        return this.beehiveComponents.find(bc => bc.type === BeehiveComponentType.Išleistuvas);
+    }
+
+    isFeederExist() {
+        return this.beehiveComponents.find(bc => bc.type === BeehiveComponentType.Maitintuvė);
     }
 }

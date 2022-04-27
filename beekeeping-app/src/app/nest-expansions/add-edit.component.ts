@@ -18,6 +18,7 @@ export class AddEditComponent implements OnInit {
     isAddMode = true;
     submitted = false;
     loading = false;
+    formLoading = true;
 
     constructor(private nestExpansionsService: NestExpansionService,
                 private alertService: AlertService,
@@ -42,7 +43,12 @@ export class AddEditComponent implements OnInit {
         if (this.nestExpansionId !== undefined) {
             this.isAddMode = false;
             this.form.addControl('id', new FormControl('', Validators.required));
-            this.nestExpansionsService.getById(this.nestExpansionId).subscribe(expansion => this.form.patchValue(expansion));
+            this.nestExpansionsService.getById(this.nestExpansionId).subscribe(expansion => {
+                this.form.patchValue(expansion);
+                this.formLoading = false;
+            });
+        } else {
+            this.formLoading = false;
         }
     }
 

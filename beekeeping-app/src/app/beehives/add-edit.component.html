@@ -23,6 +23,7 @@
         <mat-form-field *ngIf="typeField.value === beehiveTypes.Dadano">
             <mat-label>Spalva</mat-label>
             <mat-select formControlName="color">
+                <mat-option [value]="null"></mat-option>
                 <mat-option *ngFor="let beehiveColor of colorsNames" [value]="beehiveColor">
                     {{color2LabelMapping[beehiveColor]}}
                 </mat-option>

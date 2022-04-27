@@ -6,6 +6,7 @@ import { filter, first, pairwise } from 'rxjs/operators';
 import { Beehive, BeehiveComponent, BeehiveComponentType, BeehiveComponentType2LabelMapping, BeehiveTypes } from '../_models';
 import { AlertService } from '../_services/alert.service';
 import { BeehiveComponentService } from '../_services/beehive-component.service';
+import { BeehiveBeefamilyService } from '../_services/beehive-family.service';
 import { BeehiveService } from '../_services/beehive.service';
 
 @Component({
@@ -18,13 +19,16 @@ export class AddEditComponent implements OnInit {
     id: number;
     beehiveId: number;
     beehive: Beehive;
+    today: Date;
     existingComponents: BeehiveComponent[];
     isAddMode = true;
     submitted = false;
     loading = false;
+    formLoading = true;
 
     constructor(private beehiveComponentService: BeehiveComponentService,
                 private beehiveService: BeehiveService,
+                private beehiveBeefamilyService: BeehiveBeefamilyService,
                 private alertService: AlertService,
                 private formBuilder: FormBuilder,
                 private router: Router,
@@ -32,6 +36,7 @@ export class AddEditComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.today = new Date();
         this.form = this.formBuilder.group({
             type: ['', Validators.required],
             position: ['', [Validators.required, Validators.pattern('^([1-9][0-9]*)$')]],
@@ -47,12 +52,30 @@ export class AddEditComponent implements OnInit {
             this.beehiveComponentService.getById(this.id).subscribe(beehiveComponent => this.form.patchValue(beehiveComponent));
         }
 
-        const url = this.router.url.substring(10);
-        this.beehiveId = +url.substring(0, url.indexOf('/'));
+        const urlEntry = this.router.url.substring(1, 9);
+        if (urlEntry !== 'apiaries')
+        {
+            this.router.navigate(['/'], { relativeTo: this.route });
+        }
+        this.beehiveBeefamilyService.getBeefamilyBeehive(this.extractBeefamilyId()).subscribe(beefamilyBeehive => {
+            if (beefamilyBeehive.length === 0) {
+                this.router.navigate(['/'], { relativeTo: this.route });
+            }
+            this.beehiveId = beefamilyBeehive[0].beehiveId;
+            this.beehiveService.getById(this.beehiveId).subscribe(beehive => {
+                this.beehive = beehive;
+                this.beehiveComponentService.getBeehiveComponents(this.beehiveId)
+                    .subscribe(components => {
+                    this.existingComponents = components;
+                    this.formLoading = false;
+                });
+            });
+        });  
+    }
 
-        this.beehiveService.getById(this.beehiveId).subscribe(beehive => this.beehive = beehive);
-        this.beehiveComponentService.getBeehiveComponents(this.beehiveId)
-            .subscribe(components => this.existingComponents = components);
+    extractBeefamilyId() {
+        const url = this.router.url.substring(this.router.url.indexOf('beefamilies')).substring(12);
+        return +url.substring(0, url.indexOf('/'));
     }
 
     get beehiveComponentType() {

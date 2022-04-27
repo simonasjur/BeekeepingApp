@@ -1,5 +1,5 @@
 <mat-spinner *ngIf="loading" color="accent"></mat-spinner>
-<div *ngIf="beehive">
+<div *ngIf="!loading">
     <mat-card class="bee-card">
         <mat-card-title>
             Šeima
@@ -62,8 +62,18 @@
                     <h2>Nr: {{beehive.no}}</h2>
                     <p>Tipas: {{beehiveType2LabelMapping[beehive.type]}}</p>
                     <div *ngIf="beehiveType2LabelMapping[beehive.type] == 'Dadano'">
-                        <p>Įsigijimo data: {{beehive.acquireDay}}</p>
-                        <p>Spalva: {{color2LabelMapping[beehive.color]}}</p>
+                        <p *ngIf="isFeederExist()">Maitintuvė: <span [ngStyle]="{'color': 'green'}">Yra</span></p>
+                        <p>Meduvės: {{oneHullBeehiveHoneySupers()}}</p>
+                        <p *ngIf="oneHullBeehiveHoneyMiniSupers() > 0">Pusmeduvės: {{oneHullBeehiveHoneyMiniSupers()}}</p>
+                        <p>Meduvių limitas: {{beehive.maxHoneyCombsSupers}}</p>
+                        <p>Įsigijimo data: 
+                            <span *ngIf="beehive.acquireDay">{{beehive.acquireDay}}</span>
+                            <span *ngIf="!beehive.acquireDay">-</span>
+                        </p>
+                        <p>Spalva: 
+                            <span *ngIf="color2LabelMapping[beehive.color]">{{color2LabelMapping[beehive.color]}}</span>
+                            <span *ngIf="!color2LabelMapping[beehive.color]">-</span>
+                        </p>
                         <p>Lizdiniai koriai: {{beehive.nestCombs}}</p>
                         <p>Lizdinių korių limitas: {{beehive.maxNestCombs}}</p>
                         <p>Užpildymas: {{expandPercent}}%</p>
@@ -72,9 +82,14 @@
                             [value]="expandPercent">
                         </mat-progress-spinner>
                     </div>
-                    <!-- <div *ngIf="beehiveType2LabelMapping[beehive.type] != 'Dadano'">
-                        <p>Lizdo aukštai: {{honeyStages()}}</p>
-                    </div> -->
+                    <div *ngIf="beehiveType2LabelMapping[beehive.type] != 'Dadano'">
+                        <p *ngIf="multiHullBeehiveHoneySupers() > 0">Medaus aukštai: {{multiHullBeehiveHoneySupers()}}</p>
+                        <p>Lizdo aukštai: {{multiHullBeehiveNestSupers()}}</p>
+                        <p *ngIf="isQueenExcluderExist()">Skiriamoji tvorelė: <span [ngStyle]="{'color': 'green'}">Yra</span></p>
+                        <p *ngIf="isBeeDecreaserExist()">Išleistuvas: <span [ngStyle]="{'color': 'green'}">Yra</span></p>
+                        <p *ngIf="isBottomGateExist()">Dugno sklendė: <span [ngStyle]="{'color': 'green'}">Yra</span></p>
+                        <p *ngIf="isFeederExist()">Maitintuvė: <span [ngStyle]="{'color': 'green'}">Yra</span></p>
+                    </div>
                 </div>
             </div>
         </mat-card-content>

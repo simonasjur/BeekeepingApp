@@ -7,13 +7,13 @@ export class BeehiveComponent {
 }
 
 export enum BeehiveComponentType {
-    Meduvė = 1,
-    Pusmeduvė = 2,
-    Išleistuvas = 4,
-    SkiriamojiTvorelė = 8,
-    Aukstas = 16,
-    DugnoSklendė = 32,
-    Maitintuvė = 64
+    Meduvė = 1, //HoneySuper
+    Pusmeduvė = 2, //HoneyMiniSuper
+    Išleistuvas = 4, //bee decreaser
+    SkiriamojiTvorelė = 8, //queen excluder
+    Aukstas = 16, //super
+    DugnoSklendė = 32, //bottom Gate
+    Maitintuvė = 64 //feeder
 }
 
 export const BeehiveComponentType2LabelMapping: Record<BeehiveComponentType, string> = {
