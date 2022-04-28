@@ -1,5 +1,5 @@
 <h1>Avilio lizdo siaurinimai žiemai</h1>
-<button mat-raised-button color="accent" routerLink="add">Naujas siaurinimas</button>
+<button mat-raised-button color="accent" routerLink="add" *ngIf="worker && !!+worker.permissions[15]">Naujas siaurinimas</button>
 <div class="example-loading-shade" *ngIf="loading">
     <mat-spinner *ngIf="loading" color="accent"></mat-spinner>
 </div>
@@ -39,10 +39,10 @@
             <th mat-header-cell *matHeaderCellDef> Veiksmas </th>
             <td mat-cell *matCellDef="let element">
                 <div *ngIf="isActionsAllowed(element)">
-                    <button mat-icon-button >
+                    <button mat-icon-button *ngIf="worker && !!+worker.permissions[16]">
                         <mat-icon routerLink="edit/{{element.id}}">edit</mat-icon>
                     </button>
-                    <button mat-icon-button (click)="deleteNestReduction(element.id)">
+                    <button mat-icon-button (click)="deleteNestReduction(element.id)" *ngIf="worker && !!+worker.permissions[17]">
                         <mat-icon>delete</mat-icon>
                     </button>
                 </div>

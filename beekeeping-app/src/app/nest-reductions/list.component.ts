@@ -5,8 +5,9 @@ import { FarmService } from '../_services/farm.service';
 import { AlertService } from '../_services/alert.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteDialog } from '../_components/delete-dialog.component';
-import { NestReduction } from '../_models';
+import { NestReduction, Worker } from '../_models';
 import { NestReductionService } from '../_services/nest-reduction.service';
+import { WorkerService } from '../_services/worker.service';
 
 @Component({
     selector: 'nest-reductions-list',
@@ -18,10 +19,13 @@ export class ListComponent implements OnInit {
     thisYearLastReduction: NestReduction;
     beefamilyId: number;
     today: Date;
+    worker: Worker;
     loading = true;
     displayedColumns: string[] = ['date', 'stayedCombs', 'stayedBroodCombs', 'stayedHoney', 'requiredFoodForWinter', 'action'];
 
     constructor(private nestReductionService: NestReductionService,
+                private workerService: WorkerService,
+                private farmService: FarmService,
                 private alertService: AlertService,
                 private router: Router,
                 private route: ActivatedRoute,
@@ -31,15 +35,18 @@ export class ListComponent implements OnInit {
     ngOnInit() {
         this.extractBeefamilyId();
         this.today = new Date();
-        this.nestReductionService.getBeefamilyNestReductions(this.beefamilyId).subscribe(reductions => {
-            this.nestReductions = reductions;
-            if (reductions.length > 0) {
-                const lastReductionDate = new Date(reductions[0].date);
-                if (this.today.getFullYear() == lastReductionDate.getFullYear()) {
-                    this.thisYearLastReduction = reductions[0];
+        this.workerService.getFarmAndUserWorker(this.farmService.farmValue.id).subscribe(worker => {
+            this.worker = worker;
+            this.nestReductionService.getBeefamilyNestReductions(this.beefamilyId).subscribe(reductions => {
+                this.nestReductions = reductions;
+                if (reductions.length > 0) {
+                    const lastReductionDate = new Date(reductions[0].date);
+                    if (this.today.getFullYear() == lastReductionDate.getFullYear()) {
+                        this.thisYearLastReduction = reductions[0];
+                    }
                 }
-            }
-            this.loading = false;
+                this.loading = false;
+            });
         });
     }
 

@@ -3,11 +3,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { DeleteDialog } from '../_components/delete-dialog.component';
 
-import { BeefamilyQueen, Breed2LabelMapping, Color2LabelMapping, Queen, QueenState, QueenState2LabelMapping } from '../_models';
+import { BeefamilyQueen, Breed2LabelMapping, Color2LabelMapping, Queen, QueenState, QueenState2LabelMapping, Worker } from '../_models';
 import { AlertService } from '../_services/alert.service';
 import { BeefamilyQueenService } from '../_services/beefamily-queen.service';
 import { FarmService } from '../_services/farm.service';
 import { QueenService } from '../_services/queen.service';
+import { WorkerService } from '../_services/worker.service';
 
 @Component({
     selector: 'beefamily-queens-list',
@@ -18,6 +19,7 @@ export class ListComponent implements OnInit {
     beefamilyQueens: BeefamilyQueen[];
     familyQueen: BeefamilyQueen;
     beefamilyId: number;
+    worker: Worker;
     isolatedFarmQueens: Queen[];
     loading = true;
     apiaryId: number;
@@ -27,6 +29,7 @@ export class ListComponent implements OnInit {
     constructor(private beefamilyQueenService: BeefamilyQueenService,
                 private queenService: QueenService,
                 private farmService: FarmService,
+                private workerService: WorkerService,
                 private alertService: AlertService,
                 private router: Router,
                 public dialog: MatDialog) {
@@ -34,7 +37,9 @@ export class ListComponent implements OnInit {
 
     ngOnInit() {
         this.extractIds();
-        this.beefamilyQueenService.getBeefamilyQueens(this.beefamilyId)
+        this.workerService.getFarmAndUserWorker(this.farmService.farmValue.id).subscribe(worker => {
+            this.worker = worker;
+            this.beefamilyQueenService.getBeefamilyQueens(this.beefamilyId)
             .subscribe({
                 next: beefamilyQueens => {
                     this.beefamilyQueens = beefamilyQueens.sort((a, b) => a.insertDate > b.insertDate ? -1 : a.insertDate < b.insertDate ? 1 : 0 ||
@@ -49,6 +54,7 @@ export class ListComponent implements OnInit {
                     this.backToHomeWithError();
                 }
             });
+        });
     }
 
     extractIds() {

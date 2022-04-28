@@ -4,9 +4,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FarmService } from '../_services/farm.service';
 import { AlertService } from '../_services/alert.service';
 import { MatDialog } from '@angular/material/dialog';
-import { FrameType2LabelMapping, NestExpansion } from '../_models';
+import { FrameType2LabelMapping, NestExpansion, Worker } from '../_models';
 import { NestExpansionService } from '../_services/nest-expansion.service';
 import { DeleteDialog } from '../_components/delete-dialog.component';
+import { WorkerService } from '../_services/worker.service';
 
 @Component({
     selector: 'nest-expansions-list',
@@ -16,10 +17,13 @@ import { DeleteDialog } from '../_components/delete-dialog.component';
 export class ListComponent implements OnInit {
     nestExpansions: NestExpansion[];
     beefamilyId: number;
+    worker: Worker;
     loading = true;
     displayedColumns: string[] = ['date', 'frameType', 'combSheets', 'combs', 'action'];
 
     constructor(private nestExpansionService: NestExpansionService,
+                private workerService: WorkerService,
+                private farmService: FarmService,
                 private alertService: AlertService,
                 private router: Router,
                 private route: ActivatedRoute,
@@ -28,9 +32,12 @@ export class ListComponent implements OnInit {
 
     ngOnInit() {
         this.extractBeefamilyId();
-        this.nestExpansionService.getBeefamilyNestExpansions(this.beefamilyId).subscribe(expansions => {
-            this.nestExpansions = expansions.sort((a, b) => a.date > b.date ? -1 : a.date < b.date ? 1 : 0);
-            this.loading = false;
+        this.workerService.getFarmAndUserWorker(this.farmService.farmValue.id).subscribe(worker => {
+            this.worker = worker;
+            this.nestExpansionService.getBeefamilyNestExpansions(this.beefamilyId).subscribe(expansions => {
+                this.nestExpansions = expansions.sort((a, b) => a.date > b.date ? -1 : a.date < b.date ? 1 : 0);
+                this.loading = false;
+            });
         });
     }
 

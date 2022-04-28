@@ -4,10 +4,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AlertService } from '../_services/alert.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteDialog } from '../_components/delete-dialog.component';
-import { Feeding, Food } from '../_models';
+import { Feeding, Food, Worker } from '../_models';
 import { FeedingService } from '../_services/feeding.service';
 import { FoodService } from '../_services/food.service';
 import { FarmService } from '../_services/farm.service';
+import { WorkerService } from '../_services/worker.service';
 
 @Component({
     selector: 'feedings-list',
@@ -18,6 +19,7 @@ export class ListComponent implements OnInit {
     feedings: Feeding[];
     foods: Food[];
     beefamilyId: number;
+    worker: Worker;
     loading = true;
     displayedColumns: string[] = ['date', 'foodName', 'quantity', 'action'];
     foodColumns: string[] = ['name', 'action'];
@@ -25,6 +27,7 @@ export class ListComponent implements OnInit {
     constructor(private feedingService: FeedingService,
                 private foodService: FoodService,
                 private farmService: FarmService,
+                private workerService: WorkerService,
                 private alertService: AlertService,
                 private router: Router,
                 private route: ActivatedRoute,
@@ -33,11 +36,14 @@ export class ListComponent implements OnInit {
 
     ngOnInit() {
         this.extractBeefamilyId();
-        this.feedingService.getBeefamilyFeedings(this.beefamilyId).subscribe(feedings => {
-            this.feedings = feedings.sort((a, b) => a.date > b.date ? -1 : a.date < b.date ? 1 : 0);
-            this.foodService.getFarmFoods(this.farmService.farmValue.id).subscribe(foods => {
-                this.foods = foods;
-                this.loading = false;
+        this.workerService.getFarmAndUserWorker(this.farmService.farmValue.id).subscribe(worker => {
+            this.worker = worker;
+            this.feedingService.getBeefamilyFeedings(this.beefamilyId).subscribe(feedings => {
+                this.feedings = feedings.sort((a, b) => a.date > b.date ? -1 : a.date < b.date ? 1 : 0);
+                this.foodService.getFarmFoods(this.farmService.farmValue.id).subscribe(foods => {
+                    this.foods = foods;
+                    this.loading = false;
+                });
             });
         });
     }

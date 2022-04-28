@@ -7,7 +7,7 @@
             <div *ngIf="!familyQueen  && !loading">
                 <br>
                 <h2>Motinėlės <span [ngStyle]="{'color': 'red'}">nėra</span></h2>
-                <button mat-raised-button color="accent" [matMenuTriggerFor]="menu" #menuTrigger>Įdėti motinėlę</button>
+                <button mat-raised-button color="accent" [matMenuTriggerFor]="menu" #menuTrigger *ngIf="worker && !!+worker.permissions[18]">Įdėti motinėlę</button>
                 <mat-menu #menu="matMenu">
                     <button mat-menu-item routerLink="add" [disabled]="!havingIsolatedQueens()">Įdėti turimą</button>
                     <button mat-menu-item routerLink="../queens/add">Kurti naują</button>
@@ -41,7 +41,7 @@
                                 <span *ngIf="!familyQueen.queen.broodStartDate">-</span>
                             </p>
                             <p>Šeimoje nuo: {{familyQueen.insertDate | date:'yyyy-MM-dd'}}</p>
-                            <button mat-raised-button color="accent" routerLink="edit/{{familyQueen.id}}">Išimti motinėlę</button>
+                            <button mat-raised-button color="accent" routerLink="edit/{{familyQueen.id}}" *ngIf="worker && !!+worker.permissions[19]">Išimti motinėlę</button>
                         </div>
                     </div>
                 </mat-card-content>
@@ -78,10 +78,10 @@
             <ng-container matColumnDef="action">
                 <th mat-header-cell *matHeaderCellDef>Veiksmas</th>
                 <td mat-cell *matCellDef="let element">
-                    <button mat-icon-button >
+                    <button mat-icon-button *ngIf="worker && !!+worker.permissions[19]">
                         <mat-icon routerLink="/apiaries/{{apiaryId}}/beefamilies/{{beefamilyId}}/queens/edit/{{element.id}}">edit</mat-icon>
                     </button>
-                    <button mat-icon-button (click)="deleteBeefamilyQueen(element.id)" *ngIf="element.takeOutDate">
+                    <button mat-icon-button (click)="deleteBeefamilyQueen(element.id)" *ngIf="element.takeOutDate && worker && !!+worker.permissions[29]">
                         <mat-icon>delete</mat-icon>
                     </button>
                 </td>

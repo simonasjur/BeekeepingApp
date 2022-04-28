@@ -1,5 +1,5 @@
 <h1>Šeimos maitinimai</h1>
-<button mat-raised-button color="accent" routerLink="add" *ngIf="isThereAnyFood()">
+<button mat-raised-button color="accent" routerLink="add" *ngIf="isThereAnyFood() && worker && !!+worker.permissions[27]" >
     Naujas maitinimas
 </button>
 <div class="example-loading-shade" *ngIf="loading">
@@ -8,7 +8,7 @@
 <div *ngIf="!loading && !isThereAnyFood()">
     <p>Jūs neturite užregistravę nė vieno bičių maisto.</p>
     <p>Prieš registruojant maitinimą privalote sukurti nors vieną bičių maistą.</p>
-    <button mat-raised-button color="accent" routerLink="foods/add">Naujas maistas</button>
+    <button mat-raised-button color="accent" routerLink="foods/add" *ngIf="worker && !!+worker.permissions[27]">Naujas maistas</button>
 </div>
 <div *ngIf="!loading && isThereAnyFood()">
     <mat-tab-group>
@@ -35,10 +35,10 @@
                 <ng-container matColumnDef="action">
                     <th mat-header-cell *matHeaderCellDef> Veiksmas </th>
                     <td mat-cell *matCellDef="let element">
-                        <button mat-icon-button >
+                        <button mat-icon-button *ngIf="worker && !!+worker.permissions[28]">
                             <mat-icon routerLink="edit/{{element.id}}">edit</mat-icon>
                         </button>
-                        <button mat-icon-button (click)="deleteFeeding(element.id)">
+                        <button mat-icon-button (click)="deleteFeeding(element.id)" *ngIf="worker && !!+worker.permissions[29]">
                             <mat-icon>delete</mat-icon>
                         </button>
                     </td>
@@ -48,7 +48,7 @@
             </table>
         </mat-tab>
         <mat-tab label="Maistas({{foods.length}})">
-            <button mat-raised-button color="accent" routerLink="foods/add">Naujas maistas</button>
+            <button mat-raised-button color="accent" routerLink="foods/add" *ngIf="worker && !!+worker.permissions[27]">Naujas maistas</button>
             <table mat-table [dataSource]="foods">
                 <ng-container matColumnDef="name">
                     <th mat-header-cell *matHeaderCellDef>Pavadinimas</th>
@@ -59,10 +59,10 @@
                 <ng-container matColumnDef="action">
                     <th mat-header-cell *matHeaderCellDef> Veiksmas </th>
                     <td mat-cell *matCellDef="let element">
-                        <button mat-icon-button >
+                        <button mat-icon-button *ngIf="worker && !!+worker.permissions[28]">
                             <mat-icon routerLink="foods/edit/{{element.id}}">edit</mat-icon>
                         </button>
-                        <button mat-icon-button (click)="deleteFood(element.id)">
+                        <button mat-icon-button (click)="deleteFood(element.id)" *ngIf="worker && !!+worker.permissions[29]">
                             <mat-icon>delete</mat-icon>
                         </button>
                     </td>
