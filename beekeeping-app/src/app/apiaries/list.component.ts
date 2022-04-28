@@ -21,6 +21,7 @@ export class ListComponent implements OnInit {
     displayedColumns: string[] = ['name', 'familiesCount', 'action'];
     displayedColumns2: string[] = ['name', 'familiesCount'];
     worker: Worker;
+    loading = true;
 
     constructor(private apiaryService: ApiaryService,
                 private farmService: FarmService,
@@ -39,9 +40,11 @@ export class ListComponent implements OnInit {
                 this.workerService.getFarmAndUserWorker(this.farmService.farmValue.id).subscribe(worker => {
                     this.worker = worker;
                     apiaries.forEach(apiary => 
-                        this.apiaryFamiliesService.getOneApiaryBeeFamilies(apiary.id).subscribe(families =>
-                            apiary.familiesCount = families.length
-                    ));
+                        this.apiaryFamiliesService.getOneApiaryBeeFamilies(apiary.id).subscribe(families => {
+                            apiary.familiesCount = families.length;
+                            
+                        })
+                    );
                 });
             });
         this.apiaryService.clearApiary();

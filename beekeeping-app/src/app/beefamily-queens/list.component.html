@@ -32,9 +32,9 @@
                                 <span *ngIf="familyQueen.queen.hatchingDate">{{familyQueen.queen.hatchingDate | date:'yyyy-MM-dd'}}</span>
                                 <span *ngIf="!familyQueen.queen.hatchingDate">-</span>
                             </p>
-                            <p>Pažymėjimo spalva:
-                                <span>{{color2LabelMapping[familyQueen.queen.markingColor]}}</span>
-                                <!--<span *ngIf="!familyQueen.queen.markingColor">-</span>-->
+                            <p>Pažymėjimo spalva: 
+                                <span *ngIf="color2LabelMapping[familyQueen.queen.markingColor]">{{color2LabelMapping[familyQueen.queen.markingColor]}}</span>
+                                <span *ngIf="!color2LabelMapping[familyQueen.queen.markingColor]">-</span>
                             </p>
                             <p>Pradėjo dėti kiaušinius: 
                                 <span *ngIf="familyQueen.queen.broodStartDate">{{familyQueen.queen.broodStartDate | date:'yyyy-MM-dd'}}</span>

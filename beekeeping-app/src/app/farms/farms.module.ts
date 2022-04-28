@@ -14,6 +14,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { DateAdapter, MatNativeDateModule, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
+import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 
 @NgModule({
     imports: [
@@ -27,16 +28,13 @@ import { MatInputModule } from '@angular/material/input';
         MatFormFieldModule,
         MatDatepickerModule,
         MatNativeDateModule,
-        MatInputModule
+        MatInputModule,
+        MatMomentDateModule
     ],
     declarations: [
         LayoutComponent,
         ListComponent,
         AddEditComponent
-    ],
-    providers: [
-        MatDatepickerModule,
-        { provide: MAT_DATE_LOCALE, useValue: 'lt' }
     ]
 })
 export class FarmsModule { }

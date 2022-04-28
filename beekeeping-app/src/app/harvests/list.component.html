@@ -77,13 +77,13 @@
 
     <ng-container matColumnDef="startDate">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Pradėjimo data </th>
-      <td mat-cell *matCellDef="let row"> {{row.startDate}} </td>
+      <td mat-cell *matCellDef="let row"> {{row.startDate | date:'yyyy-MM-dd'}} </td>
       <td mat-footer-cell *matFooterCellDef> Duonelės {{bread}} </td>
     </ng-container>
 
     <ng-container matColumnDef="endDate">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Pabaigimo data </th>
-      <td mat-cell *matCellDef="let row"> {{row.endDate}} </td>
+      <td mat-cell *matCellDef="let row"> {{row.endDate | date:'yyyy-MM-dd'}} </td>
       <td mat-footer-cell *matFooterCellDef> Pikio {{propolis}} </td>
     </ng-container>
 
