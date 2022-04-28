@@ -75,7 +75,7 @@ namespace BeekeepingApi.Controllers
         //GET: api/beeFamilies/{beeFamilyId}/apiaryBeeFamilies
         [HttpGet("/api/beeFamilies/{beeFamilyId}/apiaryBeeFamilies")]
         [EnableQuery()]
-        public async Task<ActionResult<IEnumerable<ApiaryBeeFamilyReadForBeeFamilyDTO>>> GetAllBeeFamilyApiaries(long beeFamilyId)
+        public async Task<ActionResult<IEnumerable<ApiaryBeeFamilyReadDTO>>> GetAllBeeFamilyApiaries(long beeFamilyId)
         {
             var beeFamily = await _context.BeeFamilies.FindAsync(beeFamilyId);
             if (beeFamily == null)
@@ -94,9 +94,10 @@ namespace BeekeepingApi.Controllers
             foreach (ApiaryBeeFamily apiaryBeehive in apiaryBeeFamiliesList)
             {
                 await _context.Entry(apiaryBeehive).Reference(ab => ab.Apiary).LoadAsync();
+                await _context.Entry(apiaryBeehive).Reference(ab => ab.BeeFamily).LoadAsync();
             }
 
-            return _mapper.Map<IEnumerable<ApiaryBeeFamilyReadForBeeFamilyDTO>> (apiaryBeeFamiliesList).ToList();
+            return _mapper.Map<IEnumerable<ApiaryBeeFamilyReadDTO>> (apiaryBeeFamiliesList).ToList();
         }
 
         //POST: api/apiaryBeeFamilies

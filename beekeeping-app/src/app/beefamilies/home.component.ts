@@ -59,7 +59,7 @@ export class HomeComponent implements OnInit {
                 this.beefamily = beefamily;
                 this.beehiveFamilyService.getBeefamilyBeehive(beefamily.id).subscribe(beehiveBeefamilies => {
                     this.beehiveBeefamily = beehiveBeefamilies[0];
-                    this.apiaryFamilyService.getBeefamilyApiaries(beefamily.id).subscribe(apiaryFamilies => {
+                    this.apiaryFamilyService.getBeefamilyApiary(beefamily.id).subscribe(apiaryFamilies => {
                         this.apiaryBeefamily = apiaryFamilies[0];
                         this.beefamilyQueenService.getLivingBeefamilyQueen(this.id).subscribe(beefamilyQueen => {
                             if (beefamilyQueen.length > 0)

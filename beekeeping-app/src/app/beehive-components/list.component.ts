@@ -53,7 +53,7 @@ export class BeehiveComponentsListComponent implements OnInit {
                     this.beehiveBeefamily = beehiveBeefamilies[0];
                     this.beehiveService.getById(this.beehiveBeefamily.beehiveId).subscribe(beehive => {
                         this.beehive = beehive;
-                        this.apiaryFamilyService.getBeefamilyApiaries(this.beefamily.id).subscribe(apiaryFamily => {
+                        this.apiaryFamilyService.getBeefamilyApiary(this.beefamily.id).subscribe(apiaryFamily => {
                             this.apiaryBeefamily = apiaryFamily[0];
                             this.beehiveComponentService.getBeehiveComponents(this.beehive.id).subscribe({
                                 next: beehiveComponents => {

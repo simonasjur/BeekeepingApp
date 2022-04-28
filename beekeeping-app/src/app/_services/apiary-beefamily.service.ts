@@ -27,7 +27,7 @@ export class ApiaryBeeFamilyService {
         return this.http.get<ApiaryBeeFamily[]>(`${baseUrl}/apiaries/${apiaryId}/apiaryBeeFamilies`);
     }
 
-    getBeefamilyApiaries(beefamilyId: number) {
+    getBeefamilyApiary(beefamilyId: number) {
         return this.http.get<ApiaryBeeFamily[]>(`${baseUrl}/beeFamilies/${beefamilyId}/apiaryBeeFamilies?$filter=departDate eq null`)
         .pipe(map(apiaryFamilies => {
             this.apiaryFamilySubject.next(apiaryFamilies[0]);

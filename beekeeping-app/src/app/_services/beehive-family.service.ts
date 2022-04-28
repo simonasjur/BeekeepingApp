@@ -29,4 +29,8 @@ export class BeehiveBeefamilyService {
             return familyBeehives;
         }));
     }
+
+    getBeehiveBeefamily(beehiveId: number) {
+        return this.http.get<BeehiveBeefamily[]>(`${environment.apiUrl}/beehives/${beehiveId}/beehiveBeefamilies?$filter=departDate eq null`);
+    }
 }

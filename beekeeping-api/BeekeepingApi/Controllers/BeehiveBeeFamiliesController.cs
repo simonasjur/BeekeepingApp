@@ -48,7 +48,7 @@ namespace BeekeepingApi.Controllers
         // GET: api/beefamilies/{id}/beehiveBeefamilies
         [HttpGet("/api/beefamilies/{id}/beehiveBeefamilies")]
         [EnableQuery()]
-        public async Task<ActionResult<IEnumerable<BeehiveBeeFamilyReadDTO>>> GetBeefamilyBeehiveBeefamilies(long id)
+        public async Task<ActionResult<IEnumerable<BeehiveBeeFamilyReadDTO>>> GetBeefamilyBeehives(long id)
         {
             var beefamily = await _context.BeeFamilies.FindAsync(id);
             if (beefamily == null)
@@ -68,6 +68,27 @@ namespace BeekeepingApi.Controllers
             }
 
             return _mapper.Map<IEnumerable<BeehiveBeeFamilyReadDTO>>(beefamilyBeehives).ToList();
+        }
+
+        // GET: api/beehives/{id}/beehiveBeefamilies
+        [HttpGet("/api/beehives/{id}/beehiveBeefamilies")]
+        [EnableQuery()]
+        public async Task<ActionResult<IEnumerable<BeehiveBeeFamilyReadDTO>>> GetBeehiveBeefamilies(long id)
+        {
+            var beehive = await _context.Beehives.FindAsync(id);
+            if (beehive == null)
+                return NotFound();
+
+            var currentUserId = long.Parse(User.Identity.Name);
+            var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, beehive.FarmId);
+            if (farmWorker == null)
+            {
+                return Forbid();
+            }
+
+            var beehiveBeefamilies = await _context.BeehiveBeeFamilies.Where(bb => bb.BeehiveId == id).ToListAsync();
+
+            return _mapper.Map<IEnumerable<BeehiveBeeFamilyReadDTO>>(beehiveBeefamilies).ToList();
         }
 
         //POST: api/beehiveBeeFamilies

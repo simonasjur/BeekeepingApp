@@ -5,6 +5,8 @@ import { DeleteDialog } from '../_components/delete-dialog.component';
 
 import { Beehive, BeehiveType2LabelMapping, Worker } from '../_models';
 import { AlertService } from '../_services/alert.service';
+import { ApiaryBeeFamilyService } from '../_services/apiary-beefamily.service';
+import { BeehiveBeefamilyService } from '../_services/beehive-family.service';
 import { BeehiveService } from '../_services/beehive.service';
 import { FarmService } from '../_services/farm.service';
 import { WorkerService } from '../_services/worker.service';
@@ -20,10 +22,14 @@ export class ListComponent implements OnInit {
     worker: Worker;
     loading = true;
 
+    data = [];
     displayedColumns = ['no', 'type', 'action'];
+    displayedColumns2 = ['no', 'type', 'apiary', 'action'];
 
     constructor(private beehiveService: BeehiveService,
                 private farmService: FarmService,
+                private beehiveBeefamilyService: BeehiveBeefamilyService,
+                private apiaryBeefamilyService: ApiaryBeeFamilyService,
                 private alertService: AlertService,
                 private workerService: WorkerService,
                 private dialog: MatDialog,
@@ -40,10 +46,24 @@ export class ListComponent implements OnInit {
                 next: beehives => {
                     this.beehives = beehives.filter(b => b.isEmpty === false);
                     this.emptyBeehives = beehives.filter(b => b.isEmpty === true);
-                    this.loading = false;
-                }});
+                    this.beehives.forEach(beehive => {
+                        this.beehiveBeefamilyService.getBeehiveBeefamily(beehive.id).subscribe(beehiveBeefamily => {
+                            this.apiaryBeefamilyService.getBeefamilyApiary(beehiveBeefamily[0].beeFamilyId).subscribe(apiaryBeefamily => {
+                                const beehiveData = {
+                                    beehive: beehive,
+                                    beefamily: apiaryBeefamily[0].beeFamily,
+                                    apiary: apiaryBeefamily[0].apiary
+                                };
+                                this.data.push(beehiveData);
+                                if (this.data.length === this.beehives.length) {
+                                    this.sortDataByBeehiveNo();
+                                }
+                            });
+                        });
+                    });
+                }
+            });
         });
-        
     }
 
     checkUrl() {
@@ -55,6 +75,11 @@ export class ListComponent implements OnInit {
                 this.router.navigate(['/'], { relativeTo: this.route });
             }
         }
+    }
+
+    sortDataByBeehiveNo() {
+        this.data.sort((d1,d2) => d1.beehive.no - d2.beehive.no);
+        this.loading = false;
     }
 
     get beehiveType2LabelMapping() {
