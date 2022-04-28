@@ -18,9 +18,11 @@ export class AddBeeFamilyComponent implements OnInit {
     beehive: Beehive;
     apiaries: Apiary[];
     form: FormGroup;
+    today: Date;
     isAddMode = true;
     submitted = false;
     loading = false;
+    formLoading = true;
 
     constructor(private formBuilder: FormBuilder,
                 private beeFamilyService: BeeFamilyService,
@@ -33,6 +35,7 @@ export class AddBeeFamilyComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.today = new Date();
         this.form = this.formBuilder.group({
             origin: ['', Validators.required],
             farmId: ['', Validators.required],
@@ -45,11 +48,13 @@ export class AddBeeFamilyComponent implements OnInit {
 
         const beehiveId = this.route.snapshot.params['id'];
         this.beehiveService.getById(beehiveId)
-            .subscribe(beehive => this.beehive = beehive);
-        this.apiaryservice.getFarmApiaries(this.farmService.farmValue.id)
-            .subscribe(apiaries => this.apiaries = apiaries);
-
-        
+            .subscribe(beehive => {
+                this.beehive = beehive;
+                this.apiaryservice.getFarmApiaries(this.farmService.farmValue.id).subscribe(apiaries => {
+                    this.apiaries = apiaries;
+                    this.formLoading = false;
+                });
+            });
     }
 
     get beeFamilyOriginsNames() {

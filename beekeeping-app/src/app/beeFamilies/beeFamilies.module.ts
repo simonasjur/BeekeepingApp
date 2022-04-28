@@ -21,6 +21,8 @@ import { AddApiaryBeehiveDialog } from './add-apiary-beehive-dialog.component';
 import { HomeComponent } from './home.component';
 import { MatCardModule } from '@angular/material/card';
 import {MatChipsModule} from '@angular/material/chips';
+import { EditArriveDateDialog } from './edit-arrive-date-dialog.component';
+import { EditBeefamilyOriginDialog } from './edit-beefamily-origin-dialog.component';
 
 @NgModule({
     imports: [
@@ -45,7 +47,9 @@ import {MatChipsModule} from '@angular/material/chips';
         ListComponent,
         ApiaryBeehiveComponent,
         AddBeeFamilyComponent,
-        HomeComponent
+        HomeComponent,
+        EditArriveDateDialog,
+        EditBeefamilyOriginDialog
         //AddApiaryBeehiveDialog
     ]
 })

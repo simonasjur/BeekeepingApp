@@ -1,0 +1,24 @@
+<h1 mat-dialog-title>Šeimos kilmės atnaujinimas</h1>
+<div mat-dialog-content>
+    <form [formGroup]="form">
+        <mat-form-field [ngStyle]="{'margin-bottom': '20px'}">
+            <mat-label>Šeimos kilmė</mat-label>
+            <mat-select formControlName="origin">
+                <mat-option *ngFor="let familyOrigin of beeFamilyOriginsNames" [value]="familyOrigin">
+                    {{beeFamilyOrigin2LabelMapping[familyOrigin]}}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="submitted && f.origin.errors">
+                Šis laukas yra būtinas
+            </mat-error>
+        </mat-form-field>
+    </form>
+</div>
+<div mat-dialog-actions>
+    <button mat-flat-button color="accent" [disabled]="loading" (click)="onSubmit()">
+        Išsaugoti
+        <mat-icon *ngIf="loading" color="accent"><mat-spinner diameter="20">
+        </mat-spinner></mat-icon>
+    </button>
+    <a mat-stroked-button (click)="onNoClick()">Atšaukti</a>
+</div>

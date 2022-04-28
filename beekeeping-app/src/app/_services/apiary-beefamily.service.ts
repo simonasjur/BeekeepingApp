@@ -38,4 +38,8 @@ export class ApiaryBeeFamilyService {
     create(params: any) {
         return this.http.post(`${baseUrl}/apiaryBeeFamilies`, params);
     }
+
+    update(id: number, params: any) {
+        return this.http.put(`${baseUrl}/apiaryBeeFamilies/${id}`, params);
+    }
 }

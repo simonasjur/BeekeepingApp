@@ -21,6 +21,7 @@ export class AddEditComponent implements OnInit {
     isAddMode = true;
     submitted = false;
     loading = false;
+    formLoading = true;
 
     constructor(private beehiveService: BeehiveService,
                 private farmService: FarmService,
@@ -52,7 +53,10 @@ export class AddEditComponent implements OnInit {
             this.beehiveService.getById(this.id).subscribe(beehive => {
                 this.form.patchValue(beehive);
                 this.beehive = beehive;
+                this.formLoading = false;
             });
+        } else {
+            this.formLoading = false;
         }
     }
 

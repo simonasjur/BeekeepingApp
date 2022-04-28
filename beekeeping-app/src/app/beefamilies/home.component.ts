@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { ApiaryBeeFamily, BeeFamily, BeeFamilyOrigin2LabelMapping, BeefamilyQueen, BeeFamilyState2LabelMapping, Beehive, BeehiveBeefamily, BeehiveComponent, BeehiveComponentType, BeehiveType2LabelMapping, Breed, Breed2LabelMapping, Color2LabelMapping, Queen, QueenState, Worker } from '../_models';
 import { ApiaryBeeFamilyService } from '../_services/apiary-beefamily.service';
@@ -11,6 +12,7 @@ import { BeehiveService } from '../_services/beehive.service';
 import { FarmService } from '../_services/farm.service';
 import { QueenService } from '../_services/queen.service';
 import { WorkerService } from '../_services/worker.service';
+import { EditBeefamilyOriginDialog } from './edit-beefamily-origin-dialog.component';
 
 @Component({
     selector: 'beefamily-home',
@@ -44,7 +46,8 @@ export class HomeComponent implements OnInit {
         private queenService: QueenService,
         private workerService: WorkerService,
         private farmService: FarmService,
-        private beehiveComponentsService: BeehiveComponentService) {
+        private beehiveComponentsService: BeehiveComponentService,
+        private dialog: MatDialog) {
     }
 
     ngOnInit() {
@@ -157,5 +160,15 @@ export class HomeComponent implements OnInit {
 
     isFeederExist() {
         return this.beehiveComponents.find(bc => bc.type === BeehiveComponentType.Maitintuvė);
+    }
+
+    openEditBeefamilyOriginDialog() {
+        const dialogRef = this.dialog.open(EditBeefamilyOriginDialog, {
+            data: {
+                id: this.beefamily.id,
+                origin: this.beefamily.origin,
+                state: this.beefamily.state
+            }
+        });
     }
 }

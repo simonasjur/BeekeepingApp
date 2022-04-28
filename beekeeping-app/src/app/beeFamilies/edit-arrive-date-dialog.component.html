@@ -1,0 +1,22 @@
+<h1 mat-dialog-title>Avilio pastatymo datos atnaujinimas</h1>
+<div mat-dialog-content>
+    <form [formGroup]="form">
+        <mat-form-field [ngStyle]="{'margin-bottom': '20px'}">
+            <mat-label>Pastatymo data</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="arriveDate" [max]="today">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="submitted && f.arriveDate.errors">
+                Neteisinga data
+            </mat-error>   
+        </mat-form-field>
+    </form>
+</div>
+<div mat-dialog-actions>
+    <button mat-flat-button color="accent" [disabled]="loading" (click)="onSubmit()">
+        Išsaugoti
+        <mat-icon *ngIf="loading" color="accent"><mat-spinner diameter="20">
+        </mat-spinner></mat-icon>
+    </button>
+    <a mat-stroked-button (click)="onNoClick()">Atšaukti</a>
+</div>
