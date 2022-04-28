@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace BeekeepingApi.Controllers
 {
     [Authorize]
-    [Route("api/Farms/{farmId}/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class FarmWorkersController : ControllerBase
     {
@@ -26,40 +26,123 @@ namespace BeekeepingApi.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/Farms/1/FarmWorkers
+        // GET: api/FarmWorkers
         [HttpGet]
         [EnableQuery()]
-        public async Task<ActionResult<IEnumerable<FarmWorkerReadDTO>>> GetFarmWorkers(long id)
+        public async Task<ActionResult<IEnumerable<FarmWorkerReadDTO>>> GetFarmWorkers()
         {
-            var farm = await _context.Farms.FindAsync(id);
-            if (farm == null)
-                return NotFound();
-
             var currentUserId = long.Parse(User.Identity.Name);
-            var farmWorkersList = await _context.FarmWorkers.Where(l => l.FarmId == id).ToListAsync();
-
-            if (farmWorkersList.Any() && farmWorkersList.First().UserId != currentUserId)
-                return Forbid();
+            var farmWorkersList = await _context.FarmWorkers.Where(l => l.UserId == currentUserId).ToListAsync();
 
             return _mapper.Map<IEnumerable<FarmWorkerReadDTO>>(farmWorkersList).ToList();
         }
 
-        // DELETE: api/Farms/1/FarmWorkers/1
-        [HttpDelete("{workerId}")]
-        public async Task<ActionResult<FarmWorkerReadDTO>> DeleteFarmWorker(long farmId, long workerId)
+        [HttpGet("/api/Farms/{farmId}/Farmworkers")]
+        [EnableQuery()]
+        public async Task<ActionResult<IEnumerable<FarmWorkerReadDTO>>> GetFarmFarmWorkers(long farmId)
         {
-            var currentUserId = long.Parse(User.Identity.Name);
-            if (workerId != currentUserId)
-                return Forbid();
-
-            var farmWorker = await _context.FarmWorkers.FindAsync(workerId, farmId);
-            if (farmWorker == null)
+            var farm = await _context.Farms.FindAsync(farmId);
+            if (farm == null)
                 return NotFound();
 
-            _context.FarmWorkers.Remove(farmWorker);
+            var currentUserId = long.Parse(User.Identity.Name);
+            var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, farmId);
+            if (farmWorker == null || farmWorker.Role != WorkerRole.Owner)
+                return Forbid();
+
+            var farmWorkersList = await _context.FarmWorkers.Where(l => l.FarmId == farmId && l.UserId != currentUserId).ToListAsync();
+            foreach (var worker in farmWorkersList)
+            {
+                var user = await _context.Users.FindAsync(worker.UserId);
+                worker.FirstName = user.FirstName;
+                worker.LastName = user.LastName;
+            }
+
+            return _mapper.Map<IEnumerable<FarmWorkerReadDTO>>(farmWorkersList).ToList();
+        }
+
+        [HttpGet("/api/Farms/{farmId}/Farmworkers/{userId}")]
+        public async Task<ActionResult<FarmWorkerReadDTO>> GetFarmWorker(long farmId, long userId)
+        {
+            var farm = await _context.Farms.FindAsync(farmId);
+            if (farm == null)
+                return NotFound();
+
+            var currentUserId = long.Parse(User.Identity.Name);
+            var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, farmId);
+            if (farmWorker == null || farmWorker.Role != WorkerRole.Owner)
+                return Forbid();
+
+            var farmWorker2 = await _context.FarmWorkers.FirstOrDefaultAsync(l => l.FarmId == farmId && l.UserId == userId);
+            var user = await _context.Users.FindAsync(farmWorker2.UserId);
+            farmWorker2.FirstName = user.FirstName;
+            farmWorker2.LastName = user.LastName;
+
+            return _mapper.Map<FarmWorkerReadDTO>(farmWorker2);
+        }
+
+
+        [HttpGet("/api/Farms/{farmId}/Farmworker")]
+        public async Task<ActionResult<FarmWorkerReadDTO>> GetFarmAndUserWorker(long farmId)
+        {
+            var farm = await _context.Farms.FindAsync(farmId);
+            if (farm == null)
+                return NotFound();
+
+            var currentUserId = long.Parse(User.Identity.Name);
+
+            var farmWorkers = await _context.FarmWorkers.Where(l => l.FarmId == farmId && l.UserId == currentUserId).ToListAsync();
+            
+
+            if (farmWorkers.Any() && farmWorkers.First().UserId != currentUserId)
+                return Forbid();
+
+            return _mapper.Map<FarmWorkerReadDTO>(farmWorkers.First());
+        }
+
+        [HttpPut("/api/Farms/{farmId}/FarmWorkers/{userId}/{permissions}")]
+        public async Task<IActionResult> EditWorker(long farmId, long userId, string permissions)
+        {
+            var currentUserId = long.Parse(User.Identity.Name);
+            var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, farmId);
+            if (farmWorker == null || farmWorker.Role != WorkerRole.Owner)
+                return Forbid();
+
+            var farm = await _context.Farms.FindAsync(farmId);
+            if (farm == null)
+                return NotFound();
+
+            var farmWorkerToUpdate = await _context.FarmWorkers.FindAsync(userId, farmId);
+            if (farmWorkerToUpdate == null || farmWorkerToUpdate == farmWorker)
+                return NotFound();
+
+            farmWorkerToUpdate.Permissions = permissions;
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<FarmWorkerReadDTO>(farmWorker);
+            return NoContent();
+        }
+
+        // DELETE: api/Farms/1/FarmWorkers/1
+        [HttpDelete("/api/Farms/{farmId}/Farmworkers/{userId}")]
+        public async Task<ActionResult<FarmWorkerReadDTO>> DeleteFarmWorker(long farmId, long userId)
+        {
+            var farm = await _context.Farms.FindAsync(farmId);
+            if (farm == null)
+                return NotFound();
+
+            var currentUserId = long.Parse(User.Identity.Name);
+            var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, farmId);
+            if (farmWorker == null || farmWorker.Role != WorkerRole.Owner)
+                return Forbid();
+
+            var farmWorkerToDelete = await _context.FarmWorkers.FindAsync(userId, farmId);
+            if (farmWorkerToDelete == null)
+                return NotFound();
+
+            _context.FarmWorkers.Remove(farmWorkerToDelete);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<FarmWorkerReadDTO>(farmWorkerToDelete);
         }
     }
 }

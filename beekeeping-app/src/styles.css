@@ -12,4 +12,16 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     border: 1px solid #DADCE0 !important;
     border-radius: 25px !important;
   }
-  
+
+.mat-chip.active {
+    background: #673AB7;
+    color: white;
+}
+
+.header {
+    display: flex;
+}
+
+.sub-menu {
+    margin-bottom: 20px;
+}

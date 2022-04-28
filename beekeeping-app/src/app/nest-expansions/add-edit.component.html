@@ -1,0 +1,55 @@
+<h1 *ngIf="isAddMode">Pridėti naują avilio plėtimą</h1>
+<h1 *ngIf="!isAddMode">Atnaujinti avilio plėtimą</h1>
+<div class="example-loading-shade" *ngIf="formLoading">
+    <mat-spinner *ngIf="formLoading" color="accent"></mat-spinner>
+</div>
+<div *ngIf="!formLoading">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="form-fields">
+            <mat-form-field appearance="fill">
+                <mat-label>Data</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="date">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                <mat-error *ngIf="submitted && f.date.errors">
+                    Neteisingas datos formatas
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Korių tipas</mat-label>
+                <mat-select formControlName="frameType" [disabled]="!isAddMode">
+                    <mat-option *ngFor="let type of frameTypeNames" [value]="type">
+                        {{frameType2LabelMapping[type]}}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="submitted && f.frameType.errors">
+                    Šis laukas yra būtinas
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Vaškuolių skaičius</mat-label>
+                <input matInput formControlName="combSheets">
+                <mat-error *ngIf="submitted && f.combSheets.errors">
+                    <p *ngIf="f.combSheets.errors.required">Šis laukas yra būtinas</p>
+                    <p *ngIf="f.combSheets.errors.pattern">Skaičius privalo būti natūralusis</p>
+                </mat-error>      
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Pasiūtų korių skaičius</mat-label>
+                <input matInput formControlName="combs">
+                <mat-error *ngIf="submitted && f.combs.errors">
+                    <p *ngIf="f.combs.errors.required">Šis laukas yra būtinas</p>
+                    <p *ngIf="f.combs.errors.pattern">Skaičius privalo būti natūralusis</p>
+                </mat-error>      
+            </mat-form-field>
+        </div>
+        <div class="form-group">
+            <button mat-flat-button color="accent" [disabled]="loading">
+                Išsaugoti
+                <mat-icon *ngIf="loading" color="accent"><mat-spinner diameter="20">
+                </mat-spinner></mat-icon>
+            </button>
+            <a mat-stroked-button (click)="backToList()">Atšaukti</a>
+        </div>
+    </form>
+</div>

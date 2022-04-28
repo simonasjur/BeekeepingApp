@@ -1,0 +1,14 @@
+.form-fields {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 280px;
+}
+
+mat-form-field {
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-top: 20px;
+}

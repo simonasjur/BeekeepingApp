@@ -71,11 +71,6 @@ namespace BeekeepingApi.Controllers
         [HttpPost]
         public async Task<ActionResult<BeehiveReadDTO>> CreateBeehive(BeehiveCreateDTO beehiveCreateDTO)
         {
-            if (beehiveCreateDTO.Type == BeehiveTypes.Daugiaaukštis && beehiveCreateDTO.NestCombs != null)
-            {
-                return BadRequest();
-            }
-
             var farm = await _context.Farms.FindAsync(beehiveCreateDTO.FarmId);
             if (farm == null)
             {
@@ -84,12 +79,18 @@ namespace BeekeepingApi.Controllers
 
             var currentUserId = long.Parse(User.Identity.Name);
             var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, farm.Id);
-            if (farmWorker == null)
+            if (farmWorker == null || farmWorker.Permissions[3] != '1')
             {
                 return Forbid();
             }
 
             var beehive = _mapper.Map<Beehive>(beehiveCreateDTO);
+            
+            if (!IsBeehiveDataCorrect(beehive.Type, beehive))
+            {
+                return BadRequest("Incorrect data");
+            }
+
             _context.Beehives.Add(beehive);
             await _context.SaveChangesAsync();
 
@@ -114,9 +115,14 @@ namespace BeekeepingApi.Controllers
 
             var currentUserId = long.Parse(User.Identity.Name);
             var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, beehive.FarmId);
-            if (farmWorker == null)
+            if (farmWorker == null || farmWorker.Permissions[4] != '1')
             {
                 return Forbid();
+            }
+
+            if (!IsBeehiveDataCorrect(beehive.Type, _mapper.Map<Beehive>(beehiveEditDTO)))
+            {
+                return BadRequest("Incorrect data");
             }
 
             _mapper.Map(beehiveEditDTO, beehive);
@@ -137,17 +143,78 @@ namespace BeekeepingApi.Controllers
 
             var currentUserId = long.Parse(User.Identity.Name);
             var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, beehive.FarmId);
-            if (farmWorker == null)
+            if (farmWorker == null || farmWorker.Permissions[5] != '1')
             {
                 return Forbid();
             }
 
-            await _context.Entry(beehive).Collection(b => b.ApiaryBeehives).LoadAsync();
+            //Sita reikia pasinagrinet
+            //await _context.Entry(beehive).Collection(b => b.ApiaryBeeFamilies).LoadAsync();
 
             _context.Beehives.Remove(beehive);
             await _context.SaveChangesAsync();
 
             return _mapper.Map<BeehiveReadDTO>(beehive);
+        }
+
+        private bool IsBeehiveDataCorrect(BeehiveTypes type, Beehive beehive)
+        {
+            if ((type == BeehiveTypes.Dadano && !IsDadanoDataCorrect(type, beehive)) ||
+                (type == BeehiveTypes.Daugiaaukštis && !IsDaugiaaukstisDataCorrect(type, beehive)) ||
+                (type == BeehiveTypes.NukleosoSekcija && !IsNukleusoSekcijaDataCorrect(type, beehive)))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool IsNukleusoSekcijaDataCorrect(BeehiveTypes type, Beehive beehive)
+        {
+            if (type == BeehiveTypes.NukleosoSekcija && beehive.No == null &&
+                beehive.MaxNestCombs == null && beehive.NestCombs == null &&
+                beehive.MaxHoneyCombsSupers == null && beehive.Color == null &&
+                beehive.AcquireDay == null)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private bool IsDaugiaaukstisDataCorrect(BeehiveTypes type, Beehive beehive)
+        {
+            if (type == BeehiveTypes.Daugiaaukštis && beehive.No != null &&
+                beehive.MaxNestCombs == null && beehive.NestCombs == null &&
+                beehive.MaxHoneyCombsSupers == null && beehive.Color == null &&
+                beehive.AcquireDay == null)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private bool IsDadanoDataCorrect(BeehiveTypes type, Beehive beehive)
+        {
+            if (type == BeehiveTypes.Dadano && beehive.No != null &&
+                beehive.MaxNestCombs != null && beehive.MaxHoneyCombsSupers != null &&
+                beehive.NestCombs != null)
+            {
+                if (beehive.IsEmpty == true)
+                {
+                    if (beehive.NestCombs == 0)
+                    {
+                        return true;
+                    }
+                }
+                else 
+                {
+                    if (beehive.NestCombs > 0 && beehive.MaxNestCombs >= beehive.NestCombs)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
     }
 }

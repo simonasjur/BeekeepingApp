@@ -10,10 +10,11 @@ namespace BeekeepingApi.DTOs.HarvestDTOs
     {
         public long Id { get; set; }
         public BeeProduct Product { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
         public double Quantity { get; set; }
         public long FarmId { get; set; }
         public long ApiaryId { get; set; }
+        public long BeeFamilyId { get; set; }
     }
 }

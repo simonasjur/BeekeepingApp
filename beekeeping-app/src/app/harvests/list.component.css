@@ -1,0 +1,21 @@
+table {
+    width: 100%;
+    max-width: 800px;
+}
+
+mat-paginator {
+    max-width: 800px;
+}
+
+form {
+    margin-top: 20px;
+}
+
+.form-field {
+    width: 150px;
+    margin-right: 20px;
+}
+
+tr.mat-footer-row {
+    font-weight: bold;
+}

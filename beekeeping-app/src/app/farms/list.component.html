@@ -1,14 +1,40 @@
 <h1>Bitininkystės ūkių sąrašas</h1>
-<button mat-raised-button color="primary" routerLink="add">Pridėti naują ūkį</button>
-<mat-list>
+<button mat-raised-button color="accent" routerLink="add">Pridėti naują ūkį</button>
+<div *ngIf="user && !user.defaultFarmId">
+    <mat-divider></mat-divider>
+    <h3>Arba įveskite pakvietimo kodą</h3>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="fill">
+            <mat-label>Pakvietimo kodas</mat-label>
+            <input matInput formControlName="code">
+            <mat-error >
+                <p *ngIf="submitted && f.code.errors && f.code.errors.required">
+                    Įveskite pakvietimo kodą
+                </p>
+            </mat-error>
+        </mat-form-field>
+        <div class="form-group">
+            <button mat-flat-button color="accent" [disabled]="loading">
+                Patvirtinti
+                <mat-icon *ngIf="loading"><mat-spinner color="accent" diameter="20">
+                </mat-spinner></mat-icon>
+            </button>
+        </div>
+    </form>
+    <mat-error *ngIf="submitted && errors">
+        Neteisingas kodas
+    </mat-error>
+</div>
+<mat-list *ngIf="!loading2">
     <mat-list-item *ngFor="let farm of farms">
-        <a mat-line routerLink="/farms/{{farm.id}}">{{farm.name}}</a>
+        <a mat-line (click)="loadFarm(farm.id)" routerLink="/home">{{farm.name}}</a>
         <p class="default" *ngIf="farm.id == user.defaultFarmId">Numatytasis</p>
         <p mat-line>{{farm.creationDate}}</p>
-        <button mat-icon-button >
+        <p mat-line>{{role2LabelMapping[farm.worker.role]}}</p>
+        <button mat-icon-button *ngIf="farm.worker.role == 0">
             <mat-icon routerLink="edit/{{farm.id}}">edit</mat-icon>
         </button>
-		<button mat-icon-button (click)="deleteFarm(farm.id)">
+		<button mat-icon-button *ngIf="farm.worker.role == 0" (click)="deleteFarm(farm.id)">
             <mat-icon>delete</mat-icon>
         </button>
     </mat-list-item>

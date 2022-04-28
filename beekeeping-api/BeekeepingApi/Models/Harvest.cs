@@ -20,13 +20,9 @@ namespace BeekeepingApi.Models
         [Required]
         public BeeProduct Product { get; set; }
 
-        [Column(TypeName = "date")]
-        [DisplayFormat(DataFormatString = "{yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime StartDate { get; set; }
+        public DateTime? StartDate { get; set; }
 
-        [Column(TypeName = "date")]
-        [DisplayFormat(DataFormatString = "{yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
         
         [Required]
         public double Quantity { get; set; }
@@ -40,5 +36,10 @@ namespace BeekeepingApi.Models
 
         [ForeignKey("ApiaryId")]
         public Apiary Apiary { get; set; }
+
+        public long? BeeFamilyId { get; set; }
+
+        [ForeignKey("BeeFamilyId")]
+        public BeeFamily BeeFamily { get; set; }
     }
 }

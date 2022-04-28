@@ -1,0 +1,21 @@
+<div *ngIf="apiary">
+    <google-map
+        [center]="center"
+        [options]="options"
+        [zoom]="zoom"
+        height="300px"
+    >
+        <map-marker *ngIf="marker"
+            [position]="marker.position"
+            [label]="marker.label"
+            [title]="marker.title"
+            [options]="marker.options"
+        >
+        </map-marker>
+        <map-circle 
+            [center]="circleCenter"
+            [radius]="radius"
+        >
+        </map-circle>
+    </google-map>
+</div>

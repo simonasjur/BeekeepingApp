@@ -1,0 +1,97 @@
+<h1 *ngIf="isAddMode">Pridėti naują kopimą</h1>
+<h1 *ngIf="!isAddMode && harvest">Atnaujinti kopimą</h1>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <div class="form-fields">
+        <div class="product-field">
+            <mat-form-field appearance="fill">
+                <mat-label>Produktas</mat-label>
+                <mat-select formControlName="product">
+                    <mat-option [value]="product" *ngFor="let product of harvestProducts">
+                        {{ harvestProduct2LabelMapping[product] }}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="submitted && f.product.errors">
+                    Produktas yra privalomas
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="category">
+            <h3 class="category-title">Kategorija</h3>
+            <mat-selection-list #categories [multiple]="false">
+                <div class="category-selection-list">
+                    <mat-list-option *ngFor="let category of typesOfCategories, let i = index" 
+                    [selected]="category && i == selectedCategoryIndex" [value]="category">
+                        {{category}}
+                    </mat-list-option>
+                </div>
+            </mat-selection-list>
+            <div *ngIf="beehiveBeefamilies && categories.selectedOptions.selected[0]?.value === 'Avilys'">
+                <mat-form-field *ngIf="beehiveBeefamilies.length != 0" appearance="fill">
+                    <mat-label>Pasirinkite šeimą</mat-label>
+                    <mat-select formControlName="beeFamilyId">
+                    <mat-option *ngFor="let beehiveBeeFamily of beehiveBeefamilies" [value]="beehiveBeeFamily.beeFamilyId">
+                        {{beehiveBeeFamily.beehive.no}}
+                    </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <div *ngIf="beehiveBeefamilies.length == 0">Jūs neturite šeimų</div>
+            </div>
+            <div *ngIf="apiaries && categories.selectedOptions.selected[0]?.value === 'Bitynas'">
+                <mat-form-field *ngIf="apiaries.length != 0" appearance="fill">
+                    <mat-label>Pasirinkite bityną</mat-label>
+                    <mat-select formControlName="apiaryId">
+                    <mat-option *ngFor="let apiary of apiaries" [value]="apiary.id">
+                        {{apiary.name}}
+                    </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <div *ngIf="apiaries.length == 0">Jūs neturite bitynų</div>
+            </div>
+        </div> 
+
+        <div class="date-field">
+            <mat-form-field appearance="fill">
+                <mat-label>Pradėjimo data</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="startDate">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                <mat-error *ngIf="submitted && f.startDate.errors">
+                    Neteisingas datos formatas
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="date-field">
+            <mat-form-field appearance="fill">
+                <mat-label>Pabaigos data</mat-label>
+                <input matInput [matDatepicker]="picker2" formControlName="endDate">
+                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
+                <mat-error *ngIf="submitted && f.endDate.errors">
+                    Neteisingas datos formatas
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="quantity-field">
+            <mat-form-field appearance="fill">
+                <mat-label>Kiekis</mat-label>
+                <input matInput formControlName="quantity">
+                <mat-error *ngIf="submitted && f.quantity.errors">
+                    <p *ngIf="f.quantity.errors.required">Kiekis yra privalomas</p>
+                    <p *ngIf="f.quantity.errors.pattern">Kiekis turi būti teigiamas skaičius</p>
+                </mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="form-group">
+        <button mat-flat-button color="accent" [disabled]="loading">
+            Išsaugoti
+            <mat-icon *ngIf="loading"><mat-spinner diameter="20" color="accent">
+            </mat-spinner></mat-icon>
+        </button>
+        <a mat-stroked-button routerLink="/harvests">Atšaukti</a>
+    </div>
+</form>

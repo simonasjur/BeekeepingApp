@@ -68,6 +68,29 @@ namespace BeekeepingApi.Controllers
             return _mapper.Map<IEnumerable<HarvestReadDTO>>(harvestList).ToList();
         }
 
+        // GET: api/Beehives/1/TodoItems
+        [HttpGet("/api/Beehives/{beehiveId}/Harvests")]
+        [EnableQuery()]
+        public async Task<ActionResult<IEnumerable<HarvestReadDTO>>> GetBeehiveHarvests(long beehiveId)
+        {
+            var beehive = await _context.Apiaries.FindAsync(beehiveId);
+            if (beehive == null)
+                return NotFound();
+
+            var farm = await _context.Farms.FindAsync(beehive.FarmId);
+            if (farm == null)
+                return NotFound();
+
+            var currentUserId = long.Parse(User.Identity.Name);
+            var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, farm.Id);
+            if (farmWorker == null)
+                return Forbid();
+
+            var harvestList = await _context.Harvests.Where(l => l.BeeFamilyId == beehiveId).ToListAsync();
+
+            return _mapper.Map<IEnumerable<HarvestReadDTO>>(harvestList).ToList();
+        }
+
         // GET: api/Harvests/1
         [HttpGet("{id}")]
         public async Task<ActionResult<HarvestReadDTO>> GetHarvest(long id)
@@ -94,16 +117,26 @@ namespace BeekeepingApi.Controllers
             if (farm == null)
                 return BadRequest();
 
-            if (harvestCreateDTO.ApiaryId != null)
+            if (harvestCreateDTO.ApiaryId != null && harvestCreateDTO.BeeFamilyId == null)
             {
                 var apiary = await _context.Apiaries.FindAsync(harvestCreateDTO.ApiaryId);
                 if (apiary == null || apiary.FarmId != farm.Id)
                     return BadRequest();
             }
+            else if (harvestCreateDTO.BeeFamilyId != null && harvestCreateDTO.ApiaryId == null)
+            {
+                var beehive = await _context.BeeFamilies.FindAsync(harvestCreateDTO.BeeFamilyId);
+                if (beehive == null || beehive.FarmId != farm.Id)
+                    return BadRequest();
+            }
+            else if (harvestCreateDTO.BeeFamilyId != null && harvestCreateDTO.ApiaryId != null)
+            {
+                return BadRequest();
+            }
 
             var currentUserId = long.Parse(User.Identity.Name);
             var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, farm.Id);
-            if (farmWorker == null)
+            if (farmWorker == null || farmWorker.Permissions[9] != '1')
                 return Forbid();
 
             var harvest = _mapper.Map<Harvest>(harvestCreateDTO);
@@ -131,7 +164,7 @@ namespace BeekeepingApi.Controllers
 
             var currentUserId = long.Parse(User.Identity.Name);
             var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, farm.Id);
-            if (farmWorker == null)
+            if (farmWorker == null || farmWorker.Permissions[10] != '1')
                 return Forbid();
 
             _mapper.Map(harvestEditDTO, harvest);
@@ -153,7 +186,7 @@ namespace BeekeepingApi.Controllers
 
             var currentUserId = long.Parse(User.Identity.Name);
             var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, farm.Id);
-            if (farmWorker == null)
+            if (farmWorker == null || farmWorker.Permissions[11] != '1')
                 return Forbid();
 
             _context.Harvests.Remove(harvest);

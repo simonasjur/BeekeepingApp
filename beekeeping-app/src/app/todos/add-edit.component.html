@@ -21,16 +21,16 @@
                     </mat-list-option>
                 </div>
             </mat-selection-list>
-            <div *ngIf="beehives && categories.selectedOptions.selected[0]?.value === 'Avilys'">
-                <mat-form-field *ngIf="beehives.length != 0" appearance="fill">
-                    <mat-label>Pasirinkite avilį</mat-label>
-                    <mat-select formControlName="beehiveId">
-                    <mat-option *ngFor="let beehive of beehives" [value]="beehive.id">
-                        {{beehive.no}}
+            <div *ngIf="beehiveBeefamilies && categories.selectedOptions.selected[0]?.value === 'Avilys'">
+                <mat-form-field *ngIf="beehiveBeefamilies.length != 0" appearance="fill">
+                    <mat-label>Pasirinkite šeimą</mat-label>
+                    <mat-select formControlName="beeFamilyId">
+                    <mat-option *ngFor="let beehiveBeeFamily of beehiveBeefamilies" [value]="beehiveBeeFamily.beeFamilyId">
+                        {{beehiveBeeFamily.beehive.no}}
                     </mat-option>
                     </mat-select>
                 </mat-form-field>
-                <div *ngIf="beehives.length == 0">Jūs neturite avilių</div>
+                <div *ngIf="beehiveBeefamilies.length == 0">Jūs neturite šeimų</div>
             </div>
             <div *ngIf="apiaries && categories.selectedOptions.selected[0]?.value === 'Bitynas'">
                 <mat-form-field *ngIf="apiaries.length != 0" appearance="fill">
@@ -80,9 +80,9 @@
 
     </div>
     <div class="form-group">
-        <button mat-flat-button color="primary" [disabled]="loading">
+        <button mat-flat-button color="accent" [disabled]="loading">
             Išsaugoti
-            <mat-icon *ngIf="loading"><mat-spinner diameter="20">
+            <mat-icon *ngIf="loading"><mat-spinner diameter="20" color="accent">
             </mat-spinner></mat-icon>
         </button>
         <a routerLink="/todos" class="btn btn-link">Atšaukti</a>

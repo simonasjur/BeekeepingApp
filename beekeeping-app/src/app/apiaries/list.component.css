@@ -1,20 +1,4 @@
 table {
-    width: 55%;
-  }
-  
-  .tables-container {
-    display: flex;
-  }
-  
-  .first-table {
-    margin-right: 5%;
-    width: 40%;
-  }
-  
-  .buttons-container {
-    display: flex;
-  }
-  
-  .first-button {
-    margin-right: 40%;
-  }
+  width: 100%;
+  max-width: 600px;
+}

@@ -18,10 +18,10 @@ namespace BeekeepingApi.Models
 
         public long FoodId { get; set; }
 
-        public long BeehiveId { get; set; }
+        public long BeeFamilyId { get; set; }
 
-        [ForeignKey("BeehiveId")]
-        public Beehive Beehive { get; set; }
+        [ForeignKey("BeeFamilyId")]
+        public BeeFamily BeeFamily { get; set; }
 
         [ForeignKey("FoodId")]
         public Food Food { get; set; }

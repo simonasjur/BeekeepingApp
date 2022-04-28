@@ -7,7 +7,9 @@ import { UserService } from '../_services/user.service';
 import { AlertService } from '../_services/alert.service';
 import { MustMatch } from '../_helpers';
 
-@Component({ templateUrl: 'register.component.html' })
+@Component({ templateUrl: 'register.component.html',
+    styleUrls: ['./register.component.css'] 
+})
 export class RegisterComponent implements OnInit {
     form: FormGroup;
     loading = false;

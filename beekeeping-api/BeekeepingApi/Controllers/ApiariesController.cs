@@ -41,9 +41,9 @@ namespace BeekeepingApi.Controllers
             if (farmWorker == null)
                 return Forbid();
 
-            var harvestList = await _context.Apiaries.Where(l => l.FarmId == farmId).ToListAsync();
+            var apiariesList = await _context.Apiaries.Where(l => l.FarmId == farmId).ToListAsync();
 
-            return _mapper.Map<IEnumerable<ApiaryReadDTO>>(harvestList).ToList();
+            return _mapper.Map<IEnumerable<ApiaryReadDTO>>(apiariesList).ToList();
         }
 
         // GET: api/Apiaries/1
@@ -72,7 +72,7 @@ namespace BeekeepingApi.Controllers
 
             var currentUserId = long.Parse(User.Identity.Name);
             var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, farm.Id);
-            if (farmWorker == null)
+            if (farmWorker == null || farmWorker.Role != WorkerRole.Owner)
                 return Forbid();
 
             var apiary = _mapper.Map<Apiary>(apiaryCreateDTO);
@@ -94,13 +94,13 @@ namespace BeekeepingApi.Controllers
             var apiary = await _context.Apiaries.FindAsync(id);
             if (apiary == null)
                 return NotFound();
-            var farm = await _context.Farms.FindAsync(apiary.Id);
+            var farm = await _context.Farms.FindAsync(apiary.FarmId);
             if (farm == null)
                 return NotFound();
 
             var currentUserId = long.Parse(User.Identity.Name);
             var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, farm.Id);
-            if (farmWorker == null)
+            if (farmWorker == null || farmWorker.Role != WorkerRole.Owner)
                 return Forbid();
 
             _mapper.Map(apiaryEditDTO, apiary);
@@ -122,7 +122,7 @@ namespace BeekeepingApi.Controllers
 
             var currentUserId = long.Parse(User.Identity.Name);
             var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, farm.Id);
-            if (farmWorker == null)
+            if (farmWorker == null || farmWorker.Role != WorkerRole.Owner)
                 return Forbid();
 
             await _context.Entry(apiary).Collection(a => a.Harvests).LoadAsync();

@@ -5,10 +5,11 @@ import { first } from 'rxjs/operators';
 
 import { FarmService } from '../_services/farm.service';
 import { AlertService } from '../_services/alert.service';
-import { Apiary, Beehive, Farm, TodoItem, TodoItemPriorities2, TodoItemPriority2LabelMapping } from '../_models';
-import { TodoService } from '../_services/todoItem.service';
-import { BeehiveService } from '../_services/beehive.service';
+import { Apiary, BeeFamily, BeehiveBeefamily, Farm, TodoItem, TodoItemPriorities2, TodoItemPriority2LabelMapping } from '../_models';
+import { TodoService } from '../_services/todo-item.service';
+import { BeeFamilyService } from '../_services/beefamily.service';
 import { ApiaryService } from '../_services/apiary.service';
+import { BeehiveBeefamilyService } from '../_services/beehive-family.service';
 
 @Component({ templateUrl: 'add-edit.component.html',
 styleUrls: ['add-edit.component.css'] })
@@ -20,7 +21,8 @@ export class AddEditComponent implements OnInit {
     submitted = false;
     todo: TodoItem;
     typesOfCategories: string[] = ['Bendra', 'Bitynas', 'Avilys'];
-    beehives: Beehive[];
+    beeFamilies: BeeFamily[];
+    beehiveBeefamilies: BeehiveBeefamily[] = [];
     apiaries: Apiary[];
     checked = false;
     selectedCategoryIndex: number = 0;
@@ -32,13 +34,21 @@ export class AddEditComponent implements OnInit {
         private farmService: FarmService,
         private alertService: AlertService,
         private todoService: TodoService,
-        private beehiveService: BeehiveService,
-        private apiaryService: ApiaryService
+        private beeFamilyService: BeeFamilyService,
+        private apiaryService: ApiaryService,
+        private beehiveBeeFamilyService: BeehiveBeefamilyService
     ) {}
 
     ngOnInit() {
-        this.beehiveService.getFarmAllBeehives(this.farmService.farmValue.id)
-        .subscribe(beehives => this.beehives = beehives);
+        this.beeFamilyService.getFarmAllBeeFamilies(this.farmService.farmValue.id)
+        .subscribe({
+            next: beeFamilies => {
+                this.beeFamilies = beeFamilies
+                beeFamilies.forEach(beefamily => this.beehiveBeeFamilyService.getBeefamilyBeehive(beefamily.id)
+                    .subscribe(beehiveBeeFamily => this.beehiveBeefamilies = [...this.beehiveBeefamilies, ...beehiveBeeFamily]));
+            }
+        });
+
         this.apiaryService.getFarmApiaries(this.farmService.farmValue.id)
         .subscribe(apiaries => this.apiaries = apiaries);
 
@@ -48,7 +58,7 @@ export class AddEditComponent implements OnInit {
         if (!this.isAddMode) {
             this.todoService.getById(this.id).subscribe(todo => {
                 this.todo = todo;
-                if (this.todo.beehiveId != 0) {
+                if (this.todo.beeFamilyId != 0) {
                     this.selectedCategoryIndex = 2;
                 }
                 if (this.todo.apiaryId != 0) {
@@ -64,7 +74,7 @@ export class AddEditComponent implements OnInit {
             description: [''],
             isComplete: [false],
             apiaryId: [],
-            beehiveId: [],
+            beeFamilyId: [],
         });
 
         if (!this.isAddMode) {
@@ -110,7 +120,7 @@ export class AddEditComponent implements OnInit {
             "isComplete": this.form.get('isComplete').value,
             "farmId": this.farmService.farmValue.id,
             "apiaryId": this.form.get('apiaryId').value,
-            "beehiveId": this.form.get('beehiveId').value
+            "beeFamilyId": this.form.get('beeFamilyId').value
         }
         
         console.log(todo)

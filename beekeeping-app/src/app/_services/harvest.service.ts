@@ -28,4 +28,13 @@ export class HarvestService {
     delete(id) {
         return this.http.delete<Harvest>(`${environment.apiUrl}/harvests/${id}`);
     }
+
+    getFarmAllHarvests(farmId: number) {
+        return this.http.get<Harvest[]>(`${environment.apiUrl}/farms/${farmId}/harvests`);
+    }
+
+    getFarmThisYearHoneyHarvests(farmId: number) {
+        var currentYear = new Date(new Date().getFullYear(), 0, 1).toISOString();
+        return this.http.get<Harvest[]>(`${environment.apiUrl}/farms/${farmId}/harvests?$filter=startDate ge ${currentYear}`);
+    }
 }

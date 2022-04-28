@@ -1,0 +1,42 @@
+<mat-spinner *ngIf="loading" color="accent"></mat-spinner>
+<div *ngIf="worker">
+    <h1>Redaguoti {{worker.firstName}} {{worker.lastName}} teises</h1>
+    <form [formGroup]="tableForm" (ngSubmit)="onSubmit()">
+        <table mat-table formArrayName="permissions" [dataSource]="dataSource">
+            <ng-container matColumnDef="object">
+                <th mat-header-cell *matHeaderCellDef>Objektas</th>
+                <td mat-cell *matCellDef="let element">
+                    {{element.object}}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="create">
+                <th mat-header-cell *matHeaderCellDef>Kurti</th>
+                <td mat-cell *matCellDef="let row let rowIndex = index" [formGroupName]="rowIndex">
+                    <mat-checkbox [(ngModel)]="row.create" formControlName="create"></mat-checkbox>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="edit">
+                <th mat-header-cell *matHeaderCellDef>Redaguoti</th>
+                <td mat-cell *matCellDef="let row let rowIndex = index" [formGroupName]="rowIndex">
+                    <mat-checkbox [(ngModel)]="row.edit" formControlName="edit"></mat-checkbox>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="delete">
+                <th mat-header-cell *matHeaderCellDef>Trinti</th>
+                <td mat-cell *matCellDef="let row let rowIndex = index" [formGroupName]="rowIndex">
+                    <mat-checkbox [(ngModel)]="row.delete" formControlName="delete"></mat-checkbox>
+                </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        <div class="form-group">
+            <button mat-flat-button color="accent" [disabled]="loading">
+                Išsaugoti
+                <mat-icon *ngIf="loading2"><mat-spinner color="accent" diameter="20">
+                </mat-spinner></mat-icon>
+            </button>
+            <a mat-stroked-button mat-dialog-close class="cancel-button">Atšaukti</a>
+        </div>
+    </form>
+</div>

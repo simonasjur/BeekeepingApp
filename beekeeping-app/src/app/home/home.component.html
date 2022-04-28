@@ -1,17 +1,8 @@
-<!--<div class="card mt-4">
-    <div *ngIf="user && !user.defaultFarmId">
-        <h4 class="card-header">Jūs neturite jokio bitininkystės ūkio.</h4>
-        <a routerLink="farms/add" class="btn btn-sm btn-success mb-2">Pridėti ūkį</a>
-      </div>
-</div>-->
-
 <div *ngIf="user && user.defaultFarmId">
   <mat-toolbar color="primary">
     <mat-toolbar-row>
-      <button mat-icon-button>
-        <mat-icon (click)="sidenav.toggle()">menu</mat-icon>
-      </button>
-      <h1>Pavadinimas</h1>
+      <img src="assets/bee.png" class="header-icon">
+      <h1 *ngIf="currentFarm">{{currentFarm.name}} ūkis</h1>
       <span class="menu-spacer"></span>
       <div>
         <button mat-icon-button [matMenuTriggerFor]="profile" class="menu-button">
@@ -25,7 +16,41 @@
             <button mat-flat-button routerLink="/settings" class="empty-button">Nustatymai</button>
           </div>
           <mat-divider></mat-divider>
-          <mat-spinner diameter="40" *ngIf="!user || !farms"></mat-spinner>
+          <mat-spinner diameter="40" *ngIf="!user || !farms" color="accent"></mat-spinner>
+          <button mat-menu-item *ngFor="let farm of farms" class="default-farm-button" 
+          [disabled]="currentFarm && farm.id == currentFarm.id" (click)="loadFarm(farm.id)"
+          routerLink="/home">
+            "{{farm.name}}" ūkis
+            <p *ngIf="farm.id == user.defaultFarmId" class="default-p">Numatytasis</p>
+          </button>
+          <mat-divider></mat-divider>
+          <button mat-menu-item (click)="logout()">
+            <mat-icon>logout</mat-icon>
+            <span>Atsijungti</span>
+          </button>
+        </mat-menu>
+      </div>
+    </mat-toolbar-row>
+  </mat-toolbar>
+</div>
+  <!-- nav if no farms -->
+<div *ngIf="user && !user.defaultFarmId">
+  <mat-toolbar color="primary">
+    <mat-toolbar-row>
+      <img src="assets/bee.png" class="header-icon">
+      <span class="menu-spacer"></span>
+      <div>
+        <button mat-icon-button [matMenuTriggerFor]="profile" class="menu-button">
+          <mat-icon class="settings-icon">settings</mat-icon>
+        </button>
+        <mat-menu #profile="matMenu">
+          <div class="user-info-section">
+            <mat-icon class="account-circle">account_circle</mat-icon>
+            <p>{{user.firstName}} {{user.lastName}}</p>
+            <p>{{user.email}}</p>
+          </div>
+          <mat-divider></mat-divider>
+          <mat-spinner diameter="40" *ngIf="!user || !farms" color="accent"></mat-spinner>
           <button mat-menu-item *ngFor="let farm of farms" class="default-farm-button" 
           [disabled]="currentFarm && farm.id == currentFarm.id" (click)="loadFarm(farm.id)"
           routerLink="/">
@@ -41,97 +66,46 @@
       </div>
     </mat-toolbar-row>
   </mat-toolbar>
- 
-  <!-- nav -->
-  <!--<nav class="navbar navbar-expand navbar-dark bg-dark">
-    <div class="navbar-nav">
-      <a class="nav-item nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
-      <a class="nav-item nav-link" routerLink="/farms" routerLinkActive="active">Farms</a>        
-    </div>
-    <div class="navbar-nav ml-auto">
-      <a class="nav-item nav-link" (click)="logout()">Logout</a>
-      <div class="dropdown">
-        <button class="btn btn-secondary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" 
-        aria-expanded="false" (click)="getUserAndFarms()">
-          <img src="https://www.shankarainfra.com/img/avatar.png" class="rounded-circle" alt="Avatar">
-        </button>
-        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-          <div>{{user.firstName}} {{user.lastName}}</div>
-          <div>{{user.email}}</div>
-          <a class="dropdown-item" href="#">Tvarkyti paskyrą</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#"></a>
-          <a class="dropdown-item" href="#" *ngFor="let farm of farms">{{farm.name}}</a>
-          <div *ngIf="!farms">
-            <div colspan="4" class="text-center">
-                <span class="spinner-border spinner-border-lg align-center"></span>
-            </div>
-          </div>
-          <a class="dropdown-item" routerLink="/farms" *ngIf="farms?.length == 5">Daugiau ūkių</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" (click)="logout()">Atsijungti</a>
-        </div>
-      </div>
-    </div>
-  </nav>-->
-</div>
-  <!-- nav if no farms -->
-<div *ngIf="user && !user.defaultFarmId">
-  <nav class="navbar navbar-expand navbar-dark bg-dark">
-    <div class="navbar-nav">
-      <a class="nav-item nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>       
-    </div>
-    <div class="navbar-nav ml-auto">
-      <div class="dropdown">
-        <button class="btn btn-secondary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" 
-        aria-expanded="false" (click)="getUserAndFarms()">
-          <img src="https://www.shankarainfra.com/img/avatar.png" class="rounded-circle" alt="Avatar">
-        </button>
-        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-          <div>{{user.firstName}} {{user.lastName}}</div>
-          <div>{{user.email}}</div>
-          <a class="dropdown-item" href="#">Tvarkyti paskyrą</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" (click)="logout()">Atsijungti</a>
-        </div>
-      </div>
-    </div>
-  </nav>
 </div>
  
 <!-- main app container -->
 <div>
   <mat-sidenav-container>
-    <mat-sidenav *ngIf="user" mode="side" opened>
+    <mat-sidenav *ngIf="user && user.defaultFarmId && currentFarm" mode="side" opened>
       <mat-nav-list>
-        <a mat-list-item [routerLink]='"/"'>
+        <a mat-list-item [routerLink]='"/home"' routerLinkActive="active">
           <mat-icon>home</mat-icon>
           <div class="menu-icon-title-gap"></div>
           Namai 
         </a>
         <mat-divider></mat-divider>
-        <a mat-list-item [routerLink]='"/apiaries"'>
+        <a mat-list-item [routerLink]='"/apiaries"' routerLinkActive="active">
           <img src="assets/beehives.svg" alt="apiary icon" class="menu-icon">
           <div class="menu-icon-title-gap"></div>
           Bitynai
         </a>
-        <a mat-list-item [routerLink]='"/beehives"'>
+        <a mat-list-item [routerLink]='"/beehives"' routerLinkActive="active">
           <img src="assets/beehive.svg" alt="beehive icon" class="menu-icon">
           <div class="menu-icon-title-gap"></div>
           Aviliai 
         </a>
-        <a mat-list-item [routerLink]='"/harvests"'>
+        <a mat-list-item [routerLink]='"/harvests"' routerLinkActive="active">
           <img src="assets/harvest.svg" alt="harvest icon" class="menu-icon">
           <div class="menu-icon-title-gap"></div>
           Kopimai
         </a>
-        <a mat-list-item [routerLink]='"/todos"'>
+        <a mat-list-item [routerLink]='"/todos"' routerLinkActive="active">
           <mat-icon>task</mat-icon>
           <div class="menu-icon-title-gap"></div>
           Užduotys
         </a>
+        <a mat-list-item [routerLink]='"/queensraisings"' routerLinkActive="active">
+          <img src="assets/queen.png" alt="queen icon" class="menu-icon">
+          <div class="queen-icon-title-gap"></div>
+          Motinėlių auginimai
+        </a>
         <mat-divider></mat-divider>
-        <a mat-list-item [routerLink]='"/farms"'>
+        <a mat-list-item [routerLink]='"/farms"' routerLinkActive="active">
           <img src="assets/beekeeper.svg" alt="beekeeper icon" class="menu-icon">
           <div class="menu-icon-title-gap"></div>
           Ūkiai
@@ -142,7 +116,8 @@
     <mat-sidenav-content>
       <div style="height: 88vh;">
         <alert></alert>
-        <router-outlet></router-outlet>
+        <router-outlet>
+        </router-outlet>
       </div>
  
     </mat-sidenav-content>

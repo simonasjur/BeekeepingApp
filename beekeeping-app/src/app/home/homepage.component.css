@@ -1,0 +1,25 @@
+mat-progress-bar {
+    max-width: 600px;
+}
+
+.margin-top {
+    margin-top: 20px;
+}
+
+mat-form-field {
+    margin-top: 20px;
+    width: 400px;
+}
+
+.workers-table {
+    width: 100%;
+    max-width: 500px;
+}
+
+.header {
+    margin-top: 20px;
+}
+
+.chart {
+    height: 350px;
+}

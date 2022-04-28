@@ -6,6 +6,7 @@ export class Harvest {
     quantity: number;
     farmId: number;
     apiaryId: number;
+    beeFamilyId: number;
     isDeleting: boolean = false;
 }
 

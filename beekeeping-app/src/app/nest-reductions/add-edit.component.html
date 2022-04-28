@@ -1,0 +1,64 @@
+<h1 *ngIf="isAddMode">Pridėti naują lizdo siaurinimą</h1>
+<h1 *ngIf="!isAddMode">Atnaujinti lizdo siaurinimą</h1>
+<div class="example-loading-shade" *ngIf="formLoading">
+    <mat-spinner *ngIf="formLoading" color="accent"></mat-spinner>
+</div>
+<div *ngIf="!formLoading">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="form-fields">
+            <mat-form-field appearance="fill">
+                <mat-label>Data</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="date" [max]="today">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                <mat-error *ngIf="submitted && f.date.errors">
+                    Neteisingas datos formatas
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Likusių korių skaičius</mat-label>
+                <input matInput formControlName="stayedCombs">
+                <mat-error *ngIf="submitted && f.stayedCombs.errors">
+                    <p *ngIf="f.stayedCombs.errors.required">Šis laukas yra būtinas</p>
+                    <p *ngIf="f.stayedCombs.errors.pattern">Skaičius privalo būti natūralusis</p>
+                    <p *ngIf="f.stayedCombs.errors.max">Avilys talpina 
+                        <span *ngIf="beehiveBeefamily && beehiveBeefamily.beehive">{{beehiveBeefamily.beehive.maxNestCombs}}</span> 
+                        rėmų</p>
+                </mat-error>      
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Likursių korių su perais skaičius</mat-label>
+                <input matInput formControlName="stayedBroodCombs">
+                <mat-error *ngIf="submitted && f.stayedBroodCombs.errors">
+                    <p *ngIf="f.stayedBroodCombs.errors.required">Šis laukas yra būtinas</p>
+                    <p *ngIf="f.stayedBroodCombs.errors.pattern">Skaičius privalo būti natūralusis</p>
+                    <p *ngIf="f.stayedBroodCombs.errors.equalLessthan">Negali būti daugiau, nei likusių korių</p>
+                </mat-error>      
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Likęs medus avilyje(kg)</mat-label>
+                <input matInput formControlName="stayedHoney">
+                <mat-error *ngIf="submitted && f.stayedHoney.errors">
+                    <p *ngIf="f.stayedHoney.errors.required">Šis laukas yra būtinas</p>
+                    <p *ngIf="f.stayedHoney.errors.pattern">Skaičius privalo būti teigiamas</p>
+                </mat-error>      
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Žiemojimui reikalingas maisto kiekis(kg)</mat-label>
+                <input matInput formControlName="requiredFoodForWinter">
+                <mat-error *ngIf="submitted && f.requiredFoodForWinter.errors">
+                    <p *ngIf="f.requiredFoodForWinter.errors.required">Šis laukas yra būtinas</p>
+                    <p *ngIf="f.requiredFoodForWinter.errors.pattern">Skaičius privalo būti teigiamas</p>
+                </mat-error>      
+            </mat-form-field>
+        </div>
+        <div class="form-group">
+            <button mat-flat-button color="accent" [disabled]="loading">
+                Išsaugoti
+                <mat-icon *ngIf="loading" color="accent"><mat-spinner diameter="20">
+                </mat-spinner></mat-icon>
+            </button>
+            <a mat-stroked-button (click)="backToList()">Atšaukti</a>
+        </div>
+    </form>
+</div>

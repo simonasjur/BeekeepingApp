@@ -8,8 +8,14 @@ import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { AddComponent } from './add.component';
+import { AddEditComponent } from './add-edit.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { GoogleMapsModule } from '@angular/google-maps';
+import { MatButtonModule } from '@angular/material/button';
+import { HomeComponent } from './home.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
     imports: [
@@ -20,12 +26,18 @@ import { ReactiveFormsModule } from '@angular/forms';
         MatTableModule,
         MatInputModule,
         MatFormFieldModule, 
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        GoogleMapsModule,
+        MatButtonModule,
+        MatProgressSpinnerModule,
+        MatChipsModule,
+        MatDialogModule
     ],
     declarations: [
         LayoutComponent,
         ListComponent,
-        AddComponent
+        AddEditComponent,
+        HomeComponent
     ]
 })
 export class ApiariesModule { }

@@ -13,7 +13,7 @@ const routes: Routes = [
     { path: 'user', loadChildren: userModule },
     
     // otherwise redirect to home
-    { path: '**', redirectTo: '' }
+    { path: '**', redirectTo: 'home' }
 ];
 
 @NgModule({

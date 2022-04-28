@@ -27,6 +27,10 @@ import { AlertComponent } from '../_components';
 import { ChangeEmailComponent } from '../settings/change-email.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import { HomepageComponent } from './homepage.component';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatTableModule} from '@angular/material/table';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @NgModule({
     imports: [
@@ -50,13 +54,18 @@ import {MatFormFieldModule} from '@angular/material/form-field';
         OverlayModule,
         MatSelectModule,
         MatDatepickerModule,
-        MatFormFieldModule
+        MatFormFieldModule,
+        MatDialogModule,
+        MatProgressBarModule,
+        MatTableModule,
+        NgxChartsModule
     ],
     declarations: [
         SettingsComponent,
         HomeComponent,
         ChangePasswordComponent,
-        ChangeEmailComponent
+        ChangeEmailComponent,
+        HomepageComponent
     ]
 })
 export class HomeModule { }

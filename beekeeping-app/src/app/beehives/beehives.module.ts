@@ -9,13 +9,15 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTabsModule } from '@angular/material/tabs';
 
 import { BeehivesRoutingModule } from './beehives-routing.module';
 import { LayoutComponent } from './layout.component';
 import { ListComponent } from './list.component';
-import { ApiaryBeehiveComponent } from '../apiaryBeehives/apiaryBeehives.component';
-import { AddComponent } from './add.component';
-import { AddApiaryBeehiveDialog } from './add-apiaryBeehive-dialog.component';
+//import { ApiaryBeehiveComponent } from '../apiaryBeehives/apiaryBeehives.component';
+import { AddEditComponent } from './add-edit.component';
+//import { AddApiaryBeehiveDialog } from './add-apiaryBeehive-dialog.component';
 
 @NgModule({
     imports: [
@@ -30,13 +32,15 @@ import { AddApiaryBeehiveDialog } from './add-apiaryBeehive-dialog.component';
         MatDatepickerModule,
         MatTableModule,
         MatButtonModule,
+        MatProgressSpinnerModule,
+        MatTabsModule
     ],
     declarations: [
         LayoutComponent,
         ListComponent,
-        ApiaryBeehiveComponent,
-        AddComponent,
-        AddApiaryBeehiveDialog
+//        ApiaryBeehiveComponent,
+        AddEditComponent,
+//        AddApiaryBeehiveDialog
     ]
 })
 export class BeehivesModule { }

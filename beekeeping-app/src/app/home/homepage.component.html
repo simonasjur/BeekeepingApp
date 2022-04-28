@@ -1,0 +1,94 @@
+<mat-spinner *ngIf="mainLoading" color="accent"></mat-spinner>
+<div *ngIf="worker" class="p-4">
+    <div class="container">
+        <mat-tab-group mat-align-tabs="start">
+            <mat-tab label="Ūkis">
+                <h1 class="header">Šių metų medaus kopimai ({{overall}} kg)</h1>
+                <div class="chart">
+                    <ngx-charts-bar-vertical
+                        [view]="view"
+                        [scheme]="colorScheme"
+                        [results]="chartData"
+                        [gradient]="gradient"
+                        [xAxis]="showXAxis"
+                        [yAxis]="showYAxis"
+                        [legend]="showLegend"
+                        [showXAxisLabel]="showXAxisLabel"
+                        [showYAxisLabel]="showYAxisLabel"
+                        [xAxisLabel]="xAxisLabel"
+                        [yAxisLabel]="yAxisLabel"
+                        [trimXAxisTicks]="trimXAxisTicks">
+                    </ngx-charts-bar-vertical>
+                </div>
+            </mat-tab>
+            <mat-tab *ngIf="worker.role == 0" label="Ūkio darbuotojai">
+                <div *ngIf="workers">
+                    <table mat-table [dataSource]="workers"  class="workers-table">
+                        <ng-container matColumnDef="firstName">
+                            <th mat-header-cell *matHeaderCellDef>Vardas</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.firstName}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="lastName">
+                            <th mat-header-cell *matHeaderCellDef>Pavardė</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.lastName}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="action" *ngIf="worker.role == 0">
+                            <th mat-header-cell *matHeaderCellDef> Veiksmas </th>
+                            <td mat-cell *matCellDef="let element">
+                                <button mat-icon-button (click)="editWorker(element.userId)">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button (click)="deleteWorker(element.userId)">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+                </div>
+            </mat-tab>
+            <mat-tab *ngIf="worker.role == 0" label="Pridėti darbuotoją">
+                <h3 class="margin-top">Norint pridėti naują darbuotoją reikia sugeneruoti pakvietimo kodą</h3>
+                <button mat-raised-button color="accent" (click)="getInviteCode()" [disabled]="disabled || loading2">
+                    <mat-icon *ngIf="loading2"><mat-spinner color="accent" diameter="20">
+                    </mat-spinner></mat-icon>
+                    Sukurti pakvietimo kodą</button>
+                <div *ngIf="invitation">
+                    <p class="margin-top">Pakvietimo kodas: <b>{{invitation.code}}</b></p>
+                    <p>Perduokite pakvietimo kodą kitam naudotojui, kuris jį turi įvesti "Namai" -> "Priimti pakvietimą"</p>
+                    <mat-progress-bar mode="determinate" [value]="progressbarValue"></mat-progress-bar>
+                    <p>{{minutes}}:{{secondsString}}</p>
+                </div>
+            </mat-tab>
+            <mat-tab label="Priimti pakvietimą">
+                <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Pakvietimo kodas</mat-label>
+                        <input matInput formControlName="code">
+                        <mat-error >
+                            <p *ngIf="submitted && f.code.errors && f.code.errors.required">
+                                Įveskite pakvietimo kodą
+                            </p>
+                            
+                        </mat-error>
+                    </mat-form-field>
+                    <div class="form-group">
+                        <button mat-flat-button color="accent" [disabled]="loading">
+                            Patvirtinti
+                            <mat-icon *ngIf="loading"><mat-spinner color="accent" diameter="20">
+                            </mat-spinner></mat-icon>
+                        </button>
+                    </div>
+                </form>
+                <mat-error *ngIf="submitted && errors">
+                    Neteisingas kodas
+                </mat-error>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
+</div>
