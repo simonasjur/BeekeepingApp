@@ -22,8 +22,8 @@
                     </button>
                 </mat-card-title>
                 <mat-card-content>
-                    <div class="beehive-info">
-                        <div class="info-section">
+                    <div>
+                        <div>
                             <p *ngIf="familyQueen.queen.isFertilized" [ngStyle]="{'color': 'green'}">Apsivaisinusi</p>
                             <p *ngIf="!familyQueen.queen.isFertilized" [ngStyle]="{'color': 'red'}">Neapsivaisinusi</p>
                             <p>Veislė: {{breed2LabelMapping[familyQueen.queen.breed]}}</p>

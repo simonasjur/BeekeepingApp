@@ -12,12 +12,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatCardModule } from '@angular/material/card';
+import { MatGridListModule } from '@angular/material/grid-list'; 
 
 import { QueensRaisingsRoutingModule } from './queens-raisings-routing.module';
 import { LayoutComponent } from './layout.component';
 import { ListComponent } from './list.component';
 import { AddEditComponent } from './add-edit.component';
-//import { BeehiveComponentsListComponent } from './list.component';
+import { QueensRaisingComponent } from './queens-raising.component';
 
 
 
@@ -37,12 +39,15 @@ import { AddEditComponent } from './add-edit.component';
         MatDatepickerModule,
         MatListModule,
         MatSelectModule,
-        MatCheckboxModule
+        MatCheckboxModule,
+        MatCardModule,
+        MatGridListModule
     ],
     declarations: [
         LayoutComponent,
         ListComponent,
-        AddEditComponent
+        AddEditComponent,
+        QueensRaisingComponent
     ]
 })
 export class QueensRaisingsModule { }

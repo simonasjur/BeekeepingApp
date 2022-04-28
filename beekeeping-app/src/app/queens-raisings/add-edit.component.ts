@@ -26,6 +26,8 @@ export class AddEditComponent implements OnInit {
     isAddMode = true;
     submitted = false;
     loading = false;
+    editFormLoading = true;
+    dataLoading = true;
 
     constructor(private queensRaisingService: QueensRaisingService,
                 private queensService: QueenService,
@@ -58,7 +60,12 @@ export class AddEditComponent implements OnInit {
             this.beefamilyService.getFarmAllBeeFamilies(this.farmService.farmValue.id).subscribe({
                 next: beeFamilies => {
                     beeFamilies.forEach(beefamily => this.beehiveBeefamilyService.getBeefamilyBeehive(beefamily.id)
-                        .subscribe(beehiveBeeFamily => this.beehiveBeefamilies = [...this.beehiveBeefamilies, ...beehiveBeeFamily]));
+                        .subscribe(beehiveBeeFamily => {
+                            this.beehiveBeefamilies = [...this.beehiveBeefamilies, ...beehiveBeeFamily];
+                            if (beeFamilies.length === this.beehiveBeefamilies.length) {
+                                this.dataLoading = false;
+                            }
+                        }));
                 }
             });
         });
@@ -69,8 +76,17 @@ export class AddEditComponent implements OnInit {
         if (this.id !== undefined) {
             this.isAddMode = false;
             this.form.addControl('id', new FormControl('', Validators.required));
-            this.queensRaisingService.getById(this.id).subscribe(raising => this.form.patchValue(raising));
+            this.queensRaisingService.getById(this.id).subscribe(raising => {
+                this.form.patchValue(raising);
+                this.editFormLoading = false;
+            });
+        } else {
+            this.editFormLoading = false;
         }
+    }
+
+    isFormLoading() {
+        return this.editFormLoading || this.dataLoading;
     }
 
     get developmentPlaceNames() {
@@ -138,7 +154,7 @@ export class AddEditComponent implements OnInit {
         if (this.isAddMode) {
             this.router.navigate(['../'], { relativeTo: this.route });
         } else {
-            this.router.navigate(['../../'], { relativeTo: this.route });
+            this.router.navigate([`../../${this.id}`], { relativeTo: this.route });
         }
     }
 }

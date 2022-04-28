@@ -41,6 +41,8 @@ export class ListComponent implements OnInit {
                         raising.queen = queen;
                         this.loadedDataCount++;
                     });
+                    raising.finishDate = new Date(raising.startDate);
+                    raising.finishDate.setDate(raising.finishDate.getDate() + 12);
                     raising.daysLeft = this.calcDaysLeft(raising.startDate);
                 });
             });
@@ -50,7 +52,7 @@ export class ListComponent implements OnInit {
     calcDaysLeft(startDate: Date) {
         const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
         const finishDate = new Date(startDate);
-        finishDate.setDate(finishDate.getDate() + 16);
+        finishDate.setDate(finishDate.getDate() + 13);
         const todayDate = new Date();
         return Math.round((finishDate.valueOf() - todayDate.valueOf()) / oneDay);
     }

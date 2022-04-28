@@ -25,3 +25,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .sub-menu {
     margin-bottom: 20px;
 }
+
+.special-date {
+    background-color: #AFE1AF;
+}

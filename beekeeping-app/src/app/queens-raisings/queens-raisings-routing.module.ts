@@ -4,6 +4,7 @@ import { AddEditComponent } from './add-edit.component';
 
 import { LayoutComponent } from './layout.component';
 import { ListComponent } from './list.component';
+import { QueensRaisingComponent } from './queens-raising.component';
 
 const routes: Routes = [
     {
@@ -11,7 +12,8 @@ const routes: Routes = [
         children: [
             { path: '', component: ListComponent },
             { path: 'add', component: AddEditComponent },
-            { path: 'edit/:id', component: AddEditComponent}
+            { path: 'edit/:id', component: AddEditComponent},
+            { path: ':id', component: QueensRaisingComponent}
         ]
     }
 ];

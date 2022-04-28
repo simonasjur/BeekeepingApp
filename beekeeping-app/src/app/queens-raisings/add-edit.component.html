@@ -1,79 +1,84 @@
 <h1 *ngIf="isAddMode">Pridėti naują motinėlių auginimą</h1>
 <h1 *ngIf="!isAddMode">Atnaujinti motinėlių auginimą</h1>
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <div class="form-fields">
-        <mat-form-field>
-            <mat-label>Motinėlė</mat-label>
-            <mat-select formControlName="motherId" [disabled]="!isAddMode">
-                <mat-option *ngFor="let queen of queens" [value]="queen.id">
-                    Nr.{{queen.id}} {{breed2LabelMapping[queen.breed]}}
-                </mat-option>
-            </mat-select>
-            <mat-error *ngIf="submitted && f.motherId.errors">
-                Šis laukas yra būtinas
-            </mat-error>
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>Avilys, kuriame auginamos motinėlės</mat-label>
-            <mat-select formControlName="beefamilyId" [disabled]="!isAddMode">
-                <mat-option *ngFor="let beehiveBeefamily of beehiveBeefamilies" [value]="beehiveBeefamily.beeFamilyId">
-                    Nr.{{beehiveBeefamily.beehive.no}}
-                </mat-option>
-            </mat-select>
-            <mat-error *ngIf="submitted && f.beefamilyId.errors">
-                Šis laukas yra būtinas
-            </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-            <mat-label>Lervučių sudėjimo data</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="startDate">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-            <mat-error *ngIf="submitted && f.startDate.errors">
-                Neteisinga data
-            </mat-error>
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>Lervučių skaičius</mat-label>
-            <input matInput formControlName="larvaCount">
-            <mat-error *ngIf="submitted && f.larvaCount.errors">
-                <p *ngIf="f.larvaCount.errors.required">Šis laukas yra būtinas</p>
-                <p *ngIf="f.larvaCount.errors.pattern">Turi būti nurodyta bent 1 lervutė</p>
-            </mat-error>      
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>Motinų vystymosi vieta</mat-label>
-            <mat-select formControlName="developmentPlace">
-                <mat-option *ngFor="let place of developmentPlaceNames" [value]="place">
-                    {{developmentPlace2LabelMapping[place]}}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
-        <mat-form-field *ngIf="!isAddMode">
-            <mat-label>Uždengtų lopšių skaičius</mat-label>
-            <input matInput formControlName="cappedCellCount">
-            <mat-error *ngIf="submitted && f.cappedCellCount.errors">
-                <p *ngIf="f.cappedCellCount.errors.required">Šis laukas yra būtinas</p>
-                <p *ngIf="f.cappedCellCount.errors.pattern">Skaičius privalo būti natūralusis</p>
-                <p *ngIf="f.cappedCellCount.errors.equalLessthan">Skaičius negali būti didesnis nei lervučių skaičius</p>
-            </mat-error>      
-        </mat-form-field>
-        <mat-form-field *ngIf="!isAddMode">
-            <mat-label>Išsiritusių motinėlių skaičius</mat-label>
-            <input matInput formControlName="queensCount">
-            <mat-error *ngIf="submitted && f.queensCount.errors">
-                <p *ngIf="f.queensCount.errors.required">Šis laukas yra būtinas</p>
-                <p *ngIf="f.queensCount.errors.pattern">Skaičius privalo būti natūralusis</p>
-                <p *ngIf="f.queensCount.errors.equalLessthan">Skaičius negali būti didesnis nei uždengtų lopšių skaičius</p>
-            </mat-error>      
-        </mat-form-field>
-    </div>
-    <div class="form-group">
-        <button mat-flat-button color="accent" [disabled]="loading">
-            Išsaugoti
-            <mat-icon *ngIf="loading" color="accent"><mat-spinner diameter="20">
-            </mat-spinner></mat-icon>
-        </button>
-        <a mat-stroked-button (click)="backToList()">Atšaukti</a>
-    </div>
-</form>
+<div class="example-loading-shade" *ngIf="isFormLoading()">
+    <mat-spinner *ngIf="isFormLoading()" color="accent"></mat-spinner>
+</div>
+<div *ngIf="!isFormLoading()">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="form-fields">
+            <mat-form-field>
+                <mat-label>Motinėlė</mat-label>
+                <mat-select formControlName="motherId" [disabled]="!isAddMode">
+                    <mat-option *ngFor="let queen of queens" [value]="queen.id">
+                        Nr.{{queen.id}} {{breed2LabelMapping[queen.breed]}}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="submitted && f.motherId.errors">
+                    Šis laukas yra būtinas
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Avilys, kuris maitina motinėles</mat-label>
+                <mat-select formControlName="beefamilyId" [disabled]="!isAddMode">
+                    <mat-option *ngFor="let beehiveBeefamily of beehiveBeefamilies" [value]="beehiveBeefamily.beeFamilyId">
+                        Nr.{{beehiveBeefamily.beehive.no}}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="submitted && f.beefamilyId.errors">
+                    Šis laukas yra būtinas
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>Lervučių sudėjimo data</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="startDate">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                <mat-error *ngIf="submitted && f.startDate.errors">
+                    Neteisinga data
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Lervučių skaičius</mat-label>
+                <input matInput formControlName="larvaCount">
+                <mat-error *ngIf="submitted && f.larvaCount.errors">
+                    <p *ngIf="f.larvaCount.errors.required">Šis laukas yra būtinas</p>
+                    <p *ngIf="f.larvaCount.errors.pattern">Turi būti nurodyta bent 1 lervutė</p>
+                </mat-error>      
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Motinų vystymosi vieta</mat-label>
+                <mat-select formControlName="developmentPlace">
+                    <mat-option *ngFor="let place of developmentPlaceNames" [value]="place">
+                        {{developmentPlace2LabelMapping[place]}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field *ngIf="!isAddMode">
+                <mat-label>Uždengtų lopšių skaičius</mat-label>
+                <input matInput formControlName="cappedCellCount">
+                <mat-error *ngIf="submitted && f.cappedCellCount.errors">
+                    <p *ngIf="f.cappedCellCount.errors.required">Šis laukas yra būtinas</p>
+                    <p *ngIf="f.cappedCellCount.errors.pattern">Skaičius privalo būti natūralusis</p>
+                    <p *ngIf="f.cappedCellCount.errors.equalLessthan">Skaičius negali būti didesnis nei lervučių skaičius</p>
+                </mat-error>      
+            </mat-form-field>
+            <mat-form-field *ngIf="!isAddMode">
+                <mat-label>Išsiritusių motinėlių skaičius</mat-label>
+                <input matInput formControlName="queensCount">
+                <mat-error *ngIf="submitted && f.queensCount.errors">
+                    <p *ngIf="f.queensCount.errors.required">Šis laukas yra būtinas</p>
+                    <p *ngIf="f.queensCount.errors.pattern">Skaičius privalo būti natūralusis</p>
+                    <p *ngIf="f.queensCount.errors.equalLessthan">Skaičius negali būti didesnis nei uždengtų lopšių skaičius</p>
+                </mat-error>      
+            </mat-form-field>
+        </div>
+        <div class="form-group">
+            <button mat-flat-button color="accent" [disabled]="loading">
+                Išsaugoti
+                <mat-icon *ngIf="loading" color="accent"><mat-spinner diameter="20">
+                </mat-spinner></mat-icon>
+            </button>
+            <a mat-stroked-button (click)="backToList()">Atšaukti</a>
+        </div>
+    </form>
+</div>

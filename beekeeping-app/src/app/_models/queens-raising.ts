@@ -10,6 +10,8 @@ export class QueensRaising {
     motherId: number;
     beefamilyId: number;
 
+    finishDate: Date;
+    sealingDate: Date;
     daysLeft: number;
     queen?: Queen;
 }

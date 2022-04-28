@@ -1,0 +1,64 @@
+<a mat-stroked-button (click)="goToList()">
+    <mat-icon>arrow_back</mat-icon>
+    Auginimai
+</a>
+<div class="example-loading-shade" *ngIf="loading">
+    <mat-spinner *ngIf="loading" color="accent"></mat-spinner>
+</div>
+<mat-card *ngIf="!loading">
+    <mat-card-title>
+        Motinėlių auginimas nr. {{queensRaising.id}} 
+        <button mat-icon-button >
+            <mat-icon routerLink="../edit/{{queensRaising.id}}">edit</mat-icon>
+        </button>
+    </mat-card-title>
+    <mat-card-content>
+        <div>
+            <div>
+                <p>{{queensRaising.startDate | date:'yyyy-MM-dd'}} - {{queensRaising.finishDate | date:'yyyy-MM-dd'}}</p>
+                <div [ngStyle]="{'display': 'flex'}">
+                    <mat-card [ngStyle]="{'width': '300px'}">
+                        <mat-calendar [dateClass]="dateClass()" [selected]="today" [startAt]="queensRaising.startDate"></mat-calendar>
+                    </mat-card>
+                    <mat-card [ngStyle]="{'width': '300px', 'margin-left': '10px'}"  *ngIf="!isRaisingDoneInOneMonth()">
+                        <mat-calendar [dateClass]="dateClass()" [selected]="today" [startAt]="queensRaising.finishDate"></mat-calendar>
+                    </mat-card>
+                    <div [ngStyle]="{'margin-left': '20px'}">
+                        <h2>Informacija</h2>
+                        <p>Motinėlė: nr. {{queen.id}} {{breed2LabelMapping[queen.breed]}}</p>
+                        <p>Avilys maitinantis motinėles: 
+                            <span *ngIf="beehive">nr. {{beehive.no}}</span>
+                            <span *ngIf="!beehive"></span>
+                        </p>
+                        <p>Vystymosi vieta: {{developmentPlace2LabelMapping[queensRaising.developmentPlace]}}</p>
+                        <p>Įdėtos lervutės: {{queensRaising.larvaCount}}</p>
+                        <p>Uždegti lopšiai: {{queensRaising.cappedCellCount}}</p>
+                        <p>Išsiritusios motinėlės: {{queensRaising.queensCount}}</p>
+                    </div>
+                </div>
+                <div [ngStyle]="{'margin-top': '20px'}">
+                    <p>{{queensRaising.startDate | date:'yyyy-MM-dd'}} - vienadienių lervučių sudėjimo diena</p>
+                    <p>{{queensRaising.sealingDate | date:'yyyy-MM-dd'}} - lopšių uždengimo diena</p>
+                    <p>{{queensRaising.finishDate | date:'yyyy-MM-dd'}} - motinėlių ritimosi diena</p>
+                </div>              
+                
+                <!-- <p *ngIf="!familyQueen.queen.isFertilized" [ngStyle]="{'color': 'red'}">Neapsivaisinusi</p>
+                <p>Veislė: {{breed2LabelMapping[familyQueen.queen.breed]}}</p>
+                <p>Būsena: {{queenState2LabelMapping[familyQueen.queen.state]}}</p>
+                <p>Išsiritimo data: 
+                    <span *ngIf="familyQueen.queen.hatchingDate">{{familyQueen.queen.hatchingDate | date:'yyyy-MM-dd'}}</span>
+                    <span *ngIf="!familyQueen.queen.hatchingDate">-</span>
+                </p>
+                <p>Pažymėjimo spalva:
+                    <span>{{color2LabelMapping[familyQueen.queen.markingColor]}}</span>
+                </p>
+                <p>Pradėjo dėti kiaušinius: 
+                    <span *ngIf="familyQueen.queen.broodStartDate">{{familyQueen.queen.broodStartDate | date:'yyyy-MM-dd'}}</span>
+                    <span *ngIf="!familyQueen.queen.broodStartDate">-</span>
+                </p>
+                <p>Šeimoje nuo: {{familyQueen.insertDate | date:'yyyy-MM-dd'}}</p>
+                <button mat-raised-button color="accent" routerLink="edit/{{familyQueen.id}}" *ngIf="worker && !!+worker.permissions[19]">Išimti motinėlę</button> -->
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>
