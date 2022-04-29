@@ -139,16 +139,20 @@ namespace BeekeepingApi.Controllers
             if (farmWorkerToDelete == null)
                 return NotFound();
 
+            _context.FarmWorkers.Remove(farmWorkerToDelete);
+            await _context.SaveChangesAsync();
+
             var user = await _context.Users.FindAsync(userId);
             if (user.DefaultFarmId == farmId)
             {
-                user.DefaultFarmId = 0;
+                var farmWorkers = await _context.FarmWorkers.Where(f => f.UserId == userId).ToListAsync();
+                if (!farmWorkers.Any())
+                    user.DefaultFarmId = 0;
+                else
+                    user.DefaultFarmId = farmWorkers.First().FarmId;
                 _context.Entry(user).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
             }
-
-            _context.FarmWorkers.Remove(farmWorkerToDelete);
-            await _context.SaveChangesAsync();
 
             return _mapper.Map<FarmWorkerReadDTO>(farmWorkerToDelete);
         }
