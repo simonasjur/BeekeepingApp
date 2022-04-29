@@ -122,6 +122,7 @@ export class AddEditComponent implements OnInit {
             next: queen => {
                 this.form.patchValue(queen);
                 this.queen = queen;
+                this.checked = queen.isFertilized;
                 this.beefamilyQueenLoading = false;
             },
             error: () => {

@@ -52,7 +52,9 @@ export class ListComponent implements OnInit {
     calcDaysLeft(startDate: Date) {
         const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
         const finishDate = new Date(startDate);
-        finishDate.setDate(finishDate.getDate() + 13);
+        console.log(finishDate);
+        finishDate.setDate(finishDate.getDate() + 12);
+        console.log(finishDate);
         const todayDate = new Date();
         return Math.round((finishDate.valueOf() - todayDate.valueOf()) / oneDay);
     }

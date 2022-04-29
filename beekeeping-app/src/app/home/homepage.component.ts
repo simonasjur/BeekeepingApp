@@ -79,6 +79,7 @@ export class HomepageComponent {
             if (farm) {
                 this.harvestService.getFarmThisYearHoneyHarvests(farm.id).subscribe(harvests => {
                     this.harvests = harvests.filter(h => h.product == 3);
+                    this.harvests = this.harvests.sort((a,b)=>new Date(a.startDate).getTime()- new Date(b.startDate).getTime());
                     for (let i = 0; i < this.harvests.length; i++) {
                         this.overall += this.harvests[i].quantity;
                         console.log(new Date(this.harvests[i].startDate))

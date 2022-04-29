@@ -16,7 +16,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { LayoutComponent } from './layout.component';
 import { QueensRoutingModule } from './queens-routing.module';
 import { AddEditComponent } from './add-edit.component';
-//import { BeehiveComponentsListComponent } from './list.component';
+import { ListComponent } from './list.component';
 
 
 
@@ -39,7 +39,7 @@ import { AddEditComponent } from './add-edit.component';
     ],
     declarations: [
         LayoutComponent,
-//        ListComponent,
+        ListComponent,
         AddEditComponent
     ]
 })

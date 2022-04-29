@@ -1,4 +1,4 @@
-<div *ngIf="!loading">
+<div [hidden]="loading">
 <h1>Kopimai</h1>
 <button mat-raised-button color="accent" routerLink="add" *ngIf="worker && !!+worker.permissions[9]">Pridėti naują kopimą</button>
 

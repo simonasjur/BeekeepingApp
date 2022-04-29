@@ -56,7 +56,7 @@ export class AddEditComponent implements OnInit {
         }, formOptions);
 
         this.queensService.getFarmQueens(this.farmService.farmValue.id).subscribe(queens => {
-            this.queens = queens;
+            this.queens = queens.filter(q => q.isFertilized);
             this.beefamilyService.getFarmAllBeeFamilies(this.farmService.farmValue.id).subscribe({
                 next: beeFamilies => {
                     beeFamilies.forEach(beefamily => this.beehiveBeefamilyService.getBeefamilyBeehive(beefamily.id)

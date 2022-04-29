@@ -186,6 +186,13 @@ namespace BeekeepingApi.Controllers
             }
             await _context.SaveChangesAsync();
 
+            var relatedBeefamilyQueens = await _context.BeeFamilyQueens.Where(bq => bq.QueenId == id).ToListAsync();
+            foreach (var beefamilyQueen in relatedBeefamilyQueens)
+            {
+                _context.BeeFamilyQueens.Remove(beefamilyQueen);
+            }
+            await _context.SaveChangesAsync();
+
             _context.Queens.Remove(queen);
             await _context.SaveChangesAsync();
 

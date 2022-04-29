@@ -31,6 +31,7 @@ import { HomepageComponent } from './homepage.component';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {MatTableModule} from '@angular/material/table';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { MatTreeModule } from '@angular/material/tree';
 
 @NgModule({
     imports: [
@@ -58,7 +59,8 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
         MatDialogModule,
         MatProgressBarModule,
         MatTableModule,
-        NgxChartsModule
+        NgxChartsModule,
+        MatTreeModule
     ],
     declarations: [
         SettingsComponent,

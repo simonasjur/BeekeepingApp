@@ -109,7 +109,7 @@ export class ListComponent {
                                         }
                                         if (this.form.get('endDate').value !== null) {
                                             const endDate = formatDate(this.form.get('endDate').value,'yyyy-MM-dd','en_US');
-                                            this.harvests = this.harvests.filter(x => x.endDate != null && formatDate(x.endDate, 'yyyy-MM-dd','en_US') >= endDate);
+                                            this.harvests = this.harvests.filter(x => x.endDate != null && formatDate(x.endDate, 'yyyy-MM-dd','en_US') <= endDate);
                                         }
                                         if (this.form.get('apiaryId').value !== null && this.form.get('beeFamilyId').value !== null) {
                                             this.harvests = this.harvests.filter(x => x.apiaryId === this.form.get('apiaryId').value || x.beeFamilyId === this.form.get('beeFamilyId').value);
@@ -146,7 +146,7 @@ export class ListComponent {
                                     }
                                     if (this.form.get('endDate').value !== null) {
                                         const endDate = formatDate(this.form.get('endDate').value,'yyyy-MM-dd','en_US');
-                                        this.harvests = this.harvests.filter(x => x.endDate != null && formatDate(x.endDate, 'yyyy-MM-dd','en_US') >= endDate);
+                                        this.harvests = this.harvests.filter(x => x.endDate != null && formatDate(x.endDate, 'yyyy-MM-dd','en_US') <= endDate);
                                     }
                                     if (this.form.get('apiaryId').value !== null && this.form.get('beeFamilyId').value !== null) {
                                         this.harvests = this.harvests.filter(x => x.apiaryId === this.form.get('apiaryId').value || x.beeFamilyId === this.form.get('beeFamilyId').value);
