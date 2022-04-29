@@ -72,13 +72,13 @@ namespace BeekeepingApi.Controllers
                 return NotFound("Neteisingas kodas");
 
             if (invitation.ExpirationDate < DateTime.UtcNow)
-                return Forbid();
+                return NotFound();
 
             var currentUserId = long.Parse(User.Identity.Name);
 
             var farmWorker = await _context.FarmWorkers.FindAsync(currentUserId, invitation.FarmId);
             if (farmWorker != null)
-                return Forbid();
+                return NotFound();
 
             var user = await _context.Users.FindAsync(currentUserId);
             if (user.DefaultFarmId == null)
