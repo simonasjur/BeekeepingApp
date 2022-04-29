@@ -98,6 +98,10 @@ namespace BeekeepingApi.Controllers
             _context.FarmWorkers.Add(farmWorker);
             await _context.SaveChangesAsync();
 
+            invitation.ExpirationDate = DateTime.MinValue;
+            _context.Entry(invitation).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
             return invitation.FarmId;
         }
     }

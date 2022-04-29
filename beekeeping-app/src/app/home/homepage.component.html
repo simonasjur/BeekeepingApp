@@ -54,7 +54,7 @@
             </mat-tab>
             <mat-tab *ngIf="worker.role == 0" label="Pridėti darbuotoją">
                 <h3 class="margin-top">Norint pridėti naują darbuotoją reikia sugeneruoti pakvietimo kodą</h3>
-                <button mat-raised-button color="accent" (click)="getInviteCode()" [disabled]="disabled || loading2">
+                <button mat-raised-button color="accent" (click)="getInviteCode()" [disabled]="loading2">
                     <mat-icon *ngIf="loading2"><mat-spinner color="accent" diameter="20">
                     </mat-spinner></mat-icon>
                     Sukurti pakvietimo kodą</button>
