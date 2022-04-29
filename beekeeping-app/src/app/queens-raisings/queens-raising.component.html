@@ -8,7 +8,7 @@
 <mat-card *ngIf="!loading">
     <mat-card-title>
         Motinėlių auginimas nr. {{queensRaising.id}} 
-        <button mat-icon-button >
+        <button mat-icon-button *ngIf="worker && !!+worker.permissions[22]">
             <mat-icon routerLink="../edit/{{queensRaising.id}}">edit</mat-icon>
         </button>
     </mat-card-title>

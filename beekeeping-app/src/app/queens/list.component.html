@@ -53,10 +53,10 @@
         <ng-container matColumnDef="action">
             <th mat-header-cell *matHeaderCellDef> Veiksmas </th>
             <td mat-cell *matCellDef="let element">
-                <button mat-icon-button >
+                <button mat-icon-button *ngIf="worker && !!+worker.permissions[19]">
                     <mat-icon routerLink="edit/{{element.id}}">edit</mat-icon>
                 </button>
-                <button mat-icon-button (click)="deleteQueen(element.id)" *ngIf="isDeleteAllowed(element.state)">
+                <button mat-icon-button (click)="deleteQueen(element.id)" *ngIf="isDeleteAllowed(element.state) && worker && !!+worker.permissions[20]">
                     <mat-icon>delete</mat-icon>
                 </button>
             </td>

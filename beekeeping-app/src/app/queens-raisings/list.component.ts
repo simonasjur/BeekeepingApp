@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Breed2LabelMapping, Queen, QueensRaising, QueenState } from '../_models';
+import { Breed2LabelMapping, Queen, QueensRaising, QueenState, Worker } from '../_models';
 import { FarmService } from '../_services/farm.service';
 import { AlertService } from '../_services/alert.service';
 import { MatDialog } from '@angular/material/dialog';
 import { QueensRaisingService } from '../_services/queens-raising.service';
 import { QueenService } from '../_services/queen.service';
 import { DeleteDialog } from '../_components/delete-dialog.component';
+import { WorkerService } from '../_services/worker.service';
 
 @Component({
     selector: 'queens-raisings-list',
@@ -17,12 +18,14 @@ import { DeleteDialog } from '../_components/delete-dialog.component';
 export class ListComponent implements OnInit {
     queensRaisings: QueensRaising[];
     livingFarmQueens: Queen[];
+    worker: Worker;
     loadedDataCount = 0;
     displayedColumns: string[] = ['no', 'daysLeft', 'breed', 'startDate', 'larvaCount', 'queensCount', 'proc', 'action'];
 
     constructor(private queensRaisingService: QueensRaisingService,
                 private queenService: QueenService,
                 private farmService: FarmService,
+                private workerService: WorkerService,
                 private alertService: AlertService,
                 private router: Router,
                 private route: ActivatedRoute,
@@ -30,23 +33,26 @@ export class ListComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.queenService.getFarmQueens(this.farmService.farmValue.id).subscribe(queens => {
-            this.livingFarmQueens = queens.filter(q => q.state === QueenState.LvingInBeehive &&
-                                                       q.isFertilized === true);
-            this.queensRaisingService.getFarmQueensRaisings(this.farmService.farmValue.id)
-            .subscribe(raisings => {
-                this.queensRaisings = raisings;
-                this.queensRaisings.forEach(raising => {
-                    this.queenService.getById(raising.motherId).subscribe(queen => {
-                        raising.queen = queen;
-                        this.loadedDataCount++;
+        this.workerService.getFarmAndUserWorker(this.farmService.farmValue.id).subscribe(worker => {
+            this.worker = worker;
+            this.queenService.getFarmQueens(this.farmService.farmValue.id).subscribe(queens => {
+                this.livingFarmQueens = queens.filter(q => q.state === QueenState.LvingInBeehive &&
+                                                        q.isFertilized === true);
+                this.queensRaisingService.getFarmQueensRaisings(this.farmService.farmValue.id)
+                .subscribe(raisings => {
+                    this.queensRaisings = raisings;
+                    this.queensRaisings.forEach(raising => {
+                        this.queenService.getById(raising.motherId).subscribe(queen => {
+                            raising.queen = queen;
+                            this.loadedDataCount++;
+                        });
+                        raising.finishDate = new Date(raising.startDate);
+                        raising.finishDate.setDate(raising.finishDate.getDate() + 12);
+                        raising.daysLeft = this.calcDaysLeft(raising.startDate);
                     });
-                    raising.finishDate = new Date(raising.startDate);
-                    raising.finishDate.setDate(raising.finishDate.getDate() + 12);
-                    raising.daysLeft = this.calcDaysLeft(raising.startDate);
                 });
             });
-        }) 
+        });
     }
 
     calcDaysLeft(startDate: Date) {

@@ -43,7 +43,7 @@
             <th mat-header-cell *matHeaderCellDef>Pastatymo data</th>
             <td mat-cell *matCellDef="let element">
                 {{element.apiaryBeefamily.arriveDate | date:'yyyy-MM-dd'}} 
-                <button mat-icon-button (click)="openEditArriveDateDialog(element.apiaryBeefamily)">
+                <button mat-icon-button (click)="openEditArriveDateDialog(element.apiaryBeefamily)" *ngIf="worker && !!+worker.permissions[1]">
                     <mat-icon>edit</mat-icon>
                 </button>
             </td>

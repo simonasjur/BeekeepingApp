@@ -3,10 +3,12 @@ import { MatCalendarCellClassFunction, MatCalendarCellCssClasses } from '@angula
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Beehive, Breed2LabelMapping, Color2LabelMapping, DevelopmentPlace2LabelMapping, Queen, QueensRaising, QueenState2LabelMapping } from '../_models';
+import { Beehive, Breed2LabelMapping, Color2LabelMapping, DevelopmentPlace2LabelMapping, Queen, QueensRaising, QueenState2LabelMapping, Worker } from '../_models';
 import { BeehiveBeefamilyService } from '../_services/beehive-family.service';
+import { FarmService } from '../_services/farm.service';
 import { QueenService } from '../_services/queen.service';
 import { QueensRaisingService } from '../_services/queens-raising.service';
+import { WorkerService } from '../_services/worker.service';
 
 @Component({
     selector: 'queens-raising',
@@ -18,11 +20,14 @@ export class QueensRaisingComponent implements OnInit {
     queen: Queen;
     beehive: Beehive;
     today: Date;
+    worker: Worker;
     loading = true;
 
     constructor(private queensRaisingService: QueensRaisingService,
                 private queenService: QueenService,
                 private beehiveBeefamilyService: BeehiveBeefamilyService,
+                private workerService: WorkerService,
+                private farmService: FarmService,
                 private router: Router,
                 public dialog: MatDialog,
                 private route: ActivatedRoute) {
@@ -31,22 +36,26 @@ export class QueensRaisingComponent implements OnInit {
     ngOnInit() {
         this.today = new Date();
         const id = this.route.snapshot.params['id'];
-        this.queensRaisingService.getById(id).subscribe(queensRaising => {
-            this.queensRaising = queensRaising;
-            this.queensRaising.finishDate = new Date(this.queensRaising.startDate);
-            this.queensRaising.finishDate.setDate(this.queensRaising.finishDate.getDate() + 12);
-            this.queensRaising.sealingDate = new Date(this.queensRaising.startDate);
-            this.queensRaising.sealingDate.setDate( this.queensRaising.sealingDate.getDate() + 4);
-            this.queenService.getById(this.queensRaising.motherId).subscribe(queen => {
-                this.queen = queen;
-                this.beehiveBeefamilyService.getBeefamilyBeehive(this.queensRaising.beefamilyId). subscribe(beehiveBeefamily => {
-                    if (beehiveBeefamily.length > 0) {
-                        this.beehive = beehiveBeefamily[0].beehive;
-                    }
-                    this.loading = false;
+        this.workerService.getFarmAndUserWorker(this.farmService.farmValue.id).subscribe(worker => {
+            this.worker = worker;
+            this.queensRaisingService.getById(id).subscribe(queensRaising => {
+                this.queensRaising = queensRaising;
+                this.queensRaising.finishDate = new Date(this.queensRaising.startDate);
+                this.queensRaising.finishDate.setDate(this.queensRaising.finishDate.getDate() + 12);
+                this.queensRaising.sealingDate = new Date(this.queensRaising.startDate);
+                this.queensRaising.sealingDate.setDate( this.queensRaising.sealingDate.getDate() + 4);
+                this.queenService.getById(this.queensRaising.motherId).subscribe(queen => {
+                    this.queen = queen;
+                    this.beehiveBeefamilyService.getBeefamilyBeehive(this.queensRaising.beefamilyId). subscribe(beehiveBeefamily => {
+                        if (beehiveBeefamily.length > 0) {
+                            this.beehive = beehiveBeefamily[0].beehive;
+                        }
+                        this.loading = false;
+                    });
                 });
             });
         });
+        
     }
 
     isRaisingDoneInOneMonth() {
