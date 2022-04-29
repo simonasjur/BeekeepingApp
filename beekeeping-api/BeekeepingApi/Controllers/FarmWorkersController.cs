@@ -139,6 +139,14 @@ namespace BeekeepingApi.Controllers
             if (farmWorkerToDelete == null)
                 return NotFound();
 
+            var user = await _context.Users.FindAsync(userId);
+            if (user.DefaultFarmId == farmId)
+            {
+                user.DefaultFarmId = 0;
+                _context.Entry(user).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+            }
+
             _context.FarmWorkers.Remove(farmWorkerToDelete);
             await _context.SaveChangesAsync();
 
