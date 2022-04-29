@@ -81,7 +81,7 @@ namespace BeekeepingApi.Controllers
                 return NotFound();
 
             var user = await _context.Users.FindAsync(currentUserId);
-            if (user.DefaultFarmId == null)
+            if (user.DefaultFarmId == null || user.DefaultFarmId == 0)
             {
                 user.DefaultFarmId = invitation.FarmId;
                 _context.Entry(user).State = EntityState.Modified;
