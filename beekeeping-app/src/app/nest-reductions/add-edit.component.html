@@ -8,7 +8,7 @@
         <div class="form-fields">
             <mat-form-field appearance="fill">
                 <mat-label>Data</mat-label>
-                <input matInput [matDatepicker]="picker" formControlName="date" [max]="today">
+                <input matInput [matDatepicker]="picker" formControlName="date" [max]="today" required>
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
                 <mat-error *ngIf="submitted && f.date.errors">
@@ -17,7 +17,7 @@
             </mat-form-field>
             <mat-form-field>
                 <mat-label>Likusių korių skaičius</mat-label>
-                <input matInput formControlName="stayedCombs">
+                <input matInput formControlName="stayedCombs" required>
                 <mat-error *ngIf="submitted && f.stayedCombs.errors">
                     <p *ngIf="f.stayedCombs.errors.required">Šis laukas yra būtinas</p>
                     <p *ngIf="f.stayedCombs.errors.pattern">Skaičius privalo būti natūralusis</p>
@@ -28,7 +28,7 @@
             </mat-form-field>
             <mat-form-field>
                 <mat-label>Likursių korių su perais skaičius</mat-label>
-                <input matInput formControlName="stayedBroodCombs">
+                <input matInput formControlName="stayedBroodCombs" required>
                 <mat-error *ngIf="submitted && f.stayedBroodCombs.errors">
                     <p *ngIf="f.stayedBroodCombs.errors.required">Šis laukas yra būtinas</p>
                     <p *ngIf="f.stayedBroodCombs.errors.pattern">Skaičius privalo būti natūralusis</p>
@@ -37,7 +37,7 @@
             </mat-form-field>
             <mat-form-field>
                 <mat-label>Likęs medus avilyje(kg)</mat-label>
-                <input matInput formControlName="stayedHoney">
+                <input matInput formControlName="stayedHoney" required>
                 <mat-error *ngIf="submitted && f.stayedHoney.errors">
                     <p *ngIf="f.stayedHoney.errors.required">Šis laukas yra būtinas</p>
                     <p *ngIf="f.stayedHoney.errors.pattern">Skaičius privalo būti teigiamas</p>
@@ -45,7 +45,7 @@
             </mat-form-field>
             <mat-form-field>
                 <mat-label>Žiemojimui reikalingas maisto kiekis(kg)</mat-label>
-                <input matInput formControlName="requiredFoodForWinter">
+                <input matInput formControlName="requiredFoodForWinter" required>
                 <mat-error *ngIf="submitted && f.requiredFoodForWinter.errors">
                     <p *ngIf="f.requiredFoodForWinter.errors.required">Šis laukas yra būtinas</p>
                     <p *ngIf="f.requiredFoodForWinter.errors.pattern">Skaičius privalo būti teigiamas</p>

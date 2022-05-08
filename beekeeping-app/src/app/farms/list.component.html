@@ -27,7 +27,7 @@
 </div>
 <mat-list *ngIf="!loading2">
     <mat-list-item *ngFor="let farm of farms">
-        <a mat-line (click)="loadFarm(farm.id)" routerLink="/home">{{farm.name}}</a>
+        <a mat-line (click)="loadFarm(farm.id)">{{farm.name}}</a>
         <p class="default" *ngIf="farm.id == user.defaultFarmId">Numatytasis</p>
         <p mat-line>{{farm.creationDate | date:'yyyy-MM-dd'}}</p>
         <p mat-line>{{role2LabelMapping[farm.worker.role]}}</p>

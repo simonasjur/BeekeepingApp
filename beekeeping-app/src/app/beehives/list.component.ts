@@ -46,21 +46,25 @@ export class ListComponent implements OnInit {
                 next: beehives => {
                     this.beehives = beehives.filter(b => b.isEmpty === false);
                     this.emptyBeehives = beehives.filter(b => b.isEmpty === true);
-                    this.beehives.forEach(beehive => {
-                        this.beehiveBeefamilyService.getBeehiveBeefamily(beehive.id).subscribe(beehiveBeefamily => {
-                            this.apiaryBeefamilyService.getBeefamilyApiary(beehiveBeefamily[0].beeFamilyId).subscribe(apiaryBeefamily => {
-                                const beehiveData = {
-                                    beehive: beehive,
-                                    beefamily: apiaryBeefamily[0].beeFamily,
-                                    apiary: apiaryBeefamily[0].apiary
-                                };
-                                this.data.push(beehiveData);
-                                if (this.data.length === this.beehives.length) {
-                                    this.sortDataByBeehiveNo();
-                                }
+                    if (this.beehives.length > 0) {
+                        this.beehives.forEach(beehive => {
+                            this.beehiveBeefamilyService.getBeehiveBeefamily(beehive.id).subscribe(beehiveBeefamily => {
+                                this.apiaryBeefamilyService.getBeefamilyApiary(beehiveBeefamily[0].beeFamilyId).subscribe(apiaryBeefamily => {
+                                    const beehiveData = {
+                                        beehive: beehive,
+                                        beefamily: apiaryBeefamily[0].beeFamily,
+                                        apiary: apiaryBeefamily[0].apiary
+                                    };
+                                    this.data.push(beehiveData);
+                                    if (this.data.length === this.beehives.length) {
+                                        this.sortDataByBeehiveNo();
+                                    }
+                                });
                             });
                         });
-                    });
+                    } else {
+                        this.loading = false;
+                    }
                 }
             });
         });

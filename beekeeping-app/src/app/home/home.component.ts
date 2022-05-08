@@ -3,7 +3,7 @@
 import { UserService } from '../_services/user.service';
 import { FarmService } from '../_services/farm.service';
 import { Farm, User } from '../_models';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AlertService } from '../_services/alert.service';
 
 @Component({ selector: 'home',
@@ -18,6 +18,7 @@ export class HomeComponent {
     constructor(private userService: UserService,
                 private farmService: FarmService,
                 private router: Router,
+                private route: ActivatedRoute,
                 public alertService: AlertService) {
     }
 
@@ -40,8 +41,14 @@ export class HomeComponent {
     }
 
     loadFarm(id) {       
-        this.farmService.updateLocalStorageFarm(id).subscribe();
-        this.currentFarm = this.farmService.farmValue;
+        this.farmService.updateLocalStorageFarm(id).subscribe(() => {
+            this.currentFarm = this.farmService.farmValue;
+            const url = this.route.snapshot['_routerState'].url;
+            this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+                this.router.navigate([url]);
+            });
+        });
+        
     }
 
     logout() {

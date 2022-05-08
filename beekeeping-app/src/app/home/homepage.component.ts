@@ -76,13 +76,15 @@ export class HomepageComponent {
     ngOnInit() {
         this.mainLoading = true;
         this.farmService.farm.subscribe(farm => {
+            this.chartData = [];
+            this.overall = 0;
+            console.log(farm)
             if (farm) {
                 this.harvestService.getFarmThisYearHoneyHarvests(farm.id).subscribe(harvests => {
                     this.harvests = harvests.filter(h => h.product == 3);
                     this.harvests = this.harvests.sort((a,b)=>new Date(a.startDate).getTime()- new Date(b.startDate).getTime());
                     for (let i = 0; i < this.harvests.length; i++) {
                         this.overall += this.harvests[i].quantity;
-                        console.log(new Date(this.harvests[i].startDate))
                         const date = new Date(this.harvests[i].startDate).toISOString().substring(0,10);
                         const data = {
                             name: date,
@@ -90,6 +92,7 @@ export class HomepageComponent {
                         };
                         this.chartData.push(data);
                     }
+                    console.log('dfd '+this.chartData)
                     this.workerService.getFarmAndUserWorker(farm.id).subscribe(worker => {
                         this.worker = worker;
                         if (worker.role == 0) {

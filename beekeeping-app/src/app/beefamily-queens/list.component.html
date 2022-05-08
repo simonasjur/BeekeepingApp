@@ -26,6 +26,7 @@
                         <div>
                             <p *ngIf="familyQueen.queen.isFertilized" [ngStyle]="{'color': 'green'}">Apsivaisinusi</p>
                             <p *ngIf="!familyQueen.queen.isFertilized" [ngStyle]="{'color': 'red'}">Neapsivaisinusi</p>
+                            <p>Nr.: {{familyQueen.queen.id}}</p>
                             <p>Veislė: {{breed2LabelMapping[familyQueen.queen.breed]}}</p>
                             <p>Būsena: {{queenState2LabelMapping[familyQueen.queen.state]}}</p>
                             <p>Išsiritimo data: 
@@ -51,17 +52,27 @@
 
     <mat-tab label="Šeimos motinėlių istorija">
         <table mat-table [dataSource]="beefamilyQueens" width="100%">
+            <ng-container matColumnDef="no">
+                <th mat-header-cell *matHeaderCellDef>Nr.</th>
+                <td mat-cell *matCellDef="let element">{{element.queen.id}}</td>
+            </ng-container>
             <ng-container matColumnDef="breed">
                 <th mat-header-cell *matHeaderCellDef>Veislė</th>
                 <td mat-cell *matCellDef="let element">{{breed2LabelMapping[element.queen.breed]}}</td>
             </ng-container>
             <ng-container matColumnDef="hatchingDate">
                 <th mat-header-cell *matHeaderCellDef>Išsiritimo data</th>
-                <td mat-cell *matCellDef="let element">{{element.queen.hatchingDate | date:'yyyy-MM-dd'}}</td>
+                <td mat-cell *matCellDef="let element">
+                    <span *ngIf="element.queen.hatchingDate">{{element.queen.hatchingDate | date:'yyyy-MM-dd'}}</span>
+                    <span *ngIf="!element.queen.hatchingDate">-</span>
+                </td>
             </ng-container>
             <ng-container matColumnDef="markingColor">
                 <th mat-header-cell *matHeaderCellDef>Spalva</th>
-                <td mat-cell *matCellDef="let element">{{color2LabelMapping[element.queen.markingColor]}}</td>
+                <td mat-cell *matCellDef="let element">
+                    <span *ngIf="color2LabelMapping[element.queen.markingColor]">{{color2LabelMapping[element.queen.markingColor]}}</span>
+                    <span *ngIf="!color2LabelMapping[element.queen.markingColor]">-</span>
+                </td>
             </ng-container>
             <ng-container matColumnDef="insertDate">
                 <th mat-header-cell *matHeaderCellDef>Įdėjimo data</th>
@@ -69,7 +80,10 @@
             </ng-container>
             <ng-container matColumnDef="takeOutDate">
                 <th mat-header-cell *matHeaderCellDef>Išėmimo data</th>
-                <td mat-cell *matCellDef="let element">{{element.takeOutDate | date:'yyyy-MM-dd'}}</td>
+                <td mat-cell *matCellDef="let element">
+                    <span *ngIf="element.takeOutDate">{{element.takeOutDate | date:'yyyy-MM-dd'}}</span>
+                    <span *ngIf="!element.queen.hatchingDate">-</span>
+                </td>
             </ng-container>
             <ng-container matColumnDef="state">
                 <th mat-header-cell *matHeaderCellDef>Būsena</th>

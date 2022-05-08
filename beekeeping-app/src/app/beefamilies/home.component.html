@@ -46,6 +46,14 @@
                 <tr mat-header-row *matHeaderRowDef="beefamilyTableColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: beefamilyTableColumns;"></tr>
             </table>
+            <!-- <button mat-raised-button color="accent" [ngStyle]="{'margin': '10px'}" 
+                [matMenuTriggerFor]="menu1" #menuTrigger>
+                Funkcijos
+            </button>
+            <mat-menu #menu1="matMenu">
+                <button mat-menu-item routerLink="../../">Perkelti į kitą bityną</button>
+                <button mat-menu-item routerLink="../../">Kurti naują</button>
+            </mat-menu> -->
         </mat-card-content>
     </mat-card>
     <mat-card>

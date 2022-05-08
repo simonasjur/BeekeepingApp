@@ -52,8 +52,7 @@
           <mat-divider></mat-divider>
           <mat-spinner diameter="40" *ngIf="!user || !farms" color="accent"></mat-spinner>
           <button mat-menu-item *ngFor="let farm of farms" class="default-farm-button" 
-          [disabled]="currentFarm && farm.id == currentFarm.id" (click)="loadFarm(farm.id)"
-          routerLink="/">
+          [disabled]="currentFarm && farm.id == currentFarm.id" (click)="loadFarm(farm.id)">
             "{{farm.name}}" ūkis
             <p *ngIf="farm.id == user.defaultFarmId" class="default-p">Numatytasis</p>
           </button>

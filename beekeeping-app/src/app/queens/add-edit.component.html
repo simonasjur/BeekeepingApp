@@ -12,7 +12,7 @@
             </mat-form-field>
             <mat-form-field appearance="fill" *ngIf="beehiveBeefamily">
                 <mat-label>Įdėjimo į avilį data</mat-label>
-                <input matInput [matDatepicker]="insertPicker" formControlName="insertDate">
+                <input matInput [matDatepicker]="insertPicker" formControlName="insertDate" required>
                 <mat-datepicker-toggle matSuffix [for]="insertPicker"></mat-datepicker-toggle>
                 <mat-datepicker #insertPicker></mat-datepicker>
                 <mat-error *ngIf="submitted && f.insertDate.errors">
@@ -21,7 +21,7 @@
             </mat-form-field>
             <mat-form-field appearance="fill" *ngIf="beehiveBeefamily && beefamilyQueen && beefamilyQueen.takeOutDate">
                 <mat-label>Išėmimo iš avilio data</mat-label>
-                <input matInput [matDatepicker]="takeOutPicker" formControlName="takeOutDate">
+                <input matInput [matDatepicker]="takeOutPicker" formControlName="takeOutDate" required>
                 <mat-datepicker-toggle matSuffix [for]="takeOutPicker"></mat-datepicker-toggle>
                 <mat-datepicker #takeOutPicker></mat-datepicker>
                 <mat-error *ngIf="submitted && f.takeOutDate.errors">
@@ -30,7 +30,7 @@
             </mat-form-field>
             <mat-form-field>
                 <mat-label>Veislė</mat-label>
-                <mat-select formControlName="breed">
+                <mat-select formControlName="breed" required>
                     <mat-option *ngFor="let breed of breedNames" [value]="breed">
                         {{breed2LabelMapping[breed]}}
                     </mat-option>
@@ -41,7 +41,7 @@
             </mat-form-field>
             <mat-form-field>
                 <mat-label>Būsena</mat-label>
-                <mat-select formControlName="state" #stateField [disabled]="isStateDisabled()">
+                <mat-select formControlName="state" #stateField [disabled]="isStateDisabled()" required>
                     <mat-option [value]="1" *ngIf="isCellStatePosible()">{{queenState2LabelMapping[1]}}</mat-option>
                     <mat-option [value]="2" *ngIf="isLvingInBeehiveStatePosible()">{{queenState2LabelMapping[2]}}</mat-option>
                     <mat-option [value]="8" *ngIf="isIsolatedStatePosible()">{{queenState2LabelMapping[8]}}</mat-option>

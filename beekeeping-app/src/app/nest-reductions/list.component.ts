@@ -56,7 +56,7 @@ export class ListComponent implements OnInit {
     }
 
     isActionsAllowed(nestReduction: NestReduction) {
-        if (nestReduction.id === this.thisYearLastReduction.id) {
+        if (this.thisYearLastReduction && nestReduction.id === this.thisYearLastReduction.id) {
             return true;
         }
         const nestReductionDate = new Date(nestReduction.date);

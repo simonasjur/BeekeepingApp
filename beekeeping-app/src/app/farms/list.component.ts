@@ -110,7 +110,9 @@ export class ListComponent implements OnInit {
     }*/
 
     loadFarm(id) {       
-        this.farmService.updateLocalStorageFarm(id).subscribe();
+        this.farmService.updateLocalStorageFarm(id).subscribe(() => {
+            this.router.navigate(['../home/'], { relativeTo: this.route });
+        });
         //this.currentFarm = this.farmService.farmValue;
     }
 

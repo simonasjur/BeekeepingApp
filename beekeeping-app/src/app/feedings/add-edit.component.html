@@ -8,7 +8,7 @@
         <div class="form-fields">
             <mat-form-field appearance="fill">
                 <mat-label>Data</mat-label>
-                <input matInput [matDatepicker]="picker" formControlName="date" [max]="today">
+                <input matInput [matDatepicker]="picker" formControlName="date" [max]="today" required>
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
                 <mat-error *ngIf="submitted && f.date.errors">
@@ -17,7 +17,7 @@
             </mat-form-field>
             <mat-form-field>
                 <mat-label>Maistas</mat-label>
-                <mat-select formControlName="foodId">
+                <mat-select formControlName="foodId" required>
                     <mat-option *ngFor="let food of foods" [value]="food.id">
                         {{food.name}}
                     </mat-option>
@@ -27,8 +27,8 @@
                 </mat-error>
             </mat-form-field>
             <mat-form-field>
-                <mat-label>Kiekis</mat-label>
-                <input matInput formControlName="quantity">
+                <mat-label>Kiekis(kg)</mat-label>
+                <input matInput formControlName="quantity" required>
                 <mat-error *ngIf="submitted && f.quantity.errors">
                     <p *ngIf="f.quantity.errors.required">Šis laukas yra būtinas</p>
                     <p *ngIf="f.quantity.errors.pattern">Skaičius privalo būti teigiamas</p>

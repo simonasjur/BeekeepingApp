@@ -8,7 +8,7 @@
         <div class="form-fields">
             <mat-form-field>
                 <mat-label>Tipas</mat-label>
-                <mat-select formControlName="type" [disabled]="!isAddMode" #typeField>
+                <mat-select formControlName="type" [disabled]="!isAddMode" #typeField required>
                     <mat-option [value]="0">{{beehiveType2LabelMapping[0]}}</mat-option>
                     <mat-option [value]="1">{{beehiveType2LabelMapping[1]}}</mat-option>
                 </mat-select>
@@ -18,7 +18,7 @@
             </mat-form-field>
             <mat-form-field>
                 <mat-label>Numeris</mat-label>
-                <input matInput formControlName="no">
+                <input matInput formControlName="no" required>
                 <mat-error *ngIf="submitted && f.no.errors">
                     <p *ngIf="f.no.errors.required">Šis laukas yra būtinas</p>
                     <p *ngIf="f.no.errors.pattern">Numeris privalo būti natūralus skaičius</p>
@@ -44,7 +44,7 @@
             </mat-form-field>
             <mat-form-field *ngIf="typeField.value === beehiveTypes.Dadano">
                 <mat-label>Maksimalus lizdinių korių skaičius</mat-label>
-                <input matInput formControlName="maxNestCombs">
+                <input matInput formControlName="maxNestCombs" required>
                 <mat-error *ngIf="submitted && f.maxNestCombs.errors">
                     <p *ngIf="f.maxNestCombs.errors.required">Šis laukas yra būtinas</p>
                     <p *ngIf="f.maxNestCombs.errors.pattern">Reikšmė privalo būti natūralus skaičius</p>
@@ -53,7 +53,7 @@
             </mat-form-field>
             <mat-form-field *ngIf="typeField.value === beehiveTypes.Dadano && !isAddMode && !isBeehiveEmpty()">
                 <mat-label>Esamas lizdinių korių skaičius</mat-label>
-                <input matInput formControlName="nestCombs">
+                <input matInput formControlName="nestCombs" required>
                 <mat-error *ngIf="submitted && f.nestCombs.errors">
                     <p *ngIf="f.nestCombs.errors.required">Šis laukas yra būtinas</p>
                     <p *ngIf="f.nestCombs.errors.pattern">Reikšmė privalo būti natūralus skaičius</p>
@@ -62,7 +62,7 @@
             </mat-form-field>
             <mat-form-field *ngIf="typeField.value === beehiveTypes.Dadano">
                 <mat-label>Maksimalus meduvių skaičius</mat-label>
-                <input matInput formControlName="maxHoneyCombsSupers">
+                <input matInput formControlName="maxHoneyCombsSupers" required>
                 <mat-error *ngIf="submitted && f.maxHoneyCombsSupers.errors">
                     <p *ngIf="f.maxHoneyCombsSupers.errors.required">Šis laukas yra būtinas</p>
                     <p *ngIf="f.maxHoneyCombsSupers.errors.pattern">Reikšmė privalo būti natūralus skaičius</p>

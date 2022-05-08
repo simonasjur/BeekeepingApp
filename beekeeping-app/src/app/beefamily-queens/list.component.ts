@@ -24,7 +24,7 @@ export class ListComponent implements OnInit {
     loading = true;
     apiaryId: number;
 
-    displayedColumns = ['breed', 'hatchingDate', 'markingColor', 'insertDate', 'takeOutDate', 'state', 'action'];
+    displayedColumns = ['no', 'breed', 'hatchingDate', 'markingColor', 'insertDate', 'takeOutDate', 'state', 'action'];
 
     constructor(private beefamilyQueenService: BeefamilyQueenService,
                 private queenService: QueenService,
