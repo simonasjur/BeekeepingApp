@@ -23,6 +23,7 @@ import { MatCardModule } from '@angular/material/card';
 import {MatChipsModule} from '@angular/material/chips';
 import { EditArriveDateDialog } from './edit-arrive-date-dialog.component';
 import { EditBeefamilyOriginDialog } from './edit-beefamily-origin-dialog.component';
+import { ChangeApiaryDialog } from './change-apiary-dialog.component';
 
 @NgModule({
     imports: [
@@ -49,7 +50,8 @@ import { EditBeefamilyOriginDialog } from './edit-beefamily-origin-dialog.compon
         AddBeeFamilyComponent,
         HomeComponent,
         EditArriveDateDialog,
-        EditBeefamilyOriginDialog
+        EditBeefamilyOriginDialog,
+        ChangeApiaryDialog
         //AddApiaryBeehiveDialog
     ]
 })

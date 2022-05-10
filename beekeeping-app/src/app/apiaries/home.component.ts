@@ -22,8 +22,8 @@ export class HomeComponent implements OnInit {
     }
     circleCenter: google.maps.LatLngLiteral;
     center: google.maps.LatLngLiteral;
-    radius = 3000;
-    zoom = 12;
+    radius = 5500;
+    zoom = 11;
 
     constructor(private formBuilder: FormBuilder,
                 private apiaryService: ApiaryService,

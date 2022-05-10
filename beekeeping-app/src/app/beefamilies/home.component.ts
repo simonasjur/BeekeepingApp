@@ -12,6 +12,7 @@ import { BeehiveService } from '../_services/beehive.service';
 import { FarmService } from '../_services/farm.service';
 import { QueenService } from '../_services/queen.service';
 import { WorkerService } from '../_services/worker.service';
+import { ChangeApiaryDialog } from './change-apiary-dialog.component';
 import { EditBeefamilyOriginDialog } from './edit-beefamily-origin-dialog.component';
 
 @Component({
@@ -168,6 +169,18 @@ export class HomeComponent implements OnInit {
                 id: this.beefamily.id,
                 origin: this.beefamily.origin,
                 state: this.beefamily.state
+            }
+        });
+    }
+
+    openChangeApiaryDialog() {
+        const dialogRef = this.dialog.open(ChangeApiaryDialog, {
+            data: {
+                id: this.apiaryBeefamily.id,
+                arriveDate: this.apiaryBeefamily.arriveDate,
+                departDate: this.apiaryBeefamily.departDate,
+                apiaryId: this.apiaryBeefamily.apiaryId,
+                beeFamilyId: this.apiaryBeefamily.beeFamilyId
             }
         });
     }
