@@ -47,12 +47,9 @@
                 <tr mat-row *matRowDef="let row; columns: beefamilyTableColumns;"></tr>
             </table>
             <button mat-raised-button color="accent" [ngStyle]="{'margin': '10px'}" 
-                [matMenuTriggerFor]="menu1" #menuTrigger>
-                Funkcijos
+            (click)="openChangeApiaryDialog()" *ngIf="isThereMoreApiaries()">
+                Perkelti į kitą bityną
             </button>
-            <mat-menu #menu1="matMenu">
-                <button mat-menu-item (click)="openChangeApiaryDialog()">Perkelti į kitą bityną</button>
-            </mat-menu>
         </mat-card-content>
     </mat-card>
     <mat-card>

@@ -42,6 +42,7 @@ export class QueensRaisingComponent implements OnInit {
                 this.queensRaising = queensRaising;
                 this.queensRaising.finishDate = new Date(this.queensRaising.startDate);
                 this.queensRaising.finishDate.setDate(this.queensRaising.finishDate.getDate() + 12);
+                this.queensRaising.finishDate.setHours(this.queensRaising.finishDate.getHours() + 3);
                 this.queensRaising.sealingDate = new Date(this.queensRaising.startDate);
                 this.queensRaising.sealingDate.setDate( this.queensRaising.sealingDate.getDate() + 4);
                 this.queenService.getById(this.queensRaising.motherId).subscribe(queen => {

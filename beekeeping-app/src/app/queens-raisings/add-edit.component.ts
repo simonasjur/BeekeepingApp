@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { EqualLessthanValidator } from '../_helpers/equal-lessthan.validator';
 
-import { Beehive, BeehiveBeefamily, BeehiveType2LabelMapping, BeehiveTypes, Breed, Breed2LabelMapping, Color2LabelMapping, Colors, DevelopmentPlace, DevelopmentPlace2LabelMapping, Queen } from '../_models';
+import { Beehive, BeehiveBeefamily, BeehiveType2LabelMapping, BeehiveTypes, Breed, Breed2LabelMapping, Color2LabelMapping, Colors, DevelopmentPlace, DevelopmentPlace2LabelMapping, Queen, QueenState } from '../_models';
 import { AlertService } from '../_services/alert.service';
 import { BeeFamilyService } from '../_services/beefamily.service';
 import { BeehiveBeefamilyService } from '../_services/beehive-family.service';
@@ -56,7 +56,8 @@ export class AddEditComponent implements OnInit {
         }, formOptions);
 
         this.queensService.getFarmQueens(this.farmService.farmValue.id).subscribe(queens => {
-            this.queens = queens.filter(q => q.isFertilized);
+            this.queens = queens.filter(q => q.state === QueenState.LvingInBeehive &&
+                                             q.isFertilized === true);
             this.beefamilyService.getFarmAllBeeFamilies(this.farmService.farmValue.id).subscribe({
                 next: beeFamilies => {
                     beeFamilies.forEach(beefamily => this.beehiveBeefamilyService.getBeefamilyBeehive(beefamily.id)

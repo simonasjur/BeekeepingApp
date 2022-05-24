@@ -3,8 +3,8 @@
     <mat-spinner *ngIf="formLoading" color="accent"></mat-spinner>
 </div>
 <div mat-dialog-content *ngIf="!formLoading">
-    <form [formGroup]="form">
-        <mat-form-field [ngStyle]="{'margin-bottom': '20px'}">
+    <form [formGroup]="form" class="form-fields">
+        <mat-form-field>
             <mat-label>Bitynas</mat-label>
             <mat-select formControlName="apiaryId">
                 <mat-option *ngFor="let apiary of apiaries" [value]="apiary.id">
@@ -15,7 +15,7 @@
                 Šis laukas yra būtinas
             </mat-error>
         </mat-form-field>
-        <mat-form-field [ngStyle]="{'margin-bottom': '20px'}">
+        <mat-form-field>
             <mat-label>Pastatymo data</mat-label>
             <input matInput [matDatepicker]="picker" formControlName="departDate" [max]="today">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>

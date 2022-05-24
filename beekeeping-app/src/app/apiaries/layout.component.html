@@ -1,6 +1,10 @@
 <div class="p-4">
     <div class="container">
         <div *ngIf="apiary">
+            <a mat-stroked-button (click)="goToApiaries()" [ngStyle]="{'margin-bottom': '10px'}">
+                <mat-icon>arrow_back</mat-icon>
+                Bitynai
+            </a>
             <div class="header">
                 <h1>{{apiary.name}} bitynas</h1>
                 <button mat-icon-button>

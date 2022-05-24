@@ -1,4 +1,8 @@
 <div *ngIf="beehive && apiaryFamily">
+    <a mat-stroked-button (click)="goToBeefamilies()" [ngStyle]="{'margin-bottom': '10px'}">
+        <mat-icon>arrow_back</mat-icon>
+        Bityno šeimos
+    </a>
     <h1>Bičių šeima nr. {{beehive.no}}</h1>
     <div class="sub-menu">
         <mat-chip-list>

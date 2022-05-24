@@ -10,7 +10,8 @@ import { FarmService } from "../_services/farm.service";
 
 @Component({
     selector: 'change-apiary-dialog',
-    templateUrl: 'change-apiary-dialog.component.html'
+    templateUrl: 'change-apiary-dialog.component.html',
+    styleUrls: ['change-apiary-dialog.component.css']
   })
   export class ChangeApiaryDialog {
     form: FormGroup;
@@ -41,7 +42,7 @@ import { FarmService } from "../_services/farm.service";
         });
         this.form.patchValue(this.data);
         this.apiaryService.getFarmApiaries(this.farmService.farmValue.id).subscribe(apiaries => {
-            this.apiaries = apiaries;
+            this.apiaries = apiaries.filter(a => a.id != this.data.apiaryId);
             this.formLoading = false;
         });
     }
@@ -66,7 +67,7 @@ import { FarmService } from "../_services/farm.service";
         this.apiaryBeefamilyService.update(this.form.controls['id'].value, this.form.value).subscribe({
             next: () => {
                 const newApiaryBeefamily = {
-                    arriveDate: this.form.controls['arriveDate'].value,
+                    arriveDate: this.form.controls['departDate'].value,
                     apiaryId: this.form.controls['apiaryId'].value,
                     beeFamilyId: this.data.beeFamilyId
                 };

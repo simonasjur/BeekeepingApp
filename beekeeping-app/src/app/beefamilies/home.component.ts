@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
-import { ApiaryBeeFamily, BeeFamily, BeeFamilyOrigin2LabelMapping, BeefamilyQueen, BeeFamilyState2LabelMapping, Beehive, BeehiveBeefamily, BeehiveComponent, BeehiveComponentType, BeehiveType2LabelMapping, Breed, Breed2LabelMapping, Color2LabelMapping, Queen, QueenState, Worker } from '../_models';
+import { Apiary, ApiaryBeeFamily, BeeFamily, BeeFamilyOrigin2LabelMapping, BeefamilyQueen, BeeFamilyState2LabelMapping, Beehive, BeehiveBeefamily, BeehiveComponent, BeehiveComponentType, BeehiveType2LabelMapping, Breed, Breed2LabelMapping, Color2LabelMapping, Queen, QueenState, Worker } from '../_models';
 import { ApiaryBeeFamilyService } from '../_services/apiary-beefamily.service';
 import { ApiaryService } from '../_services/apiary.service';
 import { BeefamilyQueenService } from '../_services/beefamily-queen.service';
@@ -34,6 +34,7 @@ export class HomeComponent implements OnInit {
     beehiveComponents: BeehiveComponent[];
     loading = true;
     worker: Worker;
+    apiaries: Apiary[];
 
     beefamilyTableColumns: string[] = ['apiary', 'origin', 'state', 'queen'];
 
@@ -56,42 +57,45 @@ export class HomeComponent implements OnInit {
 
         this.workerService.getFarmAndUserWorker(this.farmService.farmValue.id).subscribe(worker => {
             this.worker = worker;
-            this.beefamilyService.getById(this.id).subscribe(beefamily => {
-                this.beefamily = beefamily;
-                this.beehiveFamilyService.getBeefamilyBeehive(beefamily.id).subscribe(beehiveBeefamilies => {
-                    this.beehiveBeefamily = beehiveBeefamilies[0];
-                    this.apiaryFamilyService.getBeefamilyApiary(beefamily.id).subscribe(apiaryFamilies => {
-                        this.apiaryBeefamily = apiaryFamilies[0];
-                        this.beefamilyQueenService.getLivingBeefamilyQueen(this.id).subscribe(beefamilyQueen => {
-                            if (beefamilyQueen.length > 0)
-                            {
-                                this.beefamilyQueen = beefamilyQueen[0];
-                                this.queenBreed = beefamilyQueen[0].queen.breed;
-                            }
-                            this.beehiveService.getById(this.beehiveBeefamily.beehiveId).subscribe(beehive => {
-                                this.beehive = beehive;
-                                if (this.beehive.nestCombs != null) {
-                                    this.expandPercent = Math.round((this.beehive.nestCombs / this.beehive.maxNestCombs) * 100);
+            this.apiaryService.getFarmApiaries(this.farmService.farmValue.id).subscribe(apiaries => {
+                this.apiaries = apiaries;
+                this.beefamilyService.getById(this.id).subscribe(beefamily => {
+                    this.beefamily = beefamily;
+                    this.beehiveFamilyService.getBeefamilyBeehive(beefamily.id).subscribe(beehiveBeefamilies => {
+                        this.beehiveBeefamily = beehiveBeefamilies[0];
+                        this.apiaryFamilyService.getBeefamilyApiary(beefamily.id).subscribe(apiaryFamilies => {
+                            this.apiaryBeefamily = apiaryFamilies[0];
+                            this.beefamilyQueenService.getLivingBeefamilyQueen(this.id).subscribe(beefamilyQueen => {
+                                if (beefamilyQueen.length > 0)
+                                {
+                                    this.beefamilyQueen = beefamilyQueen[0];
+                                    this.queenBreed = beefamilyQueen[0].queen.breed;
                                 }
-                                this.beefamilies = [
-                                    {
-                                        apiary: this.apiaryBeefamily.apiary,
-                                        origin: this.beefamily.origin,
-                                        state: this.beefamily.state,
-                                        food: this.beefamily.requiredFoodForWinter,
-                                        breed: this.queenBreed
+                                this.beehiveService.getById(this.beehiveBeefamily.beehiveId).subscribe(beehive => {
+                                    this.beehive = beehive;
+                                    if (this.beehive.nestCombs != null) {
+                                        this.expandPercent = Math.round((this.beehive.nestCombs / this.beehive.maxNestCombs) * 100);
                                     }
-                                ];
-                                this.beehiveComponentsService.getBeehiveComponents(beehive.id). subscribe(components => {
-                                    this.beehiveComponents = components;
-                                    this.queenService.getFarmQueens(this.farmService.farmValue.id).subscribe(queens => {
-                                        this.isolatedFarmQueens = queens.filter(q => q.state === QueenState.Isolated);
-                                        this.loading = false;
-                                    });
+                                    this.beefamilies = [
+                                        {
+                                            apiary: this.apiaryBeefamily.apiary,
+                                            origin: this.beefamily.origin,
+                                            state: this.beefamily.state,
+                                            food: this.beefamily.requiredFoodForWinter,
+                                            breed: this.queenBreed
+                                        }
+                                    ];
+                                    this.beehiveComponentsService.getBeehiveComponents(beehive.id). subscribe(components => {
+                                        this.beehiveComponents = components;
+                                        this.queenService.getFarmQueens(this.farmService.farmValue.id).subscribe(queens => {
+                                            this.isolatedFarmQueens = queens.filter(q => q.state === QueenState.Isolated);
+                                            this.loading = false;
+                                        });
+                                    })
                                 })
                             })
                         })
-                    })
+                    });
                 });
             });
         });
@@ -161,6 +165,10 @@ export class HomeComponent implements OnInit {
 
     isFeederExist() {
         return this.beehiveComponents.find(bc => bc.type === BeehiveComponentType.Maitintuvė);
+    }
+
+    isThereMoreApiaries() {
+        return this.apiaries.length > 1;
     }
 
     openEditBeefamilyOriginDialog() {
